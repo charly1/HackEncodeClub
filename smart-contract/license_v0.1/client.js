@@ -5,9 +5,9 @@
 
 
 // constants definition
-const infura_link = 'https://ropsten.infura.io/v3/709fd1df01b54f5ab3b9f696894dfb10';
-const contract_adr = '0xe86824cc2cd8076513ec834c5b39ad468831e675';
-const contract_abi = [{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[],"name":"get_prorio","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"new_proprio","type":"address"}],"name":"set_proprio","outputs":[],"stateMutability":"nonpayable","type":"function"}];
+var infura_link = 'https://ropsten.infura.io/v3/709fd1df01b54f5ab3b9f696894dfb10';
+var contract_adr = '0xe86824cc2cd8076513ec834c5b39ad468831e675';
+var contract_abi = [{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[],"name":"get_prorio","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"new_proprio","type":"address"}],"name":"set_proprio","outputs":[],"stateMutability":"nonpayable","type":"function"}];
 
 // object creation
 w = new Web3(infura_link);
@@ -27,12 +27,13 @@ contract.methods.get_prorio().call()
 
 
 // constants definition (required to signed a transaction, to be added to the constant of above)
-const new_proprio_adr = '0xFe5a44605eEd83DAe7e2CA1A83F84Ed61Ce38DCD';
-const private_key = '0xe5944af0847c204cee609f7112c07a1a9331533507dab4128405d271ee11c9f9' 
+var new_proprio_adr = '0xFe5a44605eEd83DAe7e2CA1A83F84Ed61Ce38DCD';
+var private_key = '0xe5944af0847c204cee609f7112c07a1a9331533507dab4128405d271ee11c9f9';
 /*** !!! NEVER LET PRIVATE KEY STAND IN CODE LIKE IN THE PREVIOUS LINE ! THIS IS OK SINCE IT ONLY CONTAINS ROPSTEN FAKE ETHER ! ***/
 
 // object creation (required to signed a transaction, to be added to the constant of above)
-const account = w.eth.accounts.privateKeyToAccount(private_key);
+var account = w.eth.accounts.privateKeyToAccount(private_key);
+console.log("address used to perform the transaction:", account.address);
 var query = contract.methods.set_proprio(new_proprio_adr);
 var encodedABI = query.encodeABI();
 
@@ -48,7 +49,7 @@ account.signTransaction({
         return w.eth.sendSignedTransaction(signedTx.rawTransaction);
     })
     .then(res => {
-        console.log("successfully sent signed transaction\n", res)
+        console.log("successfully sent signed transaction\n", res);
     })
     .catch(err => {
         console.error("An error occured while calling a payable func:", err);
