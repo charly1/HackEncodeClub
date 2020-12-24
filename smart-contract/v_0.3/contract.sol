@@ -37,6 +37,24 @@ contract License is Util {
     bool license_for_sale = false;
     uint minimum_price_for_sell = 0;
     
+    modifier licenseIsForSale() {
+        require(
+            license_for_sale,
+            "License is not for sale"
+        );
+
+        _;
+    }
+    
+    modifier priceOk(uint price) {
+        require(
+                price >= minimum_price_for_sell,
+                "Not enough ether to buy this license"
+            );
+
+        _;
+    }
+    
     constructor (address _admin, address payable _owner, uint _expiration_timestamp)
     {
         admin = _admin;
@@ -47,29 +65,16 @@ contract License is Util {
     }
     
     // whenever you send a payement to this contract, it automatically goes here
-    function receive_payment() 
+    receive() 
         external
         payable
+        licenseIsForSale()
+        priceOk(msg.value)
     {
-        if (!license_for_sale) {
-            //send ether back()
-            require(
-                license_for_sale,
-                "License is not for sale"
-            );
-        }
-        else if (msg.value < minimum_price_for_sell) {
-            //send ether back()
-            require(
-                msg.value < minimum_price_for_sell,
-                "Not enough ether to buy this license"
-            );
-        }
-        else {
-            owner.transfer(msg.value);
-            owner = msg.sender;
-            remove_for_sale();
-        }
+        owner.transfer(msg.value);
+        owner = msg.sender;
+        remove_for_sale();
+        
     }
     
     function get_is_for_sell()
@@ -83,12 +88,9 @@ contract License is Util {
     function get_selling_price()
         public
         view
+        licenseIsForSale()
         returns (uint)
     {
-        require (
-            license_for_sale,
-            "Not for sale"
-        );
         return minimum_price_for_sell;
     }
     
@@ -157,7 +159,7 @@ contract License is Util {
         public
         onlyBy(admin)
     {
-        expiration_timestamp = 0;
+        set_expiration_timestamp(0);
     }
 }
 
@@ -205,6 +207,7 @@ contract Software is Util {
     
     function add_license() // default value: admin:admin, owner:admin, expiration: 0
         public
+        onlyBy(admin) 
         returns (License)
     {
         return add_license(admin, payable(admin), 0);
@@ -212,6 +215,7 @@ contract Software is Util {
     
     function add_license(address payable _owner)  // default value: admin:admin, owner:owner, expiration: 0
         public
+        onlyBy(admin) 
         returns (License)
     {
         return add_license(admin, _owner, 0);
@@ -219,6 +223,7 @@ contract Software is Util {
     
     function add_license(uint _expiration_timestamp)  // default value: admin:admin, owner:admin, expiration: exp
         public
+        onlyBy(admin) 
         returns (License)
     {
         return add_license(admin, payable(admin), _expiration_timestamp);
@@ -226,6 +231,7 @@ contract Software is Util {
     
     function add_license(address payable _owner, uint _expiration_timestamp) // default value: admin:admin, owner:owner, expiration: exp
         public
+        onlyBy(admin) 
         returns (License)
     {
         return add_license(admin, _owner, _expiration_timestamp);
@@ -233,6 +239,7 @@ contract Software is Util {
     
     function add_license(address _admin, address payable _owner, uint _expiration_timestamp)
         public
+        onlyBy(admin) 
         returns (License)
     {
         License newLicense = new License(_admin, _owner, _expiration_timestamp);
@@ -296,13 +303,4 @@ contract SoftwareHandler is Util
     {
         return softwares.length;
     }
-    
-    /*
-    function deleteSoftware(address softwareAddress)
-        public
-        onlyBy(Software(softwareAddress).get_admin())
-    {
-        delete arr[softwareAddress];
-    }
-    */
 }

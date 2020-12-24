@@ -1,0 +1,77 @@
+[
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "company_name",
+				"type": "string"
+			}
+		],
+		"name": "addSoftware",
+		"outputs": [
+			{
+				"internalType": "contract Software",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "company_name",
+				"type": "string"
+			},
+			{
+				"internalType": "address",
+				"name": "software_admin",
+				"type": "address"
+			}
+		],
+		"name": "addSoftware",
+		"outputs": [
+			{
+				"internalType": "contract Software",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getNbOfSoftware",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "index",
+				"type": "uint256"
+			}
+		],
+		"name": "getSoftware",
+		"outputs": [
+			{
+				"internalType": "contract Software",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+]

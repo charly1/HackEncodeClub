@@ -1,16 +1,16 @@
 var Web3 = require('web3');
 
-var eth_node_link = "http://127.0.0.1:7545"
+var eth_node_link = "https://ropsten.infura.io/v3/709fd1df01b54f5ab3b9f696894dfb10"
 w = new Web3(eth_node_link);
 
 
 var contract_software_handler_abi = [{"inputs": [{"internalType": "string","name": "company_name","type": "string"}],"name": "addSoftware","outputs": [{"internalType": "contract Software","name": "","type": "address"}],"stateMutability": "nonpayable","type": "function"},{"inputs": [{"internalType": "string","name": "company_name","type": "string"},{"internalType": "address","name": "software_admin","type": "address"}],"name": "addSoftware","outputs": [{"internalType": "contract Software","name": "","type": "address"}],"stateMutability": "nonpayable","type": "function"},{"inputs": [],"name": "getNbOfSoftware","outputs": [{"internalType": "uint256","name": "","type": "uint256"}],"stateMutability": "view","type": "function"},{"inputs": [{"internalType": "uint256","name": "index","type": "uint256"}],"name": "getSoftware","outputs": [{"internalType": "contract Software","name": "","type": "address"}],"stateMutability": "view","type": "function"}]
 var contract_software_abi = [{"inputs": [{"internalType": "string","name": "company","type": "string"},{"internalType": "address","name": "_admin","type": "address"}],"stateMutability": "nonpayable","type": "constructor"},{"inputs": [{"internalType": "address","name": "_owner","type": "address"},{"internalType": "uint256","name": "_expiration_timestamp","type": "uint256"}],"name": "add_license","outputs": [{"internalType": "contract License","name": "","type": "address"}],"stateMutability": "nonpayable","type": "function"},{"inputs": [{"internalType": "address","name": "_admin","type": "address"},{"internalType": "address","name": "_owner","type": "address"},{"internalType": "uint256","name": "_expiration_timestamp","type": "uint256"}],"name": "add_license","outputs": [{"internalType": "contract License","name": "","type": "address"}],"stateMutability": "nonpayable","type": "function"},{"inputs": [],"name": "add_license","outputs": [{"internalType": "contract License","name": "","type": "address"}],"stateMutability": "nonpayable","type": "function"},{"inputs": [{"internalType": "uint256","name": "_expiration_timestamp","type": "uint256"}],"name": "add_license","outputs": [{"internalType": "contract License","name": "","type": "address"}],"stateMutability": "nonpayable","type": "function"},{"inputs": [{"internalType": "address","name": "_owner","type": "address"}],"name": "add_license","outputs": [{"internalType": "contract License","name": "","type": "address"}],"stateMutability": "nonpayable","type": "function"},{"inputs": [],"name": "get_admin","outputs": [{"internalType": "address","name": "","type": "address"}],"stateMutability": "view","type": "function"},{"inputs": [],"name": "get_company_name","outputs": [{"internalType": "string","name": "","type": "string"}],"stateMutability": "view","type": "function"},{"inputs": [{"internalType": "uint256","name": "index","type": "uint256"}],"name": "get_license","outputs": [{"internalType": "contract License","name": "","type": "address"}],"stateMutability": "view","type": "function"},{"inputs": [],"name": "get_nb_license","outputs": [{"internalType": "uint256","name": "","type": "uint256"}],"stateMutability": "view","type": "function"},{"inputs": [{"internalType": "address","name": "_admin","type": "address"}],"name": "set_admin","outputs": [],"stateMutability": "nonpayable","type": "function"},{"inputs": [{"internalType": "string","name": "_company_name","type": "string"}],"name": "set_company_name","outputs": [],"stateMutability": "nonpayable","type": "function"}]
-var contract_license_abi = [{"inputs": [{"internalType": "address","name": "new_admin","type": "address"}],"name": "set_admin","outputs": [],"stateMutability": "nonpayable","type": "function"},{"inputs": [{"internalType": "uint256","name": "new_timestamp","type": "uint256"}],"name": "set_expiration_timestamp","outputs": [],"stateMutability": "nonpayable","type": "function"},{"inputs": [{"internalType": "address","name": "new_owner","type": "address"}],"name": "set_owner","outputs": [],"stateMutability": "nonpayable","type": "function"},{"inputs": [{"internalType": "address","name": "_admin","type": "address"},{"internalType": "address","name": "_owner","type": "address"},{"internalType": "uint256","name": "_expiration_timestamp","type": "uint256"}],"stateMutability": "nonpayable","type": "constructor"},{"inputs": [],"name": "get_admin","outputs": [{"internalType": "address","name": "","type": "address"}],"stateMutability": "view","type": "function"},{"inputs": [],"name": "get_expiration_timestamp","outputs": [{"internalType": "uint256","name": "","type": "uint256"}],"stateMutability": "view","type": "function"},{"inputs": [],"name": "get_owner","outputs": [{"internalType": "address","name": "","type": "address"}],"stateMutability": "view","type": "function"}]
+var contract_license_abi = [{"inputs": [{"internalType": "address","name": "_admin","type": "address"},{"internalType": "address payable","name": "_owner","type": "address"},{"internalType": "uint256","name": "_expiration_timestamp","type": "uint256"}],"stateMutability": "nonpayable","type": "constructor"},{"inputs": [],"name": "get_admin","outputs": [{"internalType": "address","name": "","type": "address"}],"stateMutability": "view","type": "function"},{"inputs": [],"name": "get_expiration_timestamp","outputs": [{"internalType": "uint256","name": "","type": "uint256"}],"stateMutability": "view","type": "function"},{"inputs": [],"name": "get_is_for_sell","outputs": [{"internalType": "bool","name": "","type": "bool"}],"stateMutability": "view","type": "function"},{"inputs": [],"name": "get_owner","outputs": [{"internalType": "address","name": "","type": "address"}],"stateMutability": "view","type": "function"},{"inputs": [],"name": "get_selling_price","outputs": [{"internalType": "uint256","name": "","type": "uint256"}],"stateMutability": "view","type": "function"},{"inputs": [],"name": "remove_expiration_timestamp","outputs": [],"stateMutability": "nonpayable","type": "function"},{"inputs": [],"name": "remove_for_sale","outputs": [],"stateMutability": "nonpayable","type": "function"},{"inputs": [{"internalType": "address","name": "new_admin","type": "address"}],"name": "set_admin","outputs": [],"stateMutability": "nonpayable","type": "function"},{"inputs": [{"internalType": "uint256","name": "new_timestamp","type": "uint256"}],"name": "set_expiration_timestamp","outputs": [],"stateMutability": "nonpayable","type": "function"},{"inputs": [{"internalType": "uint256","name": "_minimum_price_for_sell","type": "uint256"}],"name": "set_for_sale","outputs": [],"stateMutability": "nonpayable","type": "function"},{"inputs": [{"internalType": "address payable","name": "new_owner","type": "address"}],"name": "set_owner","outputs": [],"stateMutability": "nonpayable","type": "function"},{"stateMutability": "payable","type": "receive"}]
 
-var software_handler_contract_adr = "0x902890A54e827cadFb099104ac1C13F56207046B"
-var software_contract_adr = "0x662A77c9D2F604Fee68102D3195D76Aac30b0C5a"
-var license_contract_adr = "0xf3439D2B26378ab7E1e61ad00C4f193d533202eB"
+var software_handler_contract_adr = "0x977Bc6DcbE6Dd351661bA91EbD155cC08E98164a"
+var software_contract_adr = ""
+var license_contract_adr = ""
 
 var contract_sh = new w.eth.Contract(contract_software_handler_abi, software_handler_contract_adr);
 var contract_s = new w.eth.Contract(contract_software_abi, software_contract_adr);
@@ -32,6 +32,41 @@ var address_account_4 = '0xdf6d5CcCF4C773b6c920A018c766c06C7C98b349';
 var private_account_4 = '0xf1d29c4935fc9ffa4c8de9c69acd356b6053e37f369c244800d34f2982b53188';
 var account_4 = w.eth.accounts.privateKeyToAccount(private_account_4);
 
+var wei2eth = (amount) => {
+    return parseFloat(amount) / 1000000000000000000
+}
+
+var eth2wei = (amount) => {
+    return parseInt(w.utils.toWei(String(amount), 'ether'))
+}
+
+var balance = (adr=address_account_1) => { 
+    w.eth.getBalance(adr)
+    .then(res => {
+        console.log(`balance:  ${wei2eth(parseInt(res))} ETH   =   ${res} wei`)
+    })
+}
+
+var send_monney = (from=account_1, to=account_2, amount=10, unit='wei') => {
+
+    if (typeof(to) !== 'string')
+        to = to.address;
+
+    w.eth.accounts.signTransaction({
+        to: to,
+        value: w.utils.toWei(String(amount), String(unit)),
+        gas: 2000000,
+    }, from.privateKey) 
+    .then(signedTx => {
+        return w.eth.sendSignedTransaction(signedTx.rawTransaction);
+    })
+    .then(res => {
+        console.log("Successfully sent monney ", res);
+    })
+    .catch(err => {
+        console.error("An error occured while sending monney: ", err);
+    })
+}
 
 
 /* ---------------------  SH FUNC*/
@@ -301,3 +336,71 @@ var L_remove_expiration_timestamp = (account=account_1) => {
         console.error("An error occured while calling a payable func:", err);
     });
 }
+
+var L_send_payment_to_contract = (account=account_1, amount=10) => {
+
+}
+
+var L_get_is_for_sale = () => {
+    contract_l.methods.get_is_for_sell().call()
+    .then(res => {
+        console.log("is for sale:", res)
+    })
+    .catch(err => {
+        console.error("An error occured while calling the func:", err);
+    });
+}
+
+var L_get_selling_price = () => {
+    contract_l.methods.get_selling_price().call()
+    .then(res => {
+        console.log(`selling price:  ${wei2eth(parseInt(res))} ETH   =   ${res} wei`)
+    })
+    .catch(err => {
+        console.error("An error occured while calling the func:", err);
+    });
+}
+
+var L_set_for_sale = (account=account_1, price=10) => {
+    var query = contract_l.methods.set_for_sale(price);
+    var encodedABI = query.encodeABI();
+
+    account.signTransaction({
+        data: encodedABI,
+        from: account.address,
+        gas: 2000000,
+        to: contract_l.options.address,
+    })
+    .then(signedTx => {
+        return w.eth.sendSignedTransaction(signedTx.rawTransaction);
+    })
+    .then(res => {
+        console.log("successfully sent signed transaction\n", res);
+    })
+    .catch(err => {
+        console.error("An error occured while calling a payable func:", err);
+    });
+}
+
+var L_remove_for_sale = (account=account_1) => {
+    var query = contract_l.methods.remove_for_sale();
+    var encodedABI = query.encodeABI();
+
+    account.signTransaction({
+        data: encodedABI,
+        from: account.address,
+        gas: 2000000,
+        to: contract_l.options.address,
+    })
+    .then(signedTx => {
+        return w.eth.sendSignedTransaction(signedTx.rawTransaction);
+    })
+    .then(res => {
+        console.log("successfully sent signed transaction\n", res);
+    })
+    .catch(err => {
+        console.error("An error occured while calling a payable func:", err);
+    });
+}
+
+
