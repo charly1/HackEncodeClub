@@ -2,8 +2,16 @@
 # Smart contract complete structure:
 
 Compiled using version 0.7.6
-Smart contract on ropsten: 0x977Bc6DcbE6Dd351661bA91EbD155cC08E98164a
+Smart contract on ropsten: 
+
+SoftwareHandle:  0x977Bc6DcbE6Dd351661bA91EbD155cC08E98164a
 https://ropsten.etherscan.io/address/0x977bc6dcbe6dd351661ba91ebd155cc08e98164a
+
+Software (index 0 of previous SoftwareHandle):  0xf1d50f5F40144CF6215EAa3E55CAC54c5D9E2eC5
+https://ropsten.etherscan.io/address/0xf1d50f5F40144CF6215EAa3E55CAC54c5D9E2eC5
+
+License (index 0 of previous Software):  0x26c825cF2CA8aDcBD3846391fd164FBa4fcA73a6
+https://ropsten.etherscan.io/address/0x26c825cF2CA8aDcBD3846391fd164FBa4fcA73a6
 
 ## SoftwareHandler contract:
 
