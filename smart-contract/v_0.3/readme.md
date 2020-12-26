@@ -4,14 +4,14 @@
 Compiled using version 0.7.6
 Smart contract on ropsten: 
 
-SoftwareHandle:  0x977Bc6DcbE6Dd351661bA91EbD155cC08E98164a
-https://ropsten.etherscan.io/address/0x977bc6dcbe6dd351661ba91ebd155cc08e98164a
+SoftwareHandle:  0x4bAD5F2CA59ceF307c31aE0B70Ec3E9e3349f76b
+https://ropsten.etherscan.io/address/0x4bAD5F2CA59ceF307c31aE0B70Ec3E9e3349f76b
 
-Software (index 0 of previous SoftwareHandle):  0xf1d50f5F40144CF6215EAa3E55CAC54c5D9E2eC5
-https://ropsten.etherscan.io/address/0xf1d50f5F40144CF6215EAa3E55CAC54c5D9E2eC5
+Software (index 0 of previous SoftwareHandle):  0x4D3040C16dDeCfA0c30f760dd28127A0DDBF4cdA
+https://ropsten.etherscan.io/address/0x4D3040C16dDeCfA0c30f760dd28127A0DDBF4cdA
 
-License (index 0 of previous Software):  0x26c825cF2CA8aDcBD3846391fd164FBa4fcA73a6
-https://ropsten.etherscan.io/address/0x26c825cF2CA8aDcBD3846391fd164FBa4fcA73a6
+License (index 0 of previous Software):  0xA7f1667576Dd201d4d8C2DD52b6aA4F5D6eCD62A
+https://ropsten.etherscan.io/address/0xA7f1667576Dd201d4d8C2DD52b6aA4F5D6eCD62A
 
 ## SoftwareHandler contract:
 
@@ -30,7 +30,7 @@ The company_name parameter is here to fill the company_name field of Software.
 Same as before but here the admin can be specified to a different address.
 Be careful with the admin address, if not specify correctly, you may completely loose access to the software.
 
-- `getSoftware(uint index)`
+- `softwares(uint index)`
 
 Access to the array of Software. Returns the address of the Software smart-contracts
 
@@ -46,7 +46,10 @@ not implemented yet
 
 not implemented yet
 
+### Events:
+- `softwareAdded(address)`
 
+when a new software is added using the softwareHandle structure. The address is the address of the new Software.
 
 ## Software contract:
 
@@ -57,7 +60,7 @@ A Software contract hold a list of license.
 
 ### Functions:
 
-- `get_admin()`
+- `admin()`
 
 Return the current admin address.
 
@@ -66,7 +69,7 @@ Return the current admin address.
 Change the admin address. 
 Restricted to the current admin.
 
-- `get_company_name()`
+- `company_name()`
 
 Return the company name.
 
@@ -101,7 +104,7 @@ Add a license with `_admin` as the license admin, `_owner` as the license owner,
 Restricted to the current admin.
 Be careful with the license admin, if you loose control of this address you might loose complete control of the license (typically keep the same admin for the Software and the License).
 
-- `get_license(uint index)`
+- `licenses(uint index)`
 
 Access to the array of License. Returns the address of the Licenses smart-contracts for the specified index.
 
@@ -117,6 +120,20 @@ not implemented yet
 
 not implemented yet
 
+### Events:
+
+- `adminChanged(address)`
+
+called when a new admin is set. The address is the address of the new admin.
+
+- `companyNameChanged(string)`
+
+called when a new company name is set. The string is the company name.
+
+- `licenseAdded(address)`
+
+called when a license is created. The address is the new license address
+
 
 ## License contract:
 
@@ -128,11 +145,11 @@ The owner can put up for sale the license for a price he decided for, and if the
 
 ### Functions:
 
- - `get_is_for_sell()`
+ - `license_for_sale()`
 
 Return true or false if the license is for sale.
  
- - `get_selling_price()`
+ - `selling_price()`
 
  Return the selling price, in wei, if the license is for sell. If it isn't return the error "License is not for sale".
  
@@ -146,7 +163,7 @@ Return true or false if the license is for sale.
  Remove the for sale status (license can't be bought anymore now)
  Restricted to the owner only (not the admin).
  
- - `get_owner()`
+ - `owner()`
 
 Return the current owner address.
  
@@ -155,7 +172,7 @@ Return the current owner address.
 Change the owner. Can be used to give for free a license (by the owner) or deactivate a license (by the admin).
 Restricted to the current owner or the admin.
  
- - `get_admin()`
+ - `admin()`
 
 Return the current admin address.
  
@@ -164,7 +181,7 @@ Return the current admin address.
 Change the admin.
 Restricted to the admin only.
  
- - `get_expiration_timestamp()`
+ - `expiration_timestamp()`
 
 Return the expiration date as a unix timestamp. (0 represent no expiration date).
  
@@ -178,4 +195,28 @@ Restricted to the admin only.
  Remove the expiration date (basically to the same than `set_expiration_timestamp(0)`).
  Restricted to the admin only.
 
- 
+### Events:
+
+- `adminChanged(address)`
+
+called when a new admin is set. The address is the addess of the new admin.
+
+- `ownerChanged(address)`
+
+called when a new owner is set. The address is the addess of the new owner.
+
+- `expirationTimestampChanged(uint)`
+
+called when the expiration date is changed. The number is the new expiration timestamp (unix).
+
+- `licenseSetForSale(uint)`
+
+called when the license is set for sale or the price is changed. The number is the price of the license.
+
+- `licenseRemovedFromSale()`
+
+called when the license is removed from sale (not anymore for sale then).
+
+- `licenseSold(uint, address, address)`
+
+called when the license was sold using a transaction exchange. An event of type ownerChanged(...) should also be emit. The number is the price for which the license was sold, the first address is the old owner (who received the monney) and the second address is the new owner (who paid).

@@ -2,7 +2,7 @@
 	{
 		"inputs": [
 			{
-				"internalType": "address",
+				"internalType": "address payable",
 				"name": "_admin",
 				"type": "address"
 			},
@@ -21,11 +21,94 @@
 		"type": "constructor"
 	},
 	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "adminChanged",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "expirationTimestampChanged",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
 		"inputs": [],
-		"name": "get_admin",
+		"name": "licenseRemovedFromSale",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "licenseSetForSale",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "licenseSold",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "ownerChanged",
+		"type": "event"
+	},
+	{
+		"inputs": [],
+		"name": "admin",
 		"outputs": [
 			{
-				"internalType": "address",
+				"internalType": "address payable",
 				"name": "",
 				"type": "address"
 			}
@@ -35,7 +118,7 @@
 	},
 	{
 		"inputs": [],
-		"name": "get_expiration_timestamp",
+		"name": "expiration_timestamp",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -48,7 +131,7 @@
 	},
 	{
 		"inputs": [],
-		"name": "get_is_for_sell",
+		"name": "license_for_sale",
 		"outputs": [
 			{
 				"internalType": "bool",
@@ -61,25 +144,12 @@
 	},
 	{
 		"inputs": [],
-		"name": "get_owner",
+		"name": "owner",
 		"outputs": [
 			{
-				"internalType": "address",
+				"internalType": "address payable",
 				"name": "",
 				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "get_selling_price",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
 			}
 		],
 		"stateMutability": "view",
@@ -100,9 +170,22 @@
 		"type": "function"
 	},
 	{
+		"inputs": [],
+		"name": "selling_price",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
-				"internalType": "address",
+				"internalType": "address payable",
 				"name": "new_admin",
 				"type": "address"
 			}
@@ -129,7 +212,7 @@
 		"inputs": [
 			{
 				"internalType": "uint256",
-				"name": "_minimum_price_for_sell",
+				"name": "_selling_price",
 				"type": "uint256"
 			}
 		],

@@ -7,7 +7,7 @@
 				"type": "string"
 			},
 			{
-				"internalType": "address",
+				"internalType": "address payable",
 				"name": "_admin",
 				"type": "address"
 			}
@@ -16,6 +16,45 @@
 		"type": "constructor"
 	},
 	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "adminChanged",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"name": "companyNameChanged",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "licenseAdded",
+		"type": "event"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "address payable",
@@ -42,7 +81,7 @@
 	{
 		"inputs": [
 			{
-				"internalType": "address",
+				"internalType": "address payable",
 				"name": "_admin",
 				"type": "address"
 			},
@@ -121,10 +160,10 @@
 	},
 	{
 		"inputs": [],
-		"name": "get_admin",
+		"name": "admin",
 		"outputs": [
 			{
-				"internalType": "address",
+				"internalType": "address payable",
 				"name": "",
 				"type": "address"
 			}
@@ -134,31 +173,12 @@
 	},
 	{
 		"inputs": [],
-		"name": "get_company_name",
+		"name": "company_name",
 		"outputs": [
 			{
 				"internalType": "string",
 				"name": "",
 				"type": "string"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "index",
-				"type": "uint256"
-			}
-		],
-		"name": "get_license",
-		"outputs": [
-			{
-				"internalType": "contract License",
-				"name": "",
-				"type": "address"
 			}
 		],
 		"stateMutability": "view",
@@ -180,7 +200,26 @@
 	{
 		"inputs": [
 			{
-				"internalType": "address",
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "licenses",
+		"outputs": [
+			{
+				"internalType": "contract License",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address payable",
 				"name": "_admin",
 				"type": "address"
 			}
@@ -202,5 +241,9 @@
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
+	},
+	{
+		"stateMutability": "payable",
+		"type": "receive"
 	}
 ]

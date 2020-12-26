@@ -1,5 +1,18 @@
 [
 	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "softwareAdded",
+		"type": "event"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "string",
@@ -26,7 +39,7 @@
 				"type": "string"
 			},
 			{
-				"internalType": "address",
+				"internalType": "address payable",
 				"name": "software_admin",
 				"type": "address"
 			}
@@ -59,11 +72,11 @@
 		"inputs": [
 			{
 				"internalType": "uint256",
-				"name": "index",
+				"name": "",
 				"type": "uint256"
 			}
 		],
-		"name": "getSoftware",
+		"name": "softwares",
 		"outputs": [
 			{
 				"internalType": "contract Software",
@@ -73,5 +86,9 @@
 		],
 		"stateMutability": "view",
 		"type": "function"
+	},
+	{
+		"stateMutability": "payable",
+		"type": "receive"
 	}
 ]
