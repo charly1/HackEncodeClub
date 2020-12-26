@@ -4,13 +4,13 @@
 Compiled using version 0.7.6
 Smart contract on ropsten: 
 
-SoftwareHandle:  0x4bAD5F2CA59ceF307c31aE0B70Ec3E9e3349f76b
+SoftwareHandle:  0x4bAD5F2CA59ceF307c31aE0B70Ec3E9e3349f76b  
 https://ropsten.etherscan.io/address/0x4bAD5F2CA59ceF307c31aE0B70Ec3E9e3349f76b
 
-Software (index 0 of previous SoftwareHandle):  0x4D3040C16dDeCfA0c30f760dd28127A0DDBF4cdA
+Software (index 0 of previous SoftwareHandle):  0x4D3040C16dDeCfA0c30f760dd28127A0DDBF4cdA  
 https://ropsten.etherscan.io/address/0x4D3040C16dDeCfA0c30f760dd28127A0DDBF4cdA
 
-License (index 0 of previous Software):  0xA7f1667576Dd201d4d8C2DD52b6aA4F5D6eCD62A
+License (index 0 of previous Software):  0xA7f1667576Dd201d4d8C2DD52b6aA4F5D6eCD62A  
 https://ropsten.etherscan.io/address/0xA7f1667576Dd201d4d8C2DD52b6aA4F5D6eCD62A
 
 ## SoftwareHandler contract:

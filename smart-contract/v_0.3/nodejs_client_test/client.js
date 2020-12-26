@@ -7,8 +7,9 @@
 
 Web3 = require('web3');
 
-env = 'prod'
-//env = 'test'
+// env = 'prod'     // for mainnet ethereum blockchain, not working for now
+env = 'test'        // for testing on ropsten blockchain
+//env = 'debug'     // for debug on ganache local blockchain
 
 // using ws or wss to be compatible with event emit
 eth_node_link_infura = "wss://ropsten.infura.io/ws/v3/709fd1df01b54f5ab3b9f696894dfb10"
@@ -47,7 +48,7 @@ private_account_4 = '0xf24826dd47d25a84e2d0e30cdda6f431d0ef9dc8be36cf42719860d09
 account_4 = w.eth.accounts.privateKeyToAccount(private_account_4);
 
 
-if (env === 'test') {
+if (env === 'debug') {
     w = new Web3(eth_node_link_ganache);
 
     contract_software_handler_abi = [{"anonymous": false,"inputs": [{"indexed": false,"internalType": "address","name": "","type": "address"}],"name": "softwareAdded","type": "event"},{"inputs": [{"internalType": "string","name": "company_name","type": "string"}],"name": "addSoftware","outputs": [{"internalType": "contract Software","name": "","type": "address"}],"stateMutability": "nonpayable","type": "function"},{"inputs": [{"internalType": "string","name": "company_name","type": "string"},{"internalType": "address","name": "software_admin","type": "address"}],"name": "addSoftware","outputs": [{"internalType": "contract Software","name": "","type": "address"}],"stateMutability": "nonpayable","type": "function"},{"inputs": [],"name": "getNbOfSoftware","outputs": [{"internalType": "uint256","name": "","type": "uint256"}],"stateMutability": "view","type": "function"},{"inputs": [{"internalType": "uint256","name": "","type": "uint256"}],"name": "softwares","outputs": [{"internalType": "contract Software","name": "","type": "address"}],"stateMutability": "view","type": "function"}]
