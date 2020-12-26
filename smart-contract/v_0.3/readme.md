@@ -49,7 +49,7 @@ not implemented yet
 ### Events:
 - `softwareAdded(address)`
 
-when a new software is added using the softwareHandle structure. The address is the address of the new Software.
+emited when a new software is added using the softwareHandle structure. The address is the address of the new Software.
 
 ## Software contract:
 
@@ -124,15 +124,15 @@ not implemented yet
 
 - `adminChanged(address)`
 
-called when a new admin is set. The address is the address of the new admin.
+emited when a new admin is set. The address is the address of the new admin.
 
 - `companyNameChanged(string)`
 
-called when a new company name is set. The string is the company name.
+emited when a new company name is set. The string is the company name.
 
 - `licenseAdded(address)`
 
-called when a license is created. The address is the new license address
+emited when a license is created. The address is the new license address
 
 
 ## License contract:
@@ -199,24 +199,24 @@ Restricted to the admin only.
 
 - `adminChanged(address)`
 
-called when a new admin is set. The address is the addess of the new admin.
+emited when a new admin is set. The address is the addess of the new admin.
 
 - `ownerChanged(address)`
 
-called when a new owner is set. The address is the addess of the new owner.
+emited when a new owner is set. The address is the addess of the new owner.
 
 - `expirationTimestampChanged(uint)`
 
-called when the expiration date is changed. The number is the new expiration timestamp (unix).
+emited when the expiration date is changed. The number is the new expiration timestamp (unix).
 
 - `licenseSetForSale(uint)`
 
-called when the license is set for sale or the price is changed. The number is the price of the license.
+emited when the license is set for sale or the price is changed. The number is the price of the license.
 
 - `licenseRemovedFromSale()`
 
-called when the license is removed from sale (not anymore for sale then).
+emited when the license is removed from sale (not anymore for sale then).
 
 - `licenseSold(uint, address, address)`
 
-called when the license was sold using a transaction exchange. An event of type ownerChanged(...) should also be emit. The number is the price for which the license was sold, the first address is the old owner (who received the monney) and the second address is the new owner (who paid).
+emited when the license was sold using a transaction exchange. An event of type ownerChanged(...) should also be emit. The number is the price for which the license was sold, the first address is the old owner (who received the monney) and the second address is the new owner (who paid).
