@@ -34,13 +34,16 @@ app.get("/src/portis_log.js", function (req, res) {
 app.get("/src/contract_abi.js", function (req, res) {
     res.sendFile(path.join(base_path, "src", "contract_abi.js"));
 });
+app.get("/src/utils.js", function (req, res) {
+    res.sendFile(path.join(base_path, "src", "utils.js"));
+});
 app.get('/check_owner', function (req, res) {  
 response = {  
-       bc_owner:req.query.bc_owner,  
-       local_owner:req.query.local_owner  
+       contr_adr:req.query.contr_adr,  
+       is_valid:req.query.is_valid  
    };  
    console.log(response);  
-   res.end(JSON.stringify(response));  
+   res.end(JSON.stringify(response));
 })
 
 app.listen(index_port, function () {
