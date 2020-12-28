@@ -12,9 +12,21 @@ const portis = new Portis('ae06b1b0-908f-4f16-859c-fb70fd869ec8', 'ropsten',  {s
 const web3 = new Web3(portis.provider);
 
 /*Perform licence verification*/
-const contract = new web3.eth.Contract(contract_software_abi, software_contract);
+var contract = null;
+try {
+	contract = new web3.eth.Contract(contract_software_abi, software_contract);
+}
+catch (error) {
+	document.getElementById('text').innerText = "Invalid contract address";
+	contract = null;
+}
+
 
 portis.onLogin((walletAddress, email, reputation) => {
+	if (contract === null) {
+		return;
+	}
+
 	document.getElementById('text').innerText = "Logged in!";
 	document.getElementById('text').innerText = "Checking if key exists...";
 
@@ -29,4 +41,5 @@ portis.onLogin((walletAddress, email, reputation) => {
       		document.getElementById('text').innerText = "Error while validating contract";
 			console.error("An error occured:\n", error)
 		})
+	
 });
