@@ -1,3 +1,10 @@
+document.getElementById('text').innerText = "Initialisation";
+
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+const software_contract = urlParams.get('contract')
+
+
 document.getElementById('text').innerText = "Loading your account...";
 
 /*Authentification*/

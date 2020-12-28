@@ -1,5 +1,8 @@
 const open = require('open');
 
+/*software_contract_adr determines the adress of the lices smart contract*/
+const software_contract_adr = "0xc3Fe598B1D56aCaa8Ce7c5468230228E4D614120";
+
 const index_file = "index.html";
 const index_port = 3000;
 const local_path = 'http://localhost';
@@ -7,7 +10,7 @@ const local_path = 'http://localhost';
 const express = require("express");
 const app = express();
 
-var log_url = local_path+':'+index_port;
+var log_url = local_path+':'+index_port +"?contract="+software_contract_adr;
 
 (async () => {
     await open(log_url);
