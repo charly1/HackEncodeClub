@@ -17,12 +17,12 @@ eth_node_link_ganache = "ws://127.0.0.1:7545"
 w = new Web3(eth_node_link_infura);
 
 contract_software_handler_abi = [{"anonymous": false,"inputs": [{"indexed": false,"internalType": "address","name": "","type": "address"}],"name": "softwareAdded","type": "event"},{"inputs": [{"internalType": "string","name": "company_name","type": "string"}],"name": "addSoftware","outputs": [{"internalType": "contract Software","name": "","type": "address"}],"stateMutability": "nonpayable","type": "function"},{"inputs": [{"internalType": "string","name": "company_name","type": "string"},{"internalType": "address payable","name": "software_admin","type": "address"}],"name": "addSoftware","outputs": [{"internalType": "contract Software","name": "","type": "address"}],"stateMutability": "nonpayable","type": "function"},{"inputs": [],"name": "getNbOfSoftware","outputs": [{"internalType": "uint256","name": "","type": "uint256"}],"stateMutability": "view","type": "function"},{"inputs": [{"internalType": "uint256","name": "","type": "uint256"}],"name": "softwares","outputs": [{"internalType": "contract Software","name": "","type": "address"}],"stateMutability": "view","type": "function"},{"stateMutability": "payable","type": "receive"}]
-contract_software_abi = [{"inputs": [{"internalType": "string","name": "company","type": "string"},{"internalType": "address payable","name": "_admin","type": "address"}],"stateMutability": "nonpayable","type": "constructor"},{"anonymous": false,"inputs": [{"indexed": false,"internalType": "address","name": "","type": "address"}],"name": "adminChanged","type": "event"},{"anonymous": false,"inputs": [{"indexed": false,"internalType": "string","name": "","type": "string"}],"name": "companyNameChanged","type": "event"},{"anonymous": false,"inputs": [{"indexed": false,"internalType": "address","name": "","type": "address"}],"name": "licenseAdded","type": "event"},{"inputs": [{"internalType": "address payable","name": "_owner","type": "address"},{"internalType": "uint256","name": "_expiration_timestamp","type": "uint256"}],"name": "add_license","outputs": [{"internalType": "contract License","name": "","type": "address"}],"stateMutability": "nonpayable","type": "function"},{"inputs": [{"internalType": "address payable","name": "_admin","type": "address"},{"internalType": "address payable","name": "_owner","type": "address"},{"internalType": "uint256","name": "_expiration_timestamp","type": "uint256"}],"name": "add_license","outputs": [{"internalType": "contract License","name": "","type": "address"}],"stateMutability": "nonpayable","type": "function"},{"inputs": [],"name": "add_license","outputs": [{"internalType": "contract License","name": "","type": "address"}],"stateMutability": "nonpayable","type": "function"},{"inputs": [{"internalType": "uint256","name": "_expiration_timestamp","type": "uint256"}],"name": "add_license","outputs": [{"internalType": "contract License","name": "","type": "address"}],"stateMutability": "nonpayable","type": "function"},{"inputs": [{"internalType": "address payable","name": "_owner","type": "address"}],"name": "add_license","outputs": [{"internalType": "contract License","name": "","type": "address"}],"stateMutability": "nonpayable","type": "function"},{"inputs": [],"name": "admin","outputs": [{"internalType": "address payable","name": "","type": "address"}],"stateMutability": "view","type": "function"},{"inputs": [],"name": "company_name","outputs": [{"internalType": "string","name": "","type": "string"}],"stateMutability": "view","type": "function"},{"inputs": [],"name": "get_nb_license","outputs": [{"internalType": "uint256","name": "","type": "uint256"}],"stateMutability": "view","type": "function"},{"inputs": [{"internalType": "uint256","name": "","type": "uint256"}],"name": "licenses","outputs": [{"internalType": "contract License","name": "","type": "address"}],"stateMutability": "view","type": "function"},{"inputs": [{"internalType": "address payable","name": "_admin","type": "address"}],"name": "set_admin","outputs": [],"stateMutability": "nonpayable","type": "function"},{"inputs": [{"internalType": "string","name": "_company_name","type": "string"}],"name": "set_company_name","outputs": [],"stateMutability": "nonpayable","type": "function"},{"stateMutability": "payable","type": "receive"}]
-contract_license_abi = [{"inputs": [{"internalType": "address payable","name": "_admin","type": "address"},{"internalType": "address payable","name": "_owner","type": "address"},{"internalType": "uint256","name": "_expiration_timestamp","type": "uint256"}],"stateMutability": "nonpayable","type": "constructor"},{"anonymous": false,"inputs": [{"indexed": false,"internalType": "address","name": "","type": "address"}],"name": "adminChanged","type": "event"},{"anonymous": false,"inputs": [{"indexed": false,"internalType": "uint256","name": "","type": "uint256"}],"name": "expirationTimestampChanged","type": "event"},{"anonymous": false,"inputs": [],"name": "licenseRemovedFromSale","type": "event"},{"anonymous": false,"inputs": [{"indexed": false,"internalType": "uint256","name": "","type": "uint256"}],"name": "licenseSetForSale","type": "event"},{"anonymous": false,"inputs": [{"indexed": false,"internalType": "uint256","name": "","type": "uint256"},{"indexed": false,"internalType": "address","name": "","type": "address"},{"indexed": false,"internalType": "address","name": "","type": "address"}],"name": "licenseSold","type": "event"},{"anonymous": false,"inputs": [{"indexed": false,"internalType": "address","name": "","type": "address"}],"name": "ownerChanged","type": "event"},{"inputs": [],"name": "admin","outputs": [{"internalType": "address payable","name": "","type": "address"}],"stateMutability": "view","type": "function"},{"inputs": [],"name": "expiration_timestamp","outputs": [{"internalType": "uint256","name": "","type": "uint256"}],"stateMutability": "view","type": "function"},{"inputs": [],"name": "license_for_sale","outputs": [{"internalType": "bool","name": "","type": "bool"}],"stateMutability": "view","type": "function"},{"inputs": [],"name": "owner","outputs": [{"internalType": "address payable","name": "","type": "address"}],"stateMutability": "view","type": "function"},{"inputs": [],"name": "remove_expiration_timestamp","outputs": [],"stateMutability": "nonpayable","type": "function"},{"inputs": [],"name": "remove_for_sale","outputs": [],"stateMutability": "nonpayable","type": "function"},{"inputs": [],"name": "selling_price","outputs": [{"internalType": "uint256","name": "","type": "uint256"}],"stateMutability": "view","type": "function"},{"inputs": [{"internalType": "address payable","name": "new_admin","type": "address"}],"name": "set_admin","outputs": [],"stateMutability": "nonpayable","type": "function"},{"inputs": [{"internalType": "uint256","name": "new_timestamp","type": "uint256"}],"name": "set_expiration_timestamp","outputs": [],"stateMutability": "nonpayable","type": "function"},{"inputs": [{"internalType": "uint256","name": "_selling_price","type": "uint256"}],"name": "set_for_sale","outputs": [],"stateMutability": "nonpayable","type": "function"},{"inputs": [{"internalType": "address payable","name": "new_owner","type": "address"}],"name": "set_owner","outputs": [],"stateMutability": "nonpayable","type": "function"},{"stateMutability": "payable","type": "receive"}]
+contract_software_abi = [{"inputs": [{"internalType": "string","name": "company","type": "string"},{"internalType": "address payable","name": "_admin","type": "address"}],"stateMutability": "nonpayable","type": "constructor"},{"anonymous": false,"inputs": [{"indexed": false,"internalType": "address","name": "","type": "address"}],"name": "adminChanged","type": "event"},{"anonymous": false,"inputs": [{"indexed": false,"internalType": "string","name": "","type": "string"}],"name": "companyNameChanged","type": "event"},{"anonymous": false,"inputs": [{"indexed": false,"internalType": "address","name": "","type": "address"}],"name": "licenseAdded","type": "event"},{"inputs": [{"internalType": "address payable","name": "_owner","type": "address"},{"internalType": "uint256","name": "_expiration_timestamp","type": "uint256"}],"name": "add_license","outputs": [{"internalType": "contract License","name": "","type": "address"}],"stateMutability": "nonpayable","type": "function"},{"inputs": [{"internalType": "address payable","name": "_admin","type": "address"},{"internalType": "address payable","name": "_owner","type": "address"},{"internalType": "uint256","name": "_expiration_timestamp","type": "uint256"}],"name": "add_license","outputs": [{"internalType": "contract License","name": "","type": "address"}],"stateMutability": "nonpayable","type": "function"},{"inputs": [],"name": "add_license","outputs": [{"internalType": "contract License","name": "","type": "address"}],"stateMutability": "nonpayable","type": "function"},{"inputs": [{"internalType": "uint256","name": "_expiration_timestamp","type": "uint256"}],"name": "add_license","outputs": [{"internalType": "contract License","name": "","type": "address"}],"stateMutability": "nonpayable","type": "function"},{"inputs": [{"internalType": "address payable","name": "_owner","type": "address"}],"name": "add_license","outputs": [{"internalType": "contract License","name": "","type": "address"}],"stateMutability": "nonpayable","type": "function"},{"inputs": [],"name": "admin","outputs": [{"internalType": "address payable","name": "","type": "address"}],"stateMutability": "view","type": "function"},{"inputs": [{"internalType": "address","name": "adr","type": "address"}],"name": "check_license","outputs": [{"internalType": "bool","name": "","type": "bool"}],"stateMutability": "view","type": "function"},{"inputs": [],"name": "company_name","outputs": [{"internalType": "string","name": "","type": "string"}],"stateMutability": "view","type": "function"},{"inputs": [],"name": "get_nb_license","outputs": [{"internalType": "uint256","name": "","type": "uint256"}],"stateMutability": "view","type": "function"},{"inputs": [{"internalType": "address","name": "oldOwner","type": "address"},{"internalType": "address","name": "newOwner","type": "address"}],"name": "licenseHasChangedOwner","outputs": [],"stateMutability": "nonpayable","type": "function"},{"inputs": [{"internalType": "uint256","name": "","type": "uint256"}],"name": "licenses","outputs": [{"internalType": "contract License","name": "","type": "address"}],"stateMutability": "view","type": "function"},{"inputs": [{"internalType": "address","name": "","type": "address"}],"name": "ownerLicense","outputs": [{"internalType": "contract License","name": "","type": "address"}],"stateMutability": "view","type": "function"},{"inputs": [{"internalType": "address payable","name": "_admin","type": "address"}],"name": "set_admin","outputs": [],"stateMutability": "nonpayable","type": "function"},{"inputs": [{"internalType": "string","name": "_company_name","type": "string"}],"name": "set_company_name","outputs": [],"stateMutability": "nonpayable","type": "function"},{"stateMutability": "payable","type": "receive"}]
+contract_license_abi = [{"inputs": [{"internalType": "address payable","name": "_admin","type": "address"},{"internalType": "address payable","name": "_owner","type": "address"},{"internalType": "uint256","name": "_expiration_timestamp","type": "uint256"}],"stateMutability": "nonpayable","type": "constructor"},{"anonymous": false,"inputs": [{"indexed": false,"internalType": "address","name": "","type": "address"}],"name": "adminChanged","type": "event"},{"anonymous": false,"inputs": [{"indexed": false,"internalType": "uint256","name": "","type": "uint256"}],"name": "expirationTimestampChanged","type": "event"},{"anonymous": false,"inputs": [],"name": "licenseRemovedFromSale","type": "event"},{"anonymous": false,"inputs": [{"indexed": false,"internalType": "uint256","name": "","type": "uint256"}],"name": "licenseSetForSale","type": "event"},{"anonymous": false,"inputs": [{"indexed": false,"internalType": "uint256","name": "","type": "uint256"},{"indexed": false,"internalType": "address","name": "","type": "address"},{"indexed": false,"internalType": "address","name": "","type": "address"}],"name": "licenseSold","type": "event"},{"anonymous": false,"inputs": [{"indexed": false,"internalType": "address","name": "","type": "address"}],"name": "ownerChanged","type": "event"},{"inputs": [],"name": "admin","outputs": [{"internalType": "address payable","name": "","type": "address"}],"stateMutability": "view","type": "function"},{"inputs": [],"name": "expiration_timestamp","outputs": [{"internalType": "uint256","name": "","type": "uint256"}],"stateMutability": "view","type": "function"},{"inputs": [],"name": "license_for_sale","outputs": [{"internalType": "bool","name": "","type": "bool"}],"stateMutability": "view","type": "function"},{"inputs": [],"name": "owner","outputs": [{"internalType": "address payable","name": "","type": "address"}],"stateMutability": "view","type": "function"},{"inputs": [],"name": "remove_expiration_timestamp","outputs": [],"stateMutability": "nonpayable","type": "function"},{"inputs": [],"name": "remove_for_sale","outputs": [],"stateMutability": "nonpayable","type": "function"},{"inputs": [],"name": "selling_price","outputs": [{"internalType": "uint256","name": "","type": "uint256"}],"stateMutability": "view","type": "function"},{"inputs": [{"internalType": "address payable","name": "new_admin","type": "address"}],"name": "set_admin","outputs": [],"stateMutability": "nonpayable","type": "function"},{"inputs": [{"internalType": "uint256","name": "new_timestamp","type": "uint256"}],"name": "set_expiration_timestamp","outputs": [],"stateMutability": "nonpayable","type": "function"},{"inputs": [{"internalType": "uint256","name": "_selling_price","type": "uint256"}],"name": "set_for_sale","outputs": [],"stateMutability": "nonpayable","type": "function"},{"inputs": [{"internalType": "address payable","name": "new_owner","type": "address"}],"name": "set_owner","outputs": [],"stateMutability": "nonpayable","type": "function"},{"inputs": [],"name": "software","outputs": [{"internalType": "contract Software","name": "","type": "address"}],"stateMutability": "view","type": "function"},{"stateMutability": "payable","type": "receive"}]
 
-software_handler_contract_adr = "0x4bAD5F2CA59ceF307c31aE0B70Ec3E9e3349f76b"
-software_contract_adr = "0x4D3040C16dDeCfA0c30f760dd28127A0DDBF4cdA"
-license_contract_adr = "0xA7f1667576Dd201d4d8C2DD52b6aA4F5D6eCD62A"
+software_handler_contract_adr = "0xfd217c7d08e1b3477b4a95e6f9d9d149d8e74621"
+software_contract_adr = "0xc3Fe598B1D56aCaa8Ce7c5468230228E4D614120"
+license_contract_adr = "0xa59ddA2b29E099f172FE12e0454eBC2193C5e93E"
 
 contract_sh = new w.eth.Contract(contract_software_handler_abi, software_handler_contract_adr);
 contract_s = new w.eth.Contract(contract_software_abi, software_contract_adr);
@@ -47,37 +47,40 @@ address_account_4 = '0xdead29e9dd478451c6852f4278cA07DEED98F706';
 private_account_4 = '0xf24826dd47d25a84e2d0e30cdda6f431d0ef9dc8be36cf42719860d09fce21a3';
 account_4 = w.eth.accounts.privateKeyToAccount(private_account_4);
 
+gasUseEveryWhere = 2000000;
+
 
 if (env === 'debug') {
+    // ganache mnemonic: verb outside toast guess version common fox again army excite purse doll
     w = new Web3(eth_node_link_ganache);
 
-    contract_software_handler_abi = [{"anonymous": false,"inputs": [{"indexed": false,"internalType": "address","name": "","type": "address"}],"name": "softwareAdded","type": "event"},{"inputs": [{"internalType": "string","name": "company_name","type": "string"}],"name": "addSoftware","outputs": [{"internalType": "contract Software","name": "","type": "address"}],"stateMutability": "nonpayable","type": "function"},{"inputs": [{"internalType": "string","name": "company_name","type": "string"},{"internalType": "address","name": "software_admin","type": "address"}],"name": "addSoftware","outputs": [{"internalType": "contract Software","name": "","type": "address"}],"stateMutability": "nonpayable","type": "function"},{"inputs": [],"name": "getNbOfSoftware","outputs": [{"internalType": "uint256","name": "","type": "uint256"}],"stateMutability": "view","type": "function"},{"inputs": [{"internalType": "uint256","name": "","type": "uint256"}],"name": "softwares","outputs": [{"internalType": "contract Software","name": "","type": "address"}],"stateMutability": "view","type": "function"}]
-    contract_software_abi = [{"inputs": [{"internalType": "string","name": "company","type": "string"},{"internalType": "address","name": "_admin","type": "address"}],"stateMutability": "nonpayable","type": "constructor"},{"anonymous": false,"inputs": [{"indexed": false,"internalType": "address","name": "","type": "address"}],"name": "adminChanged","type": "event"},{"anonymous": false,"inputs": [{"indexed": false,"internalType": "string","name": "","type": "string"}],"name": "companyNameChanged","type": "event"},{"anonymous": false,"inputs": [{"indexed": false,"internalType": "address","name": "","type": "address"}],"name": "licenseAdded","type": "event"},{"inputs": [{"internalType": "address payable","name": "_owner","type": "address"},{"internalType": "uint256","name": "_expiration_timestamp","type": "uint256"}],"name": "add_license","outputs": [{"internalType": "contract License","name": "","type": "address"}],"stateMutability": "nonpayable","type": "function"},{"inputs": [{"internalType": "address","name": "_admin","type": "address"},{"internalType": "address payable","name": "_owner","type": "address"},{"internalType": "uint256","name": "_expiration_timestamp","type": "uint256"}],"name": "add_license","outputs": [{"internalType": "contract License","name": "","type": "address"}],"stateMutability": "nonpayable","type": "function"},{"inputs": [],"name": "add_license","outputs": [{"internalType": "contract License","name": "","type": "address"}],"stateMutability": "nonpayable","type": "function"},{"inputs": [{"internalType": "uint256","name": "_expiration_timestamp","type": "uint256"}],"name": "add_license","outputs": [{"internalType": "contract License","name": "","type": "address"}],"stateMutability": "nonpayable","type": "function"},{"inputs": [{"internalType": "address payable","name": "_owner","type": "address"}],"name": "add_license","outputs": [{"internalType": "contract License","name": "","type": "address"}],"stateMutability": "nonpayable","type": "function"},{"inputs": [],"name": "admin","outputs": [{"internalType": "address","name": "","type": "address"}],"stateMutability": "view","type": "function"},{"inputs": [],"name": "company_name","outputs": [{"internalType": "string","name": "","type": "string"}],"stateMutability": "view","type": "function"},{"inputs": [],"name": "get_nb_license","outputs": [{"internalType": "uint256","name": "","type": "uint256"}],"stateMutability": "view","type": "function"},{"inputs": [{"internalType": "uint256","name": "","type": "uint256"}],"name": "licenses","outputs": [{"internalType": "contract License","name": "","type": "address"}],"stateMutability": "view","type": "function"},{"inputs": [{"internalType": "address","name": "_admin","type": "address"}],"name": "set_admin","outputs": [],"stateMutability": "nonpayable","type": "function"},{"inputs": [{"internalType": "string","name": "_company_name","type": "string"}],"name": "set_company_name","outputs": [],"stateMutability": "nonpayable","type": "function"}]
-    contract_license_abi = [{"inputs": [{"internalType": "address","name": "_admin","type": "address"},{"internalType": "address payable","name": "_owner","type": "address"},{"internalType": "uint256","name": "_expiration_timestamp","type": "uint256"}],"stateMutability": "nonpayable","type": "constructor"},{"anonymous": false,"inputs": [{"indexed": false,"internalType": "address","name": "","type": "address"}],"name": "adminChanged","type": "event"},{"anonymous": false,"inputs": [{"indexed": false,"internalType": "uint256","name": "","type": "uint256"}],"name": "expirationTimestampChanged","type": "event"},{"anonymous": false,"inputs": [],"name": "licenseRemovedFromSale","type": "event"},{"anonymous": false,"inputs": [{"indexed": false,"internalType": "uint256","name": "","type": "uint256"}],"name": "licenseSetForSale","type": "event"},{"anonymous": false,"inputs": [{"indexed": false,"internalType": "uint256","name": "","type": "uint256"},{"indexed": false,"internalType": "address","name": "","type": "address"},{"indexed": false,"internalType": "address","name": "","type": "address"}],"name": "licenseSold","type": "event"},{"anonymous": false,"inputs": [{"indexed": false,"internalType": "address","name": "","type": "address"}],"name": "ownerChanged","type": "event"},{"inputs": [],"name": "admin","outputs": [{"internalType": "address","name": "","type": "address"}],"stateMutability": "view","type": "function"},{"inputs": [],"name": "expiration_timestamp","outputs": [{"internalType": "uint256","name": "","type": "uint256"}],"stateMutability": "view","type": "function"},{"inputs": [],"name": "license_for_sale","outputs": [{"internalType": "bool","name": "","type": "bool"}],"stateMutability": "view","type": "function"},{"inputs": [],"name": "owner","outputs": [{"internalType": "address payable","name": "","type": "address"}],"stateMutability": "view","type": "function"},{"inputs": [],"name": "remove_expiration_timestamp","outputs": [],"stateMutability": "nonpayable","type": "function"},{"inputs": [],"name": "remove_for_sale","outputs": [],"stateMutability": "nonpayable","type": "function"},{"inputs": [],"name": "selling_price","outputs": [{"internalType": "uint256","name": "","type": "uint256"}],"stateMutability": "view","type": "function"},{"inputs": [{"internalType": "address","name": "new_admin","type": "address"}],"name": "set_admin","outputs": [],"stateMutability": "nonpayable","type": "function"},{"inputs": [{"internalType": "uint256","name": "new_timestamp","type": "uint256"}],"name": "set_expiration_timestamp","outputs": [],"stateMutability": "nonpayable","type": "function"},{"inputs": [{"internalType": "uint256","name": "_selling_price","type": "uint256"}],"name": "set_for_sale","outputs": [],"stateMutability": "nonpayable","type": "function"},{"inputs": [{"internalType": "address payable","name": "new_owner","type": "address"}],"name": "set_owner","outputs": [],"stateMutability": "nonpayable","type": "function"},{"stateMutability": "payable","type": "receive"}]
+    contract_software_handler_abi = [{"anonymous": false,"inputs": [{"indexed": false,"internalType": "address","name": "","type": "address"}],"name": "softwareAdded","type": "event"},{"inputs": [{"internalType": "string","name": "company_name","type": "string"}],"name": "addSoftware","outputs": [{"internalType": "contract Software","name": "","type": "address"}],"stateMutability": "nonpayable","type": "function"},{"inputs": [{"internalType": "string","name": "company_name","type": "string"},{"internalType": "address payable","name": "software_admin","type": "address"}],"name": "addSoftware","outputs": [{"internalType": "contract Software","name": "","type": "address"}],"stateMutability": "nonpayable","type": "function"},{"inputs": [],"name": "getNbOfSoftware","outputs": [{"internalType": "uint256","name": "","type": "uint256"}],"stateMutability": "view","type": "function"},{"inputs": [{"internalType": "uint256","name": "","type": "uint256"}],"name": "softwares","outputs": [{"internalType": "contract Software","name": "","type": "address"}],"stateMutability": "view","type": "function"},{"stateMutability": "payable","type": "receive"}]
+    contract_software_abi = [{"inputs": [{"internalType": "string","name": "company","type": "string"},{"internalType": "address payable","name": "_admin","type": "address"}],"stateMutability": "nonpayable","type": "constructor"},{"anonymous": false,"inputs": [{"indexed": false,"internalType": "address","name": "","type": "address"}],"name": "adminChanged","type": "event"},{"anonymous": false,"inputs": [{"indexed": false,"internalType": "string","name": "","type": "string"}],"name": "companyNameChanged","type": "event"},{"anonymous": false,"inputs": [{"indexed": false,"internalType": "address","name": "","type": "address"}],"name": "licenseAdded","type": "event"},{"inputs": [{"internalType": "address payable","name": "_owner","type": "address"},{"internalType": "uint256","name": "_expiration_timestamp","type": "uint256"}],"name": "add_license","outputs": [{"internalType": "contract License","name": "","type": "address"}],"stateMutability": "nonpayable","type": "function"},{"inputs": [{"internalType": "address payable","name": "_admin","type": "address"},{"internalType": "address payable","name": "_owner","type": "address"},{"internalType": "uint256","name": "_expiration_timestamp","type": "uint256"}],"name": "add_license","outputs": [{"internalType": "contract License","name": "","type": "address"}],"stateMutability": "nonpayable","type": "function"},{"inputs": [],"name": "add_license","outputs": [{"internalType": "contract License","name": "","type": "address"}],"stateMutability": "nonpayable","type": "function"},{"inputs": [{"internalType": "uint256","name": "_expiration_timestamp","type": "uint256"}],"name": "add_license","outputs": [{"internalType": "contract License","name": "","type": "address"}],"stateMutability": "nonpayable","type": "function"},{"inputs": [{"internalType": "address payable","name": "_owner","type": "address"}],"name": "add_license","outputs": [{"internalType": "contract License","name": "","type": "address"}],"stateMutability": "nonpayable","type": "function"},{"inputs": [],"name": "admin","outputs": [{"internalType": "address payable","name": "","type": "address"}],"stateMutability": "view","type": "function"},{"inputs": [{"internalType": "address","name": "adr","type": "address"}],"name": "check_license","outputs": [{"internalType": "bool","name": "","type": "bool"}],"stateMutability": "view","type": "function"},{"inputs": [],"name": "company_name","outputs": [{"internalType": "string","name": "","type": "string"}],"stateMutability": "view","type": "function"},{"inputs": [],"name": "get_nb_license","outputs": [{"internalType": "uint256","name": "","type": "uint256"}],"stateMutability": "view","type": "function"},{"inputs": [{"internalType": "address","name": "oldOwner","type": "address"},{"internalType": "address","name": "newOwner","type": "address"}],"name": "licenseHasChangedOwner","outputs": [],"stateMutability": "nonpayable","type": "function"},{"inputs": [{"internalType": "uint256","name": "","type": "uint256"}],"name": "licenses","outputs": [{"internalType": "contract License","name": "","type": "address"}],"stateMutability": "view","type": "function"},{"inputs": [{"internalType": "address","name": "","type": "address"}],"name": "ownerLicense","outputs": [{"internalType": "contract License","name": "","type": "address"}],"stateMutability": "view","type": "function"},{"inputs": [{"internalType": "address payable","name": "_admin","type": "address"}],"name": "set_admin","outputs": [],"stateMutability": "nonpayable","type": "function"},{"inputs": [{"internalType": "string","name": "_company_name","type": "string"}],"name": "set_company_name","outputs": [],"stateMutability": "nonpayable","type": "function"},{"stateMutability": "payable","type": "receive"}]
+    contract_license_abi = [{"inputs": [{"internalType": "address payable","name": "_admin","type": "address"},{"internalType": "address payable","name": "_owner","type": "address"},{"internalType": "uint256","name": "_expiration_timestamp","type": "uint256"}],"stateMutability": "nonpayable","type": "constructor"},{"anonymous": false,"inputs": [{"indexed": false,"internalType": "address","name": "","type": "address"}],"name": "adminChanged","type": "event"},{"anonymous": false,"inputs": [{"indexed": false,"internalType": "uint256","name": "","type": "uint256"}],"name": "expirationTimestampChanged","type": "event"},{"anonymous": false,"inputs": [],"name": "licenseRemovedFromSale","type": "event"},{"anonymous": false,"inputs": [{"indexed": false,"internalType": "uint256","name": "","type": "uint256"}],"name": "licenseSetForSale","type": "event"},{"anonymous": false,"inputs": [{"indexed": false,"internalType": "uint256","name": "","type": "uint256"},{"indexed": false,"internalType": "address","name": "","type": "address"},{"indexed": false,"internalType": "address","name": "","type": "address"}],"name": "licenseSold","type": "event"},{"anonymous": false,"inputs": [{"indexed": false,"internalType": "address","name": "","type": "address"}],"name": "ownerChanged","type": "event"},{"inputs": [],"name": "admin","outputs": [{"internalType": "address payable","name": "","type": "address"}],"stateMutability": "view","type": "function"},{"inputs": [],"name": "expiration_timestamp","outputs": [{"internalType": "uint256","name": "","type": "uint256"}],"stateMutability": "view","type": "function"},{"inputs": [],"name": "license_for_sale","outputs": [{"internalType": "bool","name": "","type": "bool"}],"stateMutability": "view","type": "function"},{"inputs": [],"name": "owner","outputs": [{"internalType": "address payable","name": "","type": "address"}],"stateMutability": "view","type": "function"},{"inputs": [],"name": "remove_expiration_timestamp","outputs": [],"stateMutability": "nonpayable","type": "function"},{"inputs": [],"name": "remove_for_sale","outputs": [],"stateMutability": "nonpayable","type": "function"},{"inputs": [],"name": "selling_price","outputs": [{"internalType": "uint256","name": "","type": "uint256"}],"stateMutability": "view","type": "function"},{"inputs": [{"internalType": "address payable","name": "new_admin","type": "address"}],"name": "set_admin","outputs": [],"stateMutability": "nonpayable","type": "function"},{"inputs": [{"internalType": "uint256","name": "new_timestamp","type": "uint256"}],"name": "set_expiration_timestamp","outputs": [],"stateMutability": "nonpayable","type": "function"},{"inputs": [{"internalType": "uint256","name": "_selling_price","type": "uint256"}],"name": "set_for_sale","outputs": [],"stateMutability": "nonpayable","type": "function"},{"inputs": [{"internalType": "address payable","name": "new_owner","type": "address"}],"name": "set_owner","outputs": [],"stateMutability": "nonpayable","type": "function"},{"inputs": [],"name": "software","outputs": [{"internalType": "contract Software","name": "","type": "address"}],"stateMutability": "view","type": "function"},{"stateMutability": "payable","type": "receive"}]
 
-    software_handler_contract_adr = "0x1fd31748296AC13562FbC56D123A6ed223bdEe84"
-    software_contract_adr = "0x1361C2341FE18E6324B84D9CFc3dFDE5509Ff1cA"
-    license_contract_adr = "0xcBD21a9664Dc833dfAC6db9d6cB882Db09FA4114"
+    software_handler_contract_adr = "0x83CF1f445cc4350Ce37C763d6e4498e244fc0d72"
+    software_contract_adr = "0xD2fB4832435E2ff6D854d8670EbBfCA10d14D01e"
+    license_contract_adr = "0x8881Ea810fC1F2E0b7b432aFfbe67799283b8e2D"
 
     contract_sh = new w.eth.Contract(contract_software_handler_abi, software_handler_contract_adr);
     contract_s = new w.eth.Contract(contract_software_abi, software_contract_adr);
     contract_l = new w.eth.Contract(contract_license_abi, license_contract_adr);
 
     // keys for ganache:
-    address_account_1 = '0x22D127bFef61bE547F26Cb95Fb4c7C099e3F34Cd';
-    private_account_1 = '0x8f83886120e6aed60619b3ff665c18dbfb5741675c1934b5ef33d3f875d629de';
+    address_account_1 = '0x4B11aCbBB4AA56D32314cb406F0F4175d7f19604';
+    private_account_1 = '0xab1e63f0eeec071e7525ab3ea2f69df4d0bf6aebd595cf00812652f80190720d';
     account_1 = w.eth.accounts.privateKeyToAccount(private_account_1);
 
-    address_account_2 = '0x385DC7781F4B36EeCB126B7f13779b547c127e5D';
-    private_account_2 = '0xc9dff619b4f71be813ab94412ebc7406807bf2b3e7a8a5a6b9d148c6eb1a43cf';
+    address_account_2 = '0x1bB0eF37667A713E9Be2ed6E0d5248Cf6E4eaff3';
+    private_account_2 = '0x135f945c16d0dadacc7142f2a8a55abcc411319077aa6a72680fcf0c6f767f1a';
     account_2 = w.eth.accounts.privateKeyToAccount(private_account_2);
 
-    address_account_3 = '0x3E257d3C8AC19e4F9f513705C4Eb928A821Bb7cA';
-    private_account_3 = '0x34a5b0158b0eca6a3e8f44daf55901853f10f0e72b7d4efa7612534a5d9ab793';
+    address_account_3 = '0xED96E5B9e0ca53b3ad9c3CD2e9E83C2Dba3ce67a';
+    private_account_3 = '0xc22865e4d0802326d7583ede5b56770a942ef5e9574c93681c1c9eb01634a84c';
     account_3 = w.eth.accounts.privateKeyToAccount(private_account_3);
 
-    address_account_4 = '0xdf6d5CcCF4C773b6c920A018c766c06C7C98b349';
-    private_account_4 = '0xf1d29c4935fc9ffa4c8de9c69acd356b6053e37f369c244800d34f2982b53188';
+    address_account_4 = '0xbC06D7dc4d8D49CbaB03516a52B7953885b91717';
+    private_account_4 = '0xeab60409eee9423a2f240ba934a52e5e7a90148ff70e1e06a8aa1a9cb8ff6a49';
     account_4 = w.eth.accounts.privateKeyToAccount(private_account_4);
 }
 
@@ -119,7 +122,7 @@ send_monney = (from=account_1, to=account_2, amount=10, unit='wei') => {
     w.eth.accounts.signTransaction({
         to: to,
         value: w.utils.toWei(String(amount), String(unit)),
-        gas: 2000000,
+        gas: gasUseEveryWhere,
     }, from.privateKey) 
     .then(signedTx => {
         return w.eth.sendSignedTransaction(signedTx.rawTransaction);
@@ -142,7 +145,7 @@ SH_add_software = (account=account_1, company_name="company") => {
     account.signTransaction({
         data: encodedABI,
         from: account.address,
-        gas: 2000000,
+        gas: gasUseEveryWhere,
         to: contract_sh.options.address,
     })
     .then(signedTx => {
@@ -222,7 +225,7 @@ S_set_admin = (account=account_1, new_admin=address_account_1) => {
     account.signTransaction({
         data: encodedABI,
         from: account.address,
-        gas: 2000000,
+        gas: gasUseEveryWhere,
         to: contract_s.options.address,
     })
     .then(signedTx => {
@@ -253,7 +256,7 @@ S_set_company_name = (account=account_1, new_company_name=address_account_1) => 
     account.signTransaction({
         data: encodedABI,
         from: account.address,
-        gas: 2000000,
+        gas: gasUseEveryWhere,
         to: contract_s.options.address,
     })
     .then(signedTx => {
@@ -274,7 +277,7 @@ S_add_license = (account=account_1, owner=address_account_1, admin=address_accou
     account.signTransaction({
         data: encodedABI,
         from: account.address,
-        gas: 2000000,
+        gas: gasUseEveryWhere,
         to: contract_s.options.address,
     })
     .then(signedTx => {
@@ -336,6 +339,17 @@ S_list_licenses = () => {
     });
 }
 
+S_check_license = (account=account_1) => {
+
+    contract_s.methods.check_license(account.address).call()
+        .then(res => {
+            console.log("result: ", res)
+        })
+        .catch(err => {
+            console.error("An error occured while calling the func:", err);
+        });
+}
+
 
 /* --------------- License funcs */
 
@@ -356,7 +370,7 @@ L_set_owner = (account=account_1, owner=address_account_1) => {
     account.signTransaction({
         data: encodedABI,
         from: account.address,
-        gas: 2000000,
+        gas: gasUseEveryWhere,
         to: contract_l.options.address,
     })
     .then(signedTx => {
@@ -387,7 +401,7 @@ L_set_admin = (account=account_1, admin=address_account_1) => {
     account.signTransaction({
         data: encodedABI,
         from: account.address,
-        gas: 2000000,
+        gas: gasUseEveryWhere,
         to: contract_l.options.address,
     })
     .then(signedTx => {
@@ -418,7 +432,7 @@ L_set_expiration_timestamp = (account=account_1, timestamp=0) => {
     account.signTransaction({
         data: encodedABI,
         from: account.address,
-        gas: 2000000,
+        gas: gasUseEveryWhere,
         to: contract_l.options.address,
     })
     .then(signedTx => {
@@ -439,7 +453,7 @@ L_remove_expiration_timestamp = (account=account_1) => {
     account.signTransaction({
         data: encodedABI,
         from: account.address,
-        gas: 2000000,
+        gas: gasUseEveryWhere,
         to: contract_l.options.address,
     })
     .then(signedTx => {
@@ -480,7 +494,7 @@ L_set_for_sale = (account=account_1, price=10) => {
     account.signTransaction({
         data: encodedABI,
         from: account.address,
-        gas: 2000000,
+        gas: gasUseEveryWhere,
         to: contract_l.options.address,
     })
     .then(signedTx => {
@@ -501,7 +515,7 @@ L_remove_for_sale = (account=account_1) => {
     account.signTransaction({
         data: encodedABI,
         from: account.address,
-        gas: 2000000,
+        gas: gasUseEveryWhere,
         to: contract_l.options.address,
     })
     .then(signedTx => {
@@ -514,5 +528,3 @@ L_remove_for_sale = (account=account_1) => {
         console.error("An error occured while calling a payable func:", err);
     });
 }
-
-

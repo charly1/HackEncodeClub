@@ -4,14 +4,14 @@
 Compiled using version 0.7.6
 Smart contract on ropsten: 
 
-SoftwareHandle:  0x4bAD5F2CA59ceF307c31aE0B70Ec3E9e3349f76b  
-https://ropsten.etherscan.io/address/0x4bAD5F2CA59ceF307c31aE0B70Ec3E9e3349f76b
+SoftwareHandle:  0xfd217c7d08e1b3477b4a95e6f9d9d149d8e74621  
+https://ropsten.etherscan.io/address/0xfd217c7d08e1b3477b4a95e6f9d9d149d8e74621
 
-Software (index 0 of previous SoftwareHandle):  0x4D3040C16dDeCfA0c30f760dd28127A0DDBF4cdA  
-https://ropsten.etherscan.io/address/0x4D3040C16dDeCfA0c30f760dd28127A0DDBF4cdA
+Software (index 0 of previous SoftwareHandle):  0xc3Fe598B1D56aCaa8Ce7c5468230228E4D614120  
+https://ropsten.etherscan.io/address/0xc3Fe598B1D56aCaa8Ce7c5468230228E4D614120
 
-License (index 0 of previous Software):  0xA7f1667576Dd201d4d8C2DD52b6aA4F5D6eCD62A  
-https://ropsten.etherscan.io/address/0xA7f1667576Dd201d4d8C2DD52b6aA4F5D6eCD62A
+License (index 0 of previous Software):  0xa59ddA2b29E099f172FE12e0454eBC2193C5e93E  
+https://ropsten.etherscan.io/address/0xa59ddA2b29E099f172FE12e0454eBC2193C5e93E
 
 ## SoftwareHandler contract:
 
@@ -111,6 +111,10 @@ Access to the array of License. Returns the address of the Licenses smart-contra
 - `get_nb_license()`
 
 Returns the Number of License registered for the current Software.
+
+- `check_license(address owner)`
+
+Check if the software has a valid license for the specified owner.
 
 - `remove_license(uint index)`
 

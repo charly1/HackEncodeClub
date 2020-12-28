@@ -235,6 +235,19 @@
 		"type": "function"
 	},
 	{
+		"inputs": [],
+		"name": "software",
+		"outputs": [
+			{
+				"internalType": "contract Software",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"stateMutability": "payable",
 		"type": "receive"
 	}

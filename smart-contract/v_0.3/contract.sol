@@ -50,7 +50,8 @@ contract License is Util {
     //event deleted();
 
     address payable public admin; //administrator of the license, basically, who created it
-    address payable public  owner; //last owner of the license
+    address payable public owner; //last owner of the license
+    Software public software;
     uint public expiration_timestamp = 0; // 0 for no expiration date
     bool public license_for_sale = false;
     uint public selling_price = 0;
@@ -80,6 +81,7 @@ contract License is Util {
         expiration_timestamp = _expiration_timestamp;
         license_for_sale = false;
         selling_price = 0;
+        software = Software(msg.sender);
     }
     
     /*function destroy()
@@ -98,6 +100,7 @@ contract License is Util {
         priceOk(msg.value)
     {
         emit licenseSold(msg.value, owner, msg.sender);
+        software.licenseHasChangedOwner(owner, msg.sender);
         
         owner.transfer(msg.value);
         owner = msg.sender;
@@ -128,6 +131,7 @@ contract License is Util {
         public
         onlyBy2(owner, admin)
     {
+        software.licenseHasChangedOwner(owner, new_owner);
         owner = new_owner;
         emit ownerChanged(owner);
     }
@@ -167,6 +171,16 @@ contract Software is Util {
     string public company_name;
     address payable public admin;
     License[] public licenses;
+    mapping (address => License) public ownerLicense;
+    
+    modifier ownerLicenseMatch(address owner, License license) {
+        require (
+            ownerLicense[owner] == license,
+            "Invalid License or owner."
+        );
+        
+        _;
+    }
     
     constructor (string memory company, address payable _admin)
     {
@@ -198,6 +212,22 @@ contract Software is Util {
         payable
         refuseTransaction
     {}
+    
+    function licenseHasChangedOwner(address oldOwner, address newOwner) 
+        public
+        ownerLicenseMatch(oldOwner, License(msg.sender))
+    {
+        delete ownerLicense[oldOwner];
+        ownerLicense[newOwner] = License(msg.sender);
+    }
+    
+    function check_license(address adr)
+        public
+        view
+        returns (bool)
+    {
+        return ownerLicense[adr] != License(0) && ownerLicense[adr].owner() == adr;
+    }
     
     function set_admin(address payable _admin)
         public
@@ -255,6 +285,7 @@ contract Software is Util {
         License newLicense = new License(_admin, _owner, _expiration_timestamp);
         licenses.push(newLicense);
         
+        ownerLicense[_owner] = newLicense;
         emit licenseAdded(address(newLicense));
         
         return newLicense;
