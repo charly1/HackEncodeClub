@@ -16,7 +16,9 @@ var log_url = local_path+':'+index_port;
 app.get("/", function (req, res) {
     res.sendFile(__dirname + "/" + index_file);
 });
-
+app.get("/src/portis_log.js", function (req, res) {
+    res.sendFile(__dirname + "/src/portis_log.js");
+});
 app.get('/check_owner', function (req, res) {  
 response = {  
        bc_owner:req.query.bc_owner,  
