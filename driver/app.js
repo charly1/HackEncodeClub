@@ -6,6 +6,15 @@ const local_path = 'http://localhost';
 
 const express = require("express");
 const app = express();
+const path = require('path');
+
+var base_path = "";
+try {
+	base_path = __dirname;
+}
+catch (error) {
+	base_path = process.cwd();
+}
 
 var log_url = local_path+':'+index_port;
 
@@ -14,10 +23,10 @@ var log_url = local_path+':'+index_port;
 })();
 
 app.get("/", function (req, res) {
-    res.sendFile(__dirname + "/" + index_file);
+    res.sendFile(path.join(base_path, index_file));
 });
 app.get("/src/portis_log.js", function (req, res) {
-    res.sendFile(__dirname + "/src/portis_log.js");
+    res.sendFile(path.join(base_path, "src", "portis_log.js"));
 });
 app.get('/check_owner', function (req, res) {  
 response = {  
