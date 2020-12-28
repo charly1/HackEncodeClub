@@ -31,6 +31,9 @@ app.get("/", function (req, res) {
 app.get("/src/portis_log.js", function (req, res) {
     res.sendFile(path.join(base_path, "src", "portis_log.js"));
 });
+app.get("/src/contract_abi.js", function (req, res) {
+    res.sendFile(path.join(base_path, "src", "contract_abi.js"));
+});
 app.get('/check_owner', function (req, res) {  
 response = {  
        bc_owner:req.query.bc_owner,  
