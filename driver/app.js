@@ -37,7 +37,7 @@ app.get("/src/contract_abi.js", function (req, res) {
 app.get("/src/utils.js", function (req, res) {
     res.sendFile(path.join(base_path, "src", "utils.js"));
 });
-app.get('/check_owner', function (req, res) {  
+app.post('/check_owner', function (req, res) {  
 response = {  
        contr_adr:req.query.contr_adr,  
        is_valid:req.query.is_valid  
