@@ -28,14 +28,16 @@ portis.onLogin((walletAddress, email, reputation) => {
 	}
 
 	document.getElementById('text').innerText = "Logged in!";
-	document.getElementById('text').innerText = "Checking if key exists...";
-
 	contract.methods.check_license(walletAddress).call()
 		.then(isAdrValid => {
-			if (isAdrValid)
+			if (isAdrValid) {
 				document.getElementById('text').innerText = "Your key is valid !";
-			else
+        /*post('/check_owner', {contr_adr: software_contract, is_valid: true});*/
+      }
+			else {
 				document.getElementById('text').innerText = "Your key is not valid...";
+        /*post('/check_owner', {contr_adr: software_contract, is_valid: false});*/
+      }
 		})
 		.catch(error => {
       		document.getElementById('text').innerText = "Error while validating contract";
