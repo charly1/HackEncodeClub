@@ -1,29 +1,16 @@
 /**
  * sends a request to the specified url from a form. this will change the window location.
  * @param {string} path the path to send the post request to
- * @param {object} params the paramiters to add to the url
- * @param {string} [method=post] the method to use on the form
+ * @param {object} body the paramiters to add to the url
  */
 
-function post(path, params, method='post') {
+function post(path, body) {
+  const Http = new XMLHttpRequest();
+  Http.open("POST", path);
+  Http.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+  Http.send(JSON.stringify(body));
 
-  // The rest of this code assumes you are not using a library.
-  // It can be made less wordy if you use one.
-  const form = document.createElement('form');
-  form.method = method;
-  form.action = path;
-
-  for (const key in params) {
-    if (params.hasOwnProperty(key)) {
-      const hiddenField = document.createElement('input');
-      hiddenField.type = 'hidden';
-      hiddenField.name = key;
-      hiddenField.value = params[key];
-
-      form.appendChild(hiddenField);
-    }
+  Http.onreadystatechange = (e) => {
+    console.log(Http.responseText)
   }
-
-  document.body.appendChild(form);
-  form.submit();
 }
