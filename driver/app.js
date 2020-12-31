@@ -25,62 +25,61 @@ catch (error) {
     base_path = process.cwd();
 }
 
+// var without signing required
 var log_url = local_path+':'+index_port +"?contract="+software_contract_adr;
+
+// var with signing required
+// var log_url = local_path+':'+index_port +"?contract="+software_contract_adr+"&sign_required=true";
 
 (async () => {
     await open(log_url);
 })();
 
+// main html file
 app.get("/", function (req, res) {
-    res.sendFile(path.join(base_path, index_file));
+    res.sendFile(path.join(base_path, 'public', 'html', index_file));
 });
-app.get("/src/portis_log.js", function (req, res) {
-    res.sendFile(path.join(base_path, "src", "portis_log.js"));
-});
-app.get("/src/contract_abi.js", function (req, res) {
-    res.sendFile(path.join(base_path, "src", "contract_abi.js"));
-});
-app.get("/src/utils.js", function (req, res) {
-    res.sendFile(path.join(base_path, "src", "utils.js"));
-});
-app.get("/src/web3.min.1.3.1.js", function (req, res) {
-    res.sendFile(path.join(base_path, "src", "web3.min.1.3.1.js"));
-});
+
+// any files in the public folder
+app.use('/public', express.static('public'));
+
+// post api return data
 app.post('/check_owner', function (req, res) {  
-    /*
-    body:
-    {
-        contr_adr: software_contract, 
-        is_valid: true, 
-        proof: { 
-            wallet: walletAddress, 
-            message: message, 
-            signature: signedMessage
+
+    res.sendStatus(200);
+    // console.log(req.body);
+
+    if ('proof' in req.body) {
+
+        var signature_is_valid = true;
+
+        // VERIFY SIGNATURE HERE
+
+            /*var messageHash = EthCrypto.hash.keccak256(req.body.proof.message);
+            try {
+                var adr = EthCrypto.recover(req.body.proof.signature, messageHash);
+                if (adr !== req.body.proof.wallet)
+                    throw 'error';
+            }
+            catch (err) {
+                signature_is_valid = false;
+            }*/
+    
+        console.log("signature validity:", signature_is_valid);
+        if (signature_is_valid) {
+            console.log("successfully verified the authencity of the license with a signature proof.");
+        }
+        else {
+            console.log("failed to verify the authencity of the license with a signature proof: INVALID SIGNATURE");
         }
     }
-    */
-    res.sendStatus(200);
-    //console.log(req.body);
-
-    var signature_is_valid = true;
-
-// VERIFY SIGNATURE HERE
-
-    /*var messageHash = EthCrypto.hash.keccak256(req.body.proof.message);
-    try {
-        var adr = EthCrypto.recover(req.body.proof.signature, messageHash);
-        if (adr !== req.body.proof.wallet)
-            throw 'error';
+    else {
+        console.log("successfully verified the authencity of the license but without any signature proof.");
     }
-    catch (err) {
-        signature_is_valid = false;
-    }*/
-    
-    console.log("signature validity:", signature_is_valid);
-    console.log("successfully verified the authencity of the license.")
      
 })
 
+// start the code !
 app.listen(index_port, function () {
     console.log("Server is running on "+local_path+":"+index_port);
 });

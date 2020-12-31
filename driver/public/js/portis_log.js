@@ -4,7 +4,8 @@ document.getElementById('text').innerText = "Initialisation";
 
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
-const software_contract = urlParams.get('contract')
+const software_contract = urlParams.get('contract');
+const signing_required = (urlParams.get('sign_required') || 'false').toLowerCase() === 'true';
 
 document.getElementById('text').innerText = "Loading your account...";
 
@@ -48,8 +49,14 @@ portis.onLogin((walletAddress, email, reputation) => {
 			if (isAdrValid) {
 				document.getElementById('text').innerText = "Your key is valid !";
 
-				message = JSON.stringify({type:"data_to_sign", timestamp: new Date().getTime(), rand: Math.random()});
-  				return signedMessage = web3.eth.sign(message, walletAddress);
+				if (signing_required) { 
+				// if "sign_required is to true (default value: false)"
+					message = JSON.stringify({type:"data_to_sign", timestamp: new Date().getTime(), rand: Math.random()});
+	  				return signedMessage = web3.eth.sign(message, walletAddress);
+  				}
+  				else {
+        			post('/check_owner', {contr_adr: software_contract, is_valid: true});
+  				}
       		}
 			else {
 				document.getElementById('text').innerText = "Your key is not valid...";
@@ -57,7 +64,9 @@ portis.onLogin((walletAddress, email, reputation) => {
       		}
 		})
 		.then(signedMessage => {
-			post('/check_owner', {contr_adr: software_contract, is_valid: true, proof: { wallet: walletAddress, message: message, signature: signedMessage}});
+			if (signing_required) {
+				post('/check_owner', {contr_adr: software_contract, is_valid: true, proof: { wallet: walletAddress, message: message, signature: signedMessage}});
+			}
 		})
 		.catch(error => {
       		document.getElementById('text').innerText = "Error while validating contract";
