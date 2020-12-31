@@ -1,5 +1,6 @@
 import React from "react"
 import Web3 from "web3";
+import AdminUI from '../components/admin';
 
 function showLogs({ msg = '', type = '[ERROR]' }) {
   if (process.env.NODE_ENV === "development") console.log(type + msg);
@@ -71,6 +72,7 @@ class PortisUI extends React.Component {
   onActiveWalletChanged(address) {
     showLogs({ type: '[PORTIS] WALLET CHANGED:', msg: address });
     this.setState({ address });
+    this.getBalance();
   }
 
   getBalance() {
@@ -84,14 +86,15 @@ class PortisUI extends React.Component {
   }
 
   handleChange(event) {
+    // event.persist() // uncomment to log event object
     if (event.target.name) {
       this.setState({ [`${event.target.name.split('_')[1]}`]: event.target.value });
     }
   }
 
   handleSubmit(event) {
-    event.preventDefault();
-    event.persist()
+    event.preventDefault(); // avoid page reloading
+    // event.persist() // uncomment to log event object
     const { portis, web3, address, email, network, tosign } = this.state;
     switch (event.target.name) {
       case 's_email':
@@ -116,6 +119,7 @@ class PortisUI extends React.Component {
       default:
         break;
     }
+    this.getBalance();
   }
 
   handleLogout() {
@@ -133,84 +137,101 @@ class PortisUI extends React.Component {
   }
 
   render() {
-    const { portis, logged, email, address, network, tosign, signed, reputation, balance } = this.state;
+    const { portis, web3, logged, email, address, network, tosign, signed, reputation, balance } = this.state;
     if (!portis) return <h1>Portis module not loaded...</h1>
     return (
-      <div className="block-main">
-        <div className="block-sub">
-          <button onClick={() => portis.showPortis()}>Show Portis</button>
-          <button onClick={() => this.isLoggedIn()}>Logged: {logged ? '🔵' : '🔴'}</button>
-          <button onClick={() => this.handleLogout()}>Logout</button>
-        </div>
-        {logged ? (
-          <>
-            <div className="block-sub">
-              <form name="s_email" onSubmit={this.handleSubmit}>
-                <label>
-                  <span className="description">Email:</span>
-                  <input type="text" value={email} name="f_email" onChange={this.handleChange} size="40"/>
-                </label>
-                <input type="submit" value="Set email" />
-              </form>
-            </div>
-            <div className="block-sub">
-              <form name="s_network" onSubmit={this.handleSubmit}>
-                <label>
-                  <span className="description">Network:</span>
-                  <input type="text" value={network} name="f_network" onChange={this.handleChange} size="30"/>
-                </label>
-                <input type="submit" value="Switch network" />
-              </form>
-            </div>
-            {/* <div className="block-sub">
-              <button onClick={() => portis.showBitcoinWallet()}>Bitcoin Wallet</button>
-            </div> */}
-            <div className="block-sub">
-              <form name="s_address" onSubmit={this.handleSubmit}>
-                <label>
-                  <span className="description">Wallet:</span>
-                  <input type="text" value={address} name="f_address" onChange={this.handleChange} size="50" />
-                </label>
-                <input type="submit" value="Change wallet" />
-              </form>
-            </div>
-            {/* <div className="block-sub">
-              <button onClick={() => portis.getExtendedPublicKey()}>Get PKey</button>
-              {pkey ? <span className="description">{pkey}</span> : null}
-            </div> */}
-            <div className="block-sub">
-              <form name="s_tosign" onSubmit={this.handleSubmit}>
-                <label>
-                  <span className="description">Message to sign:</span>
-                  <input type="text" value={tosign} name="f_tosign" onChange={this.handleChange} size="50" />
-                </label>
-                <input type="submit" value="Sign message" />
-              </form>
-              {signed
+      <>
+        <div className="block-main">
+          <div className="block-sub">
+            <button onClick={() => portis.showPortis()}>Show Portis</button>
+            <button onClick={() => this.isLoggedIn()}>Logged: {logged ? '🔵' : '🔴'}</button>
+            <button onClick={() => this.handleLogout()}>Logout</button>
+          </div>
+          {logged ? (
+            <>
+              <div className="block-sub">
+                <form name="s_email" onSubmit={this.handleSubmit}>
+                  <label>
+                    <span className="description">Email:</span>
+                    <input type="text" value={email} name="f_email" onChange={this.handleChange} size="40"/>
+                  </label>
+                  <input type="submit" value="Set email" />
+                </form>
+              </div>
+              <div className="block-sub">
+                <form name="s_network" onSubmit={this.handleSubmit}>
+                  <label>
+                    <span className="description">Network:
+                    <select name="f_network" onChange={this.handleChange} >
+                      <option value="ropsten">Ropsten</option>
+                      <option value="kovan">Kovan</option>
+                      <option value="rinkeby">Rinkeby</option>
+                      {/* <option value="ethereum">Ethereum</option> */}
+                    </select>
+                    </span>
+                  </label>
+                  <input type="submit" value="Switch network" />
+                </form>
+              </div>
+              {/* <div className="block-sub">
+                <button onClick={() => portis.showBitcoinWallet()}>Bitcoin Wallet</button>
+              </div> */}
+              <div className="block-sub">
+                <form name="s_address" onSubmit={this.handleSubmit}>
+                  <label>
+                    <span className="description">Wallet:</span>
+                    <input type="text" value={address} name="f_address" onChange={this.handleChange} size="50" />
+                  </label>
+                  <input type="submit" value="Change wallet" />
+                </form>
+              </div>
+              {/* <div className="block-sub">
+                <button onClick={() => portis.getExtendedPublicKey()}>Get PKey</button>
+                {pkey ? <span className="description">{pkey}</span> : null}
+              </div> */}
+              <div className="block-sub">
+                <form name="s_tosign" onSubmit={this.handleSubmit}>
+                  <label>
+                    <span className="description">Message to sign:</span>
+                    <input type="text" value={tosign} name="f_tosign" onChange={this.handleChange} size="50" />
+                  </label>
+                  <input type="submit" value="Sign message" />
+                </form>
+                {signed
+                  ? (
+                  <div className="block-sub">
+                    <span className="description">Signature: {signed}</span>
+                  </div>
+                  )
+                  : null}
+              </div>
+              {balance
                 ? (
                 <div className="block-sub">
-                  <span className="description">Signature: {signed}</span>
+                  <span className="description">Balance: {balance}</span>
                 </div>
                 )
                 : null}
-            </div>
-            {balance
-              ? (
-              <div className="block-sub">
-                <span className="description">Balance: {balance}</span>
-              </div>
-              )
+              {reputation
+                ? (
+                <div className="block-sub">
+                  <span className="description">Reputation: {reputation}</span>
+                </div>
+                )
               : null}
-            {reputation
-              ? (
-              <div className="block-sub">
-                <span className="description">Reputation: {reputation}</span>
-              </div>
-              )
-            : null}
-          </>
+            </>
+          ) : null}
+        </div>
+        {logged ? (
+          <AdminUI
+            portis={portis}
+            web3={web3}
+            email={email}
+            network={network}
+            address={address}
+          />
         ) : null}
-      </div>
+      </>
     );
   }
 }

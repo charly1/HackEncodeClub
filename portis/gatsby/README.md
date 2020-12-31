@@ -13,6 +13,8 @@ Install all dependencies:
 - Build: `npm run build`
 - Run (prod): `npm run serve`
 
+In dev mode, page is server on `localhost:8000`
+
 ## Learn more
 
 - [Source](https://www.gatsbyjs.com/docs/quick-start)
