@@ -33,8 +33,8 @@ class PortisUI extends React.Component {
   componentDidMount() {
     if (typeof window !== 'undefined') {
       const Portis = require('@portis/web3');
-      const dappId = '1a5e4c06-3d4a-4369-b406-d937cdb090b6'; // '211b48db-e8cc-4b68-82ad-bf781727ea9e';
-      const network = 'ropsten'; // 'rinkeby';
+      const dappId = process.env.DAPP_ID;
+      const network = 'ropsten';
       const portis = new Portis(dappId, network, { scope: ['email', 'reputation'] });
       const web3 = new Web3(portis.provider);
       this.setState({ portis, web3, network });
@@ -166,7 +166,8 @@ class PortisUI extends React.Component {
                       <option value="ropsten">Ropsten</option>
                       <option value="kovan">Kovan</option>
                       <option value="rinkeby">Rinkeby</option>
-                      {/* <option value="ethereum">Ethereum</option> */}
+                      <option value="goerli">Goerli</option>
+                      <option value="mainnet">Mainnet</option>
                     </select>
                     </span>
                   </label>
