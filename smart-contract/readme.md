@@ -4,14 +4,14 @@
 Compiled using version 0.7.6
 Smart contract on ropsten: 
 
-SoftwareHandle:  0xfd217c7d08e1b3477b4a95e6f9d9d149d8e74621  
-https://ropsten.etherscan.io/address/0xfd217c7d08e1b3477b4a95e6f9d9d149d8e74621
+SoftwareHandle:  0xf81512792f6eadf8993059e5e8077951b1a1b535  
+https://ropsten.etherscan.io/address/0xf81512792f6eadf8993059e5e8077951b1a1b535
 
-Software (index 0 of previous SoftwareHandle):  0xc3Fe598B1D56aCaa8Ce7c5468230228E4D614120  
-https://ropsten.etherscan.io/address/0xc3Fe598B1D56aCaa8Ce7c5468230228E4D614120
+Software (index 0 of previous SoftwareHandle):  0xA907F70b12592C360335BD8B09c00B9C6c2fEaFC  
+https://ropsten.etherscan.io/address/0xA907F70b12592C360335BD8B09c00B9C6c2fEaFC
 
 License (index 0 of previous Software):  0xa59ddA2b29E099f172FE12e0454eBC2193C5e93E  
-https://ropsten.etherscan.io/address/0xa59ddA2b29E099f172FE12e0454eBC2193C5e93E
+https://ropsten.etherscan.io/address/0x2c382dB10fF430Dd133cc0Ae32ebaa54558a73Ae
 
 ## SoftwareHandler contract:
 
@@ -37,6 +37,10 @@ Access to the array of Software. Returns the address of the Software smart-contr
 - `getNbOfSoftware()`
 
 Returns the Number of Software in the array.
+
+- `get_softwares_with_admin(address _admin)`
+
+Returns the list of Software contract address that has `_admin` as admin.
 
 - `removeSoftware(uint index)`
 
@@ -115,6 +119,14 @@ Returns the Number of License registered for the current Software.
 - `check_license(address owner)`
 
 Check if the software has a valid license for the specified owner.
+
+- `get_licenses_with_admin(address _admin)`
+
+Returns the list of License contract address that has `_admin` as admin.
+
+- `get_licenses_with_owner(address _owner)`
+
+Returns the list of License contract address that has `_owner` as owner.
 
 - `remove_license(uint index)`
 

@@ -298,6 +298,56 @@ contract Software is Util {
     {
         return licenses.length;
     }
+    
+    function get_licenses_with_admin(address _admin)
+        public 
+        view
+        returns (License[] memory)
+    {
+        uint counter = 0;
+        for (uint i = 0 ; i < licenses.length ; i++) {
+            if (licenses[i].admin() == _admin) {
+                counter++;
+            }
+        }
+        
+        
+        License[] memory ret = new License[](counter);
+        uint j = 0;
+        for (uint i = 0; i < licenses.length ; i++) {
+            if (licenses[i].admin() == _admin) {
+                ret[j] = licenses[i];
+                j++;
+            }
+        }
+        
+        return ret;
+    }
+    
+    function get_licenses_with_owner(address _owner)
+        public 
+        view
+        returns (License[] memory)
+    {
+        uint counter = 0;
+        for (uint i = 0 ; i < licenses.length ; i++) {
+            if (licenses[i].owner() == _owner) {
+                counter++;
+            }
+        }
+        
+        
+        License[] memory ret = new License[](counter);
+        uint j = 0;
+        for (uint i = 0; i < licenses.length ; i++) {
+            if (licenses[i].owner() == _owner) {
+                ret[j] = licenses[i];
+                j++;
+            }
+        }
+        
+        return ret;
+    }
 }
 
 contract SoftwareHandler is Util
@@ -337,6 +387,31 @@ contract SoftwareHandler is Util
         returns (uint) 
     {
         return softwares.length;
+    }
+    
+    function get_softwares_with_admin(address _admin)
+        public 
+        view
+        returns (Software[] memory)
+    {
+        uint counter = 0;
+        for (uint i = 0 ; i < softwares.length ; i++) {
+            if (softwares[i].admin() == _admin) {
+                counter++;
+            }
+        }
+        
+        
+        Software[] memory ret = new Software[](counter);
+        uint j = 0;
+        for (uint i = 0; i < softwares.length ; i++) {
+            if (softwares[i].admin() == _admin) {
+                ret[j] = softwares[i];
+                j++;
+            }
+        }
+        
+        return ret;
     }
     
     /*function removeSoftware(uint index) 
