@@ -1,0 +1,25 @@
+[
+    {
+        "type" : "s",
+        "id" : "1st soft",
+        "uploaded" : "UPLOADED.TO_BE_UPLOADED",
+        "id_root" : "main_sh",
+        "upload_from": "account_1",
+        "params" : {
+            "admin": "account_1",
+            "company_name": "test"
+        }
+    },
+    {
+        "type" : "l",
+        "id" : "1st soft - L1",
+        "uploaded" : "UPLOADED.TO_BE_UPLOADED",
+        "id_root" : "1st soft",
+        "upload_from": "account_1",
+        "params" : {
+            "owner": "account_1",
+            "admin": "account_1",
+            "expiration_timestamp": "0"
+        }
+    }
+]

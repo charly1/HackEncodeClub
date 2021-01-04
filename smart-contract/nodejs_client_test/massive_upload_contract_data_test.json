@@ -1,0 +1,191 @@
+[
+    {
+        "type" : "s",
+        "id" : "1st_soft",
+        "uploaded" : "UPLOADED.TO_BE_UPLOADED",
+        "id_root" : "main_sh",
+        "upload_from": "account_1",
+        "params" : {
+            "admin": "account_1",
+            "company_name": "test"
+        }
+    },
+    {
+        "type" : "l",
+        "id" : "1st_soft___L1",
+        "uploaded" : "UPLOADED.TO_BE_UPLOADED",
+        "id_root" : "1st_soft",
+        "upload_from": "account_1",
+        "params" : {
+            "owner": "account_1",
+            "admin": "account_1",
+            "expiration_timestamp": "0"
+        }
+    },
+    {
+        "type" : "s",
+        "id" : "2nd_soft",
+        "uploaded" : "UPLOADED.TO_BE_UPLOADED",
+        "id_root" : "main_sh",
+        "upload_from": "account_1",
+        "params" : {
+            "admin": "account_1",
+            "company_name": "test"
+        }
+    },
+    {
+        "type" : "l",
+        "id" : "2nd_soft__L2",
+        "uploaded" : "UPLOADED.TO_BE_UPLOADED",
+        "id_root" : "2nd_soft",
+        "upload_from": "account_1",
+        "params" : {
+            "owner": "account_2",
+            "admin": "account_1",
+            "expiration_timestamp": "0"
+        }
+    },
+    {
+        "type" : "l",
+        "id" : "2nd_soft__L3",
+        "uploaded" : "UPLOADED.TO_BE_UPLOADED",
+        "id_root" : "2nd_soft",
+        "upload_from": "account_1",
+        "params" : {
+            "owner": "account_3",
+            "admin": "account_1",
+            "expiration_timestamp": "0"
+        }
+    },
+    {
+        "type" : "l",
+        "id" : "2nd_soft__L4",
+        "uploaded" : "UPLOADED.TO_BE_UPLOADED",
+        "id_root" : "2nd_soft",
+        "upload_from": "account_1",
+        "params" : {
+            "owner": "account_4",
+            "admin": "account_1",
+            "expiration_timestamp": "0"
+        }
+    },
+    {
+        "type" : "s",
+        "id" : "3rd_soft",
+        "uploaded" : "UPLOADED.TO_BE_UPLOADED",
+        "id_root" : "main_sh",
+        "upload_from": "account_2",
+        "params" : {
+            "admin": "account_2",
+            "company_name": "test"
+        }
+    },
+    {"type":"l","id":"3rd_soft___L3_0","uploaded":"UPLOADED.TO_BE_UPLOADED","id_root":"3rd_soft","upload_from":"account_2","params":{"owner":"account_3","admin":"account_2","expiration_timestamp":"0"}},
+    {"type":"l","id":"3rd_soft___L3_1","uploaded":"UPLOADED.TO_BE_UPLOADED","id_root":"3rd_soft","upload_from":"account_2","params":{"owner":"account_3","admin":"account_2","expiration_timestamp":"0"}},
+    {"type":"l","id":"3rd_soft___L3_2","uploaded":"UPLOADED.TO_BE_UPLOADED","id_root":"3rd_soft","upload_from":"account_2","params":{"owner":"account_3","admin":"account_2","expiration_timestamp":"0"}},
+    {"type":"l","id":"3rd_soft___L3_3","uploaded":"UPLOADED.TO_BE_UPLOADED","id_root":"3rd_soft","upload_from":"account_2","params":{"owner":"account_3","admin":"account_2","expiration_timestamp":"0"}},
+    {"type":"l","id":"3rd_soft___L3_4","uploaded":"UPLOADED.TO_BE_UPLOADED","id_root":"3rd_soft","upload_from":"account_2","params":{"owner":"account_3","admin":"account_2","expiration_timestamp":"0"}},
+    {"type":"l","id":"3rd_soft___L3_5","uploaded":"UPLOADED.TO_BE_UPLOADED","id_root":"3rd_soft","upload_from":"account_2","params":{"owner":"account_3","admin":"account_2","expiration_timestamp":"0"}},
+    {"type":"l","id":"3rd_soft___L3_6","uploaded":"UPLOADED.TO_BE_UPLOADED","id_root":"3rd_soft","upload_from":"account_2","params":{"owner":"account_3","admin":"account_2","expiration_timestamp":"0"}},
+    {"type":"l","id":"3rd_soft___L3_7","uploaded":"UPLOADED.TO_BE_UPLOADED","id_root":"3rd_soft","upload_from":"account_2","params":{"owner":"account_3","admin":"account_2","expiration_timestamp":"0"}},
+    {"type":"l","id":"3rd_soft___L3_8","uploaded":"UPLOADED.TO_BE_UPLOADED","id_root":"3rd_soft","upload_from":"account_2","params":{"owner":"account_3","admin":"account_2","expiration_timestamp":"0"}},
+    {"type":"l","id":"3rd_soft___L3_9","uploaded":"UPLOADED.TO_BE_UPLOADED","id_root":"3rd_soft","upload_from":"account_2","params":{"owner":"account_3","admin":"account_2","expiration_timestamp":"0"}},
+
+    {"type":"l","id":"3rd_soft___L4_0","uploaded":"UPLOADED.TO_BE_UPLOADED","id_root":"3rd_soft","upload_from":"account_2","params":{"owner":"account_4","admin":"account_2","expiration_timestamp":"0"}},
+    {"type":"l","id":"3rd_soft___L4_1","uploaded":"UPLOADED.TO_BE_UPLOADED","id_root":"3rd_soft","upload_from":"account_2","params":{"owner":"account_4","admin":"account_2","expiration_timestamp":"0"}},
+    {"type":"l","id":"3rd_soft___L4_2","uploaded":"UPLOADED.TO_BE_UPLOADED","id_root":"3rd_soft","upload_from":"account_2","params":{"owner":"account_4","admin":"account_2","expiration_timestamp":"0"}},
+    {"type":"l","id":"3rd_soft___L4_3","uploaded":"UPLOADED.TO_BE_UPLOADED","id_root":"3rd_soft","upload_from":"account_2","params":{"owner":"account_4","admin":"account_2","expiration_timestamp":"0"}},
+    {"type":"l","id":"3rd_soft___L4_4","uploaded":"UPLOADED.TO_BE_UPLOADED","id_root":"3rd_soft","upload_from":"account_2","params":{"owner":"account_4","admin":"account_2","expiration_timestamp":"0"}},
+    {"type":"l","id":"3rd_soft___L4_5","uploaded":"UPLOADED.TO_BE_UPLOADED","id_root":"3rd_soft","upload_from":"account_2","params":{"owner":"account_4","admin":"account_2","expiration_timestamp":"0"}},
+    {"type":"l","id":"3rd_soft___L4_6","uploaded":"UPLOADED.TO_BE_UPLOADED","id_root":"3rd_soft","upload_from":"account_2","params":{"owner":"account_4","admin":"account_2","expiration_timestamp":"0"}},
+    {"type":"l","id":"3rd_soft___L4_7","uploaded":"UPLOADED.TO_BE_UPLOADED","id_root":"3rd_soft","upload_from":"account_2","params":{"owner":"account_4","admin":"account_2","expiration_timestamp":"0"}},
+    {"type":"l","id":"3rd_soft___L4_8","uploaded":"UPLOADED.TO_BE_UPLOADED","id_root":"3rd_soft","upload_from":"account_2","params":{"owner":"account_4","admin":"account_2","expiration_timestamp":"0"}},
+    {"type":"l","id":"3rd_soft___L4_9","uploaded":"UPLOADED.TO_BE_UPLOADED","id_root":"3rd_soft","upload_from":"account_2","params":{"owner":"account_4","admin":"account_2","expiration_timestamp":"0"}},
+    {
+        "type" : "s",
+        "id" : "4th_soft",
+        "uploaded" : "UPLOADED.TO_BE_UPLOADED",
+        "id_root" : "main_sh",
+        "upload_from": "account_3",
+        "params" : {
+            "admin": "account_3",
+            "company_name": "test"
+        }
+    },
+    {
+        "type" : "l",
+        "id" : "4th_soft___L1",
+        "uploaded" : "UPLOADED.TO_BE_UPLOADED",
+        "id_root" : "4th_soft",
+        "upload_from": "account_3",
+        "params" : {
+            "owner": "account_1",
+            "admin": "account_3",
+            "expiration_timestamp": "0"
+        }
+    },
+    {
+        "type" : "l",
+        "id" : "4th_soft___L2",
+        "uploaded" : "UPLOADED.TO_BE_UPLOADED",
+        "id_root" : "4th_soft",
+        "upload_from": "account_3",
+        "params" : {
+            "owner": "account_2",
+            "admin": "account_3",
+            "expiration_timestamp": "0"
+        }
+    },
+    {
+        "type" : "l",
+        "id" : "4th_soft___L3",
+        "uploaded" : "UPLOADED.TO_BE_UPLOADED",
+        "id_root" : "4th_soft",
+        "upload_from": "account_3",
+        "params" : {
+            "owner": "account_3",
+            "admin": "account_3",
+            "expiration_timestamp": "0"
+        }
+    },
+    {
+        "type" : "l",
+        "id" : "4th_soft___L4",
+        "uploaded" : "UPLOADED.TO_BE_UPLOADED",
+        "id_root" : "4th_soft",
+        "upload_from": "account_3",
+        "params" : {
+            "owner": "account_4",
+            "admin": "account_3",
+            "expiration_timestamp": "0"
+        }
+    },
+    {
+        "type" : "s",
+        "id" : "5th_soft",
+        "uploaded" : "UPLOADED.TO_BE_UPLOADED",
+        "id_root" : "main_sh",
+        "upload_from": "account_4",
+        "params" : {
+            "admin": "account_4",
+            "company_name": "test"
+        }
+    },
+    {"type":"l","id":"5th_soft___L1_0","uploaded":"UPLOADED.TO_BE_UPLOADED","id_root":"5th_soft","upload_from":"account_4","params":{"owner":"account_1","admin":"account_4","expiration_timestamp":"0"}},
+    {"type":"l","id":"5th_soft___L1_1","uploaded":"UPLOADED.TO_BE_UPLOADED","id_root":"5th_soft","upload_from":"account_4","params":{"owner":"account_1","admin":"account_4","expiration_timestamp":"0"}},
+    {"type":"l","id":"5th_soft___L1_2","uploaded":"UPLOADED.TO_BE_UPLOADED","id_root":"5th_soft","upload_from":"account_4","params":{"owner":"account_1","admin":"account_4","expiration_timestamp":"0"}},
+    {"type":"l","id":"5th_soft___L1_3","uploaded":"UPLOADED.TO_BE_UPLOADED","id_root":"5th_soft","upload_from":"account_4","params":{"owner":"account_1","admin":"account_4","expiration_timestamp":"0"}},
+    {"type":"l","id":"5th_soft___L1_4","uploaded":"UPLOADED.TO_BE_UPLOADED","id_root":"5th_soft","upload_from":"account_4","params":{"owner":"account_1","admin":"account_4","expiration_timestamp":"0"}},
+
+    {"type":"l","id":"5th_soft___L2_0","uploaded":"UPLOADED.TO_BE_UPLOADED","id_root":"5th_soft","upload_from":"account_4","params":{"owner":"account_2","admin":"account_4","expiration_timestamp":"0"}},
+    {"type":"l","id":"5th_soft___L2_1","uploaded":"UPLOADED.TO_BE_UPLOADED","id_root":"5th_soft","upload_from":"account_4","params":{"owner":"account_2","admin":"account_4","expiration_timestamp":"0"}},
+    {"type":"l","id":"5th_soft___L2_2","uploaded":"UPLOADED.TO_BE_UPLOADED","id_root":"5th_soft","upload_from":"account_4","params":{"owner":"account_2","admin":"account_4","expiration_timestamp":"0"}},
+    {"type":"l","id":"5th_soft___L2_3","uploaded":"UPLOADED.TO_BE_UPLOADED","id_root":"5th_soft","upload_from":"account_4","params":{"owner":"account_2","admin":"account_4","expiration_timestamp":"0"}},
+
+    {"type":"l","id":"5th_soft___L3_0","uploaded":"UPLOADED.TO_BE_UPLOADED","id_root":"5th_soft","upload_from":"account_4","params":{"owner":"account_3","admin":"account_4","expiration_timestamp":"0"}},
+    {"type":"l","id":"5th_soft___L3_1","uploaded":"UPLOADED.TO_BE_UPLOADED","id_root":"5th_soft","upload_from":"account_4","params":{"owner":"account_3","admin":"account_4","expiration_timestamp":"0"}},
+    {"type":"l","id":"5th_soft___L3_2","uploaded":"UPLOADED.TO_BE_UPLOADED","id_root":"5th_soft","upload_from":"account_4","params":{"owner":"account_3","admin":"account_4","expiration_timestamp":"0"}},
+
+    {"type":"l","id":"5th_soft___L4_0","uploaded":"UPLOADED.TO_BE_UPLOADED","id_root":"5th_soft","upload_from":"account_4","params":{"owner":"account_4","admin":"account_4","expiration_timestamp":"0"}},
+    {"type":"l","id":"5th_soft___L4_1","uploaded":"UPLOADED.TO_BE_UPLOADED","id_root":"5th_soft","upload_from":"account_4","params":{"owner":"account_4","admin":"account_4","expiration_timestamp":"0"}}
+]
