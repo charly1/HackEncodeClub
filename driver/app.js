@@ -2,6 +2,7 @@ const open = require('open');
 
 /*software_contract_adr determines the adress of the lices smart contract*/
 const software_contract_adr = "0xc3Fe598B1D56aCaa8Ce7c5468230228E4D614120";
+const software_contract_adr_binance = "0x0440829FeDcf48f26F77c2C2dBb49a14fa286111";
 
 const index_file = "index.html";
 const index_port = 3000;
@@ -26,10 +27,13 @@ catch (error) {
 }
 
 // var without signing required
-var log_url = local_path+':'+index_port +"?contract="+software_contract_adr;
+var log_url = `${local_path}:${index_port}?contract=${software_contract_adr}`;
 
-// var with signing required
-// var log_url = local_path+':'+index_port +"?contract="+software_contract_adr+"&sign_required=true";
+// use binance ? comment next line to use ropsten, uncomment to use binance
+log_url = `${local_path}:${index_port}?contract=${software_contract_adr_binance}&network=binance`;
+
+// var with signing required ? uncomment nect line to require signature
+// log_url += "&sign_required=true";
 
 (async () => {
     await open(log_url);

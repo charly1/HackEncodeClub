@@ -4,13 +4,27 @@ document.getElementById('text').innerText = "Initialisation";
 
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
-const software_contract = urlParams.get('contract');
-const signing_required = (urlParams.get('sign_required') || 'false').toLowerCase() === 'true';
+const software_contract = urlParams.get('contract').trim();
+const signing_required = (urlParams.get('sign_required').trim() || 'false').toLowerCase() === 'true';
+const network = urlParams.get('network').trim() || 'ropsten';
 
+document.getElementById('network').innerText = "Using Ropsten Ethereum test-network";
 document.getElementById('text').innerText = "Loading your account...";
 
 /*Authentification*/
-const portis = new Portis('1a5e4c06-3d4a-4369-b406-d937cdb090b6', 'ropsten',  {scope: ['email'] });
+var NodeUsed = 'ropsten'
+
+if (network.startsWith('binance')) {
+
+	// binance test network
+	NodeUsed = {
+		nodeUrl: 'https://data-seed-prebsc-1-s1.binance.org:8545',
+		chainId: 97,
+	};
+
+	document.getElementById('network').innerText = "Using Binance test-network";
+}
+const portis = new Portis('1a5e4c06-3d4a-4369-b406-d937cdb090b6', NodeUsed, {scope: ['email'] });
 function showPortisTimer() {
 	portis.isLoggedIn()
 		.then(res => {
