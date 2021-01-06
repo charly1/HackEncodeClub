@@ -9,11 +9,14 @@ Web3 = require('web3');
 
 // env = 'prod'     // for mainnet ethereum blockchain, not working for now
 env = 'test'        // for testing on ropsten blockchain
+// env = 'bnb-test'    // bnb test net
 // env = 'debug'     // for debug on ganache local blockchain
 
 // using ws or wss to be compatible with event emit
 eth_node_link_infura = "wss://ropsten.infura.io/ws/v3/709fd1df01b54f5ab3b9f696894dfb10"
 eth_node_link_ganache = "ws://127.0.0.1:7545"
+bnb_main_net_link = 'wss://bsc-dataseed1.binance.org:443'
+bnb_test_net_link = 'wss://data-seed-prebsc-1-s1.binance.org:8545/'
 w = new Web3(eth_node_link_infura);
 
 contract_software_handler_abi = require('../SoftwareHandler_abi.json');
@@ -68,6 +71,12 @@ if (env === 'debug') {
     account_4 = w.eth.accounts.privateKeyToAccount(private_account_4);
 
     waiting_robot = 1500; // in milliseconds
+}
+else if (env === 'bnb-test') {
+
+    w = new Web3(bnb_test_net_link);
+
+    SH_main_contract_address = '0x6C1FE2de3150EDD0fE0991FED6dA01F33938F05B';
 }
 
 get_dict = (dict, key, def) => {
@@ -222,7 +231,7 @@ SH_add_software = (contract, account, params) => {
 
         var query = contract.methods.addSoftware(params.company_name, params.admin);
         var encodedABI = query.encodeABI();
-
+        
         account.signTransaction({
             data: encodedABI,
             from: account.address,
