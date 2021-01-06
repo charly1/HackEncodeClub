@@ -4,9 +4,9 @@ document.getElementById('text').innerText = "Initialisation";
 
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
-const software_contract = urlParams.get('contract').trim();
-const signing_required = (urlParams.get('sign_required').trim() || 'false').toLowerCase() === 'true';
-const network = urlParams.get('network').trim() || 'ropsten';
+const software_contract = (urlParams.get('contract') || "").trim();
+const signing_required = (urlParams.get('sign_required') || 'false').trim().toLowerCase() === 'true';
+const network = (urlParams.get('network') || 'ropsten').trim();
 
 document.getElementById('network').innerText = "Using Ropsten Ethereum test-network";
 document.getElementById('text').innerText = "Loading your account...";
