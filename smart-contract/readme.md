@@ -2,7 +2,8 @@
 # Smart contract complete structure:
 
 Compiled using version 0.7.6
-Smart contract on ropsten: 
+
+## Smart contract on ropsten: 
 
 SoftwareHandle:  0xf81512792f6eadf8993059e5e8077951b1a1b535  
 https://ropsten.etherscan.io/address/0x30e6D8c504d45a63570a93fa4D278B6A8f0109a6
@@ -12,6 +13,18 @@ https://ropsten.etherscan.io/address/0xC4899e1C9DEa0870b63587300E50D8d423dCCe87
 
 License (index 0 of previous Software):  0x60dBFB0bb7bac751F9a7a7FE9AA600c85a11cBaD  
 https://ropsten.etherscan.io/address/0x60dBFB0bb7bac751F9a7a7FE9AA600c85a11cBaD
+
+
+## Smart contract on binance test-net: 
+
+SoftwareHandle:  0x6c1fe2de3150edd0fe0991fed6da01f33938f05b  
+https://testnet.bscscan.com/address/0x6c1fe2de3150edd0fe0991fed6da01f33938f05b
+
+Software (index 0 of previous SoftwareHandle):  0x0440829FeDcf48f26F77c2C2dBb49a14fa286111  
+https://testnet.bscscan.com/address/0x0440829FeDcf48f26F77c2C2dBb49a14fa286111
+
+License (index 0 of previous Software):  0xA7f3d6F7e8D7f71D6BFFb3738138fC585B69EAE7  
+https://testnet.bscscan.com/address/0xA7f3d6F7e8D7f71D6BFFb3738138fC585B69EAE7
 
 ## SoftwareHandler contract:
 
