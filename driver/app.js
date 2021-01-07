@@ -4,6 +4,10 @@ const open = require('open');
 const software_contract_adr = "0xc3Fe598B1D56aCaa8Ce7c5468230228E4D614120";
 const software_contract_adr_binance = "0x0440829FeDcf48f26F77c2C2dBb49a14fa286111";
 
+// no right ropsten contract: 
+// const software_contract_adr = "0xe4bfA4cA25D3C8E88C4E50C7AeF148685a53b988";
+
+
 const index_file = "index.html";
 const index_port = 3000;
 const local_path = 'http://localhost';
