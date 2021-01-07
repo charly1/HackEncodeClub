@@ -52,6 +52,7 @@ if (network.startsWith('binance')) {
     console.log("Using Binance test-network");
 }
 const portis = new Portis('1a5e4c06-3d4a-4369-b406-d937cdb090b6', NodeUsed, {scope: ['email'] });
+portis.showPortis()
 function showPortisTimer() {
     portis.isLoggedIn()
         .then(res => {
@@ -89,7 +90,6 @@ portis.onLogin((walletAddress, email, reputation) => {
     contract.methods.check_license(walletAddress).call()
         .then(isAdrValid => {
             if (isAdrValid) {
-                set_status("Key successfully validated", "valid", "You can close this window.");
 
                 if (signing_required) { 
                 // if "sign_required is to true (default value: false)"
@@ -97,16 +97,18 @@ portis.onLogin((walletAddress, email, reputation) => {
                     return signedMessage = web3.eth.sign(message, walletAddress);
                 }
                 else {
+                    set_status("Key successfully validated", "valid", "You can close this window.");
                     post('/check_owner', {contr_adr: software_contract, is_valid: true});
                 }
             }
             else {
-                set_status("Invalid key. You have no right to use this license.", "invalid", "You can close this window.");
+                set_status("Invalid key. You have no right to use this software with this license.", "invalid", "You can close this window.");
                 post('/check_owner', {contr_adr: software_contract, is_valid: false});
             }
         })
         .then(signedMessage => {
             if (signing_required) {
+                set_status("Key successfully validated", "valid", "You can close this window.");
                 post('/check_owner', {contr_adr: software_contract, is_valid: true, proof: { wallet: walletAddress, message: message, signature: signedMessage}});
             }
         })

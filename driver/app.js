@@ -1,5 +1,7 @@
 const open = require('open');
 
+ui = require('./libui-node/examples/license_loader.js');
+
 /*software_contract_adr determines the adress of the lices smart contract*/
 const software_contract_adr = "0xc3Fe598B1D56aCaa8Ce7c5468230228E4D614120";
 const software_contract_adr_binance = "0x0440829FeDcf48f26F77c2C2dBb49a14fa286111";
@@ -39,9 +41,14 @@ log_url = `${local_path}:${index_port}?contract=${software_contract_adr_binance}
 // var with signing required ? uncomment nect line to require signature
 // log_url += "&sign_required=true";
 
-(async () => {
+ui.setLabelText("License status: not loaded.");
+ui.setBtnText("Load License");
+
+ui.setBtnCallBack(async () => {
+    console.log("Loading license")
+    ui.setLabelText("License status: Loading...", "");
     await open(log_url);
-})();
+});
 
 // main html file
 app.get("/", function (req, res) {
@@ -55,6 +62,7 @@ app.use('/public', express.static('public'));
 app.post('/check_owner', function (req, res) {  
 
     res.sendStatus(200);
+
     // console.log(req.body);
 
     if ('proof' in req.body) {
@@ -76,14 +84,25 @@ app.post('/check_owner', function (req, res) {
         console.log("signature validity:", signature_is_valid);
         if (signature_is_valid) {
             console.log("successfully verified the authencity of the license with a signature proof.");
+            ui.setLabelText("License status: License is valid !", "You can now use the software.");
         }
         else {
             console.log("failed to verify the authencity of the license with a signature proof: INVALID SIGNATURE");
+            ui.setLabelText("License status: License is not valid !", "You may click again on the button to retry loading the license.");
         }
     }
     else {
-        console.log("successfully verified the authencity of the license but without any signature proof.");
+        if (req.body.is_valid) {
+            console.log("successfully verified the authencity of the license but without any signature proof.");
+            ui.setLabelText("License status: License is valid !", "You can now use the software.");
+        } 
+        else {
+            console.log("Failed to verified the authencity of the license but without any signature proof.");
+            ui.setLabelText("License status: License is not valid !", "You may click again on the button to retry loading the license.");
+        }
+        
     }
+    
      
 })
 
