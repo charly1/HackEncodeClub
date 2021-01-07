@@ -1,0 +1,22 @@
+version: 1.0.{build}
+image: Visual Studio 2015
+
+
+environment:
+  matrix:
+    - nodejs_version: "10"
+    - nodejs_version: "9"
+    - nodejs_version: "8"
+    - nodejs_version: "6"
+    - nodejs_version: "4"
+
+install:
+  - ps: Install-Product node $env:nodejs_version x64
+  - npm i npm@5.7 -g
+  - npm install
+
+
+test_script:
+  - npm test
+
+build: off
