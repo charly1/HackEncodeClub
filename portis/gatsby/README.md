@@ -6,6 +6,12 @@ Install all dependencies:
 
 - `npm install`
 
+## Environemnt variables and configs
+
+Use `.env.development` and `.evn.production` files to store credentials and network info for dev and prod  
+
+*If you change any environment variable, you must rebuild to project*  
+
 ## Build and Run
 
 - Build and Run (dev): `npm run start`

@@ -1,65 +1,44 @@
 import React from "react"
-import CONTRACT_ABI from '../config/contract_abi';
-import HANDLER_ABI from '../config/handler_abi';
-import LICENSE_ABI from '../config/license_abi';
+import abi from '../config/abi';
 import * as func from '../utils';
 
-
-// {
-//   contract: swContract,
-//   addr: license,
-//   admin,
-//   owner,
-//   expiry: '2021-04-25',
-//   forSale: false,
-// }
+import LicenseInfo from './licenceUI';
 
 function loadAll(contract_sh, web3) {
   return func.SH_list_softwares(contract_sh)
     .then(sofwares => {
       if (sofwares) {
-        const promises = [];
+        const promisesSoftware = [];
         sofwares.forEach(software => {
-          const swContract = web3 ? new web3.eth.Contract(CONTRACT_ABI, software) : null;
+          const swContract = web3 ? new web3.eth.Contract(abi.CONTRACT_ABI, software) : null;
           if (swContract) {
-            promises.push(func.S_list_licenses(swContract)
-              .then(licenses => ({ licenses, swContract }))
-              .then(({ licenses, swContract }) => {
-                return func.S_get_admin(swContract)
-                  .then((admin) => ({ admin, swContract, licenses }));
-              })
-              .then(({ admin, swContract, licenses }) => {
-                if (!admin) return Promise.resolve(false);
-                const licensePromise = [];
-                licenses.forEach(license => {
-                  const liContract = web3 ? new web3.eth.Contract(LICENSE_ABI, license) : null;
-                  if (liContract) {
-                    licensePromise.push(
-                      func.L_get_owner(liContract)
-                        .then((owner) => ({ owner, admin, swContract, liContract }))
-                        .then(({ owner, admin, swContract, liContract }) => {
-                          return Promise.resolve({
-                            swContract: swContract,
-                            liContract: liContract,
-                            addr: license,
-                            admin,
-                            owner,
-                            expiry: '2021-04-25',
-                            forSale: false,
-                          });
-                        }))
-                    }
-                  });
-                return Promise.all(licensePromise);
-              }))
+            promisesSoftware.push(
+              func.S_list_licenses(swContract)
+                .then((licenses) => func.S_get_admin(swContract).then((admin) => ({ admin, licenses })))
+                .then(({ admin, licenses }) => {
+                  if (!admin) return {};
+                  // console.log('ALL', swContract, admin, sofwares, licenses)
+                  return {
+                    type: 'software',
+                    admin,
+                    addr: software,
+                    contract: swContract,
+                    licenses,
+                  };
+                })
+            )
           }
         });
-        return Promise.all(promises);
+        return Promise.all(promisesSoftware);
       }
       return false;
     })
+      .then((softwareDetails) => {
+        if (!softwareDetails) return false;
+        return softwareDetails.flat();
+      })
       .catch(err => {
-        console.log('ERROR: load all: ', err);
+        func.showLogs({ type: '[ERROR]:', msg: 'load all: ' + err });
         return false;
       });
 }
@@ -67,90 +46,119 @@ class AdminUI extends React.Component {
   constructor(props) {
     super(props);
     this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleLicenseaddr = this.handleLicenseaddr.bind(this);
-    this.loadLicenses = this.loadLicenses.bind(this);
-    this.changeAdmin = this.changeAdmin.bind(this);
-    this.changeOwner = this.changeOwner.bind(this);
-    this.changeDate = this.changeDate.bind(this);
-    this.changeForSale = this.changeForSale.bind(this);
+    this.handleSwSelect = this.handleSwSelect.bind(this);
+    this.loadSoftwares = this.loadSoftwares.bind(this);
+    this.loadLicense = this.loadLicense.bind(this);
+    this.setSWAdmin = this.setSWAdmin.bind(this);
+    this.setLAdmin = this.setLAdmin.bind(this);
+    this.setLOwner = this.setLOwner.bind(this);
+    this.setLDate = this.setLDate.bind(this);
+    this.setLForSale = this.setLForSale.bind(this);
 
+    let contractAddress = '';
+    if (this.props.type === 'ethereum') contractAddress = process.env.ROPSTEN_CONTRACT_HANDLER;
+    if (this.props.type === 'binance') contractAddress = process.env.BINANCE_CONTRACT_HANDLER;
     this.state = {
-      contractAddress: process.env.CONTRACT_ADDR_HANDLER || '',
-      licenses: [],
-      currLicenseaddr: '',
+      contractAddress,
+      softwares: [],
+      licenses: {},
+      currSw: '',
       currAdmin: '',
-      currOwner: '',
-      currExpiry: '',
-      currForSale: false,
       handlerContract: null,
-      swContract: null,
     };
   }
 
-  loadLicenses(event) {
+  loadLicense(licenseAddr) {
+    const { web3 } = this.props;
+    const liContract = web3 ? new web3.eth.Contract(abi.LICENSE_ABI, licenseAddr) : null;
+    if (!liContract) return;
+
+    Promise.all([
+      func.L_get_admin(liContract),
+      func.L_get_owner(liContract),
+      func.L_get_expiration_timestamp(liContract),
+      func.L_get_is_for_sale(liContract),
+    ])
+    .then(([admin, owner, expiry, forSale]) => {
+      // console.log("🚀 ~ file: admin.jsx", admin, owner, expiry, forSale)
+      this.setState(prevState => ({
+        ...prevState,
+        licenses: {
+          ...prevState.licenses,
+          [licenseAddr]: {
+            type: 'license',
+            addr: licenseAddr,
+            liContract,
+            admin,
+            owner,
+            expiry: expiry === '0' ? 'infinity' : expiry,
+            forSale,
+          },
+        },
+      }))
+    })
+    .catch(err => console.error(err));
+  }
+
+  loadSoftwares(event) {
     event.preventDefault(); // avoid page reloading
     const { web3 } = this.props;
     const { contractAddress } = this.state;
-    const handlerContract = web3 ? new web3.eth.Contract(HANDLER_ABI, contractAddress) : null;
-
+    const handlerContract = web3 ? new web3.eth.Contract(abi.HANDLER_ABI, contractAddress) : null;
     loadAll(handlerContract, web3)
-      .then((result) => {
-        console.log('ALL RESULTS', result);
-        if (result && result.length && result[0].length) {
-          const all = result[0];
-          this.setState({
-            licenses: all,
-            currAdmin: all[0].admin,
-            currOwner: all[0].owner,
-            currExpiry: all[0].expiry,
-            currForSale: !!all[0].forSale,
-            handlerContract,
-          })
-        }
+      .then((softwares) => {
+        func.showLogs({ type: '[INFO]:', msg: 'ALL RESULTS', softwares });
+        if (!softwares || !softwares.length) return;
+
+        this.setState({
+          softwares,
+          currSw: softwares[0].addr,
+          currAdmin: softwares[0].admin,
+          handlerContract,
+        })
+
+        softwares.forEach(sw => {
+          if (sw.licenses && sw.licenses.length) {
+            sw.licenses.forEach(license => this.loadLicense(license));
+          }
+        });
       })
-        .catch(err => console.log('ERROR', err));
-
-    // const licenses = [
-    //   { addr: '31msd930290adn90ind', admin: 'adobe', owner: 'yolo98', expiry: '2021-04-25', forSale: false },
-    //   { addr: 'cdopwad9ud90wasnd90', admin: 'adobe', owner: 'gugus', expiry: '2021-01-24', forSale: true},
-    //   { addr: 'mmdmewoasdpj9097asd', admin: 'office', owner: 'superman', expiry: '2021-11-18'},
-    // ]
-    // this.setState({
-    //   licenses: allLicenses,
-    //   currAdmin: licenses[0].admin,
-    //   currOwner: licenses[0].owner,
-    //   currExpiry: licenses[0].expiry,
-    //   currForSale: !!licenses[0].forSale,
-    //   handlerContract,
-    //   // swContract,
-    // })
+        .catch(err => func.showLogs({ type: '[ERROR]:', msg: err }));
   }
 
-  changeAdmin(event) {
+  setSWAdmin(event) {
     // event.persist() // uncomment to log event object
     event.preventDefault(); // avoid page reloading
-    const { currAdmin, swContract } = this.state;
-    swContract.methods.adminChanged(currAdmin).send();
-    console.log("sync currAdmin", currAdmin)
+    // const { currAdmin, swContract } = this.state;
+    // swContract.methods.adminsetd(currAdmin).send();
+    // func.showLogs({ type: '[INFO]:', msg: "sync currAdmin " + currAdmin })
   }
 
-  changeOwner(event) {
+  setLAdmin(event) {
     // event.persist() // uncomment to log event object
     event.preventDefault(); // avoid page reloading
-    const { currOwner, swContract } = this.state;
-    swContract.methods.adminChanged(currOwner).call();
-    console.log("sync currOwner", currOwner)
+    // const { currAdmin, swContract } = this.state;
+    // swContract.methods.adminsetd(currAdmin).send();
+    // func.showLogs({ type: '[INFO]:', msg: "sync currAdmin " + currAdmin })
   }
 
-  changeDate(event) {
+  setLOwner(event) {
     // event.persist() // uncomment to log event object
     event.preventDefault(); // avoid page reloading
-    // const { portis, web3, email, network } = this.props;
-    const { currExpiry } = this.state;
-    console.log("sync currExpiry", currExpiry)
+    // const { currOwner, swContract } = this.state;
+    // swContract.methods.adminChanged(currOwner).call();
+    // func.showLogs({ type: '[INFO]:', msg: "sync currOwner " + currOwner })
   }
 
-  changeForSale(forSale) {
+  setLDate(event) {
+    // event.persist() // uncomment to log event object
+    // event.preventDefault(); // avoid page reloading
+    // // const { portis, web3, email, network } = this.props;
+    // const { currExpiry } = this.state;
+    // func.showLogs({ type: '[INFO]:', msg: "sync currExpiry" + currExpiry })
+  }
+
+  setLForSale() {
     // event.persist() // uncomment to log event object
     //   L_set_for_sale = (account=account_1, price=10) => {
     //     var query = contract_l.methods.set_for_sale(String(price));
@@ -166,13 +174,13 @@ class AdminUI extends React.Component {
     //         return w.eth.sendSignedTransaction(signedTx.rawTransaction);
     //     })
     //     .then(res => {
-    //         console.log("successfully sent signed transaction\n", res);
+    //         func.showLogs({ type: '[INFO]:', msg: "successfully sent signed transaction\n", res);
     //     })
     //     .catch(err => {
     //         console.error("An error occured while calling a payable func:", err);
     //     });
     // }
-    this.setState({ currForSale: !forSale });
+    // this.setState({ currForSale: !forSale });
   }
 
   handleInputChange(event) {
@@ -182,17 +190,14 @@ class AdminUI extends React.Component {
     }
   }
 
-  handleLicenseaddr(event) {
+  handleSwSelect(event) {
     // event.persist() // uncomment to log event object
-    const { licenses } = this.state;
-    const selection = licenses.find(item => item.addr === event.target.value)
+    const { softwares } = this.state;
+    const selection = softwares.find(item => item.addr === event.target.value)
     if (!selection) return;
     this.setState({
-      currLicenseaddr: event.target.value,
+      currSw: selection.addr,
       currAdmin: selection.admin,
-      currOwner: selection.owner,
-      currExpiry: selection.expiry,
-      currForSale: selection.forSale,
     });
   }
 
@@ -200,70 +205,59 @@ class AdminUI extends React.Component {
     const {
       contractAddress,
       licenses,
-      currLicenseaddr,
-      currOwner,
+      softwares,
+      currSw,
       currAdmin,
-      currExpiry,
-      currForSale,
     } = this.state;
-    const bgcolor = '#9ab394';
+    const bgColor = this.props.type === 'ethereum' ? 'mediumpurple' : '#b2bf97';
+    const mainBGColor = 'lightgrey';
+    const currentSoftware = softwares.find(sw => sw.addr === currSw);
     return (
-      <div className="block-main" style={{ backgroundColor: '#267469' }}>
-        <div className="block-sub" style={{ bgcolor }}>
-          <form name="s_address" onSubmit={this.loadLicenses}>
+      <div className="block-main" style={{ backgroundColor: mainBGColor }}>
+        <div className="block-sub" style={{ bgColor }}>
+          <form name="s_address" onSubmit={this.loadSoftwares}>
             <label>
-              <span className="description">Software contract address:</span>
+              <span className="description">Handler contract address:</span>
               <input type="text" value={contractAddress} name="contractAddress" onChange={this.handleInputChange} size="50" />
             </label>
             <input type="submit" value="Load" />
           </form>
         </div>
-        {licenses.length ? (
+        {softwares.length ? (
           <>
-            <form name="f_license">
+            <form name="f_sw" style={{ marginTop: '10px', marginBottom: '10px' }}>
               <label>
-                <span className="description">Licence addr:
-                <select name={`license_${currLicenseaddr}`} onChange={this.handleLicenseaddr}>
-                  {licenses.map(item => (
+                <span className="description">Software addr: 
+                <select name={`sw_${currSw}`} value={currSw} onChange={this.handleSwSelect} onBlur={this.handleSwSelect}>
+                  {softwares.map(item => (
                     <option key={item.addr} value={item.addr}>{item.addr}</option>
                   ))}
                 </select>
                 </span>
               </label>
-              {/* <input type="submit" value="Load details" /> */}
             </form>
-            <div className="block-sub" style={{ bgcolor }}>
-              <form name="s_admin" onSubmit={this.changeAdmin}>
+            <div className="block-sub" style={{ bgColor }}>
+              <form name="s_admin" onSubmit={this.setSWAdmin}>
                 <label>
-                  <span className="description">Admin:</span>
-                  <input type="text" value={currAdmin} disabled={!currForSale} name="currAdmin" onChange={this.handleInputChange} size="50" />
+                  <span className="description">Software admin:</span>
+                  <input type="text" value={currAdmin} disabled name="currAdmin" onChange={this.handleInputChange} onBlur={this.handleInputChange} size="50" />
                 </label>
-                <input type="submit" value="Set new admin" disabled={!currForSale} />
+                <input type="submit" value="Set new admin" disabled />
               </form>
             </div>
-            <div className="block-sub" style={{ bgcolor }}>
-              <form name="s_owner" onSubmit={this.changeOwner}>
-                <label>
-                  <span className="description">Owner:</span>
-                  <input type="text" value={currOwner} disabled={!currForSale} name="currOwner" onChange={this.handleInputChange} size="50" />
-                </label>
-                <input type="submit" value="Set new owner" disabled={!currForSale} />
-              </form>
-            </div>
-            <div className="block-sub" style={{ bgcolor }}>
-              <form name="s_expiry" onSubmit={this.changeDate}>
-                <label>
-                  <span className="description">Expiry date:</span>
-                  <input type="text" value={currExpiry} disabled={!currForSale} name="currExpiry" onChange={this.handleInputChange} size="50" />
-                </label>
-                <input type="submit" value="Set new date" disabled={!currForSale} />
-              </form>
-            </div>
-            <div className="block-sub" style={{ bgcolor, alignItems: 'center'}}>
-              <button onClick={() => this.changeForSale(currForSale)} style={{ width: '200px'  }}>
-                For sale ?: {currForSale ? 'yes 🔵' : 'no 🔴'}
-              </button>
-            </div>
+            {currentSoftware && currentSoftware.licenses && currentSoftware.licenses.length
+              ? currentSoftware.licenses.map((license, i) => (
+                <LicenseInfo
+                  key={'lc' + i}
+                  license={licenses[license] || {}}
+                  setForSale={this.setLForSale}
+                  setDate={this.setLDate}
+                  setOwner={this.setLOwner}
+                  setAdmin={this.setLAdmin}
+                  bgColor={bgColor}
+                />
+              ))
+              : (<h4>No License for this software</h4>)}
           </>
         ) : null}
       </div>

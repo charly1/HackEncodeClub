@@ -81,7 +81,7 @@ label, input {
 
 .block-menu {
   padding: 4px;
-  background-color: #fcda8d;
+  /* background-color: #fcda8d; */
   margin-top: 5px;
   margin-bottom: 5px;
 }

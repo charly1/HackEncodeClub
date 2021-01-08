@@ -12,11 +12,6 @@ const NotFoundPage = () => {
           😔
         </span>{" "}
         we couldn’t find what you were looking for.
-        {process.env.NODE_ENV === "development" ? (
-          <div>
-            Visit home page at: <span className="code">/</span>
-          </div>
-        ) : null}
         <Link to="/"><button className="btn-menu" onClick={() => {}}>Home</button></Link>
       </div>
     </main>

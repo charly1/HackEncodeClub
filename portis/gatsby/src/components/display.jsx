@@ -1,10 +1,7 @@
 import React from "react"
 import Web3 from "web3";
 import AdminUI from '../components/admin';
-
-function showLogs({ msg = '', type = '[ERROR]' }) {
-  if (process.env.NODE_ENV === "development") console.log(type + msg);
-}
+import { showLogs } from '../utils';
 
 class PortisUI extends React.Component {
   constructor(props) {
@@ -32,10 +29,11 @@ class PortisUI extends React.Component {
 
   componentDidMount() {
     if (typeof window !== 'undefined') {
+      const { node } = this.props;
       const Portis = require('@portis/web3');
-      const dappId = process.env.DAPP_ID;
-      const network = 'ropsten';
-      const portis = new Portis(dappId, network, { scope: ['email', 'reputation'] });
+      const dappId = process.env.DAPP_ID || '';
+      const network = node || 'ropsten';
+      const portis = new Portis(dappId, network, { scope: ['email'] }); // 'reputation' off
       const web3 = new Web3(portis.provider);
       this.setState({ portis, web3, network });
 
@@ -142,6 +140,7 @@ class PortisUI extends React.Component {
     return (
       <>
         <div className="block-main">
+          <h2>{this.props.title || 'Hackathon challenge !'}</h2>
           <div className="block-sub">
             <button onClick={() => portis.showPortis()}>Show Portis</button>
             <button onClick={() => this.isLoggedIn()}>Logged: {logged ? '🔵' : '🔴'}</button>
@@ -225,6 +224,7 @@ class PortisUI extends React.Component {
         </div>
         {logged ? (
           <AdminUI
+            type={this.props.type}
             portis={portis}
             web3={web3}
             email={email}
