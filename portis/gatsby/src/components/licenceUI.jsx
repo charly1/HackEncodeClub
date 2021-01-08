@@ -42,7 +42,7 @@ const LicenseDisplay = ({
               onChange={(evt) => setTextOwner(evt.target.value)}
               size="50"
             />            </label>
-          <input type="submit" value="Set new owner" disabled={!license.forSale} />
+          <input type="submit" value="Set new owner" />
         </form>
       </div>
       <div>
@@ -55,12 +55,13 @@ const LicenseDisplay = ({
               onChange={(evt) => setTextDate(evt.target.value)}
               onChange={(evt) => setTextDate(evt.target.value)}
               size="50"
-            />             </label>
-          <input type="submit" value="Set new date" disabled={!license.forSale} />
+            />
+          </label>
+          <input type="submit" value="Set new date" />
         </form>
       </div>
       <div style={{ alignItems: 'center'}}>
-        <button onClick={() => setForSale(license.addr)} style={{ width: '200px'  }}>
+        <button onClick={() => setForSale(license.addr, license.forSale)} style={{ width: '200px'  }}>
           For sale ?: {license.forSale ? 'yes 🔵' : 'no 🔴'}
         </button>
       </div>

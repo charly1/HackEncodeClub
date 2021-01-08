@@ -8,7 +8,7 @@ const IndexBinance = () => {
       <title>Dapp Web UI</title>
       <meta charSet="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
-      <Menu />
+      <Menu type="binance" />
       {process.env.BINANCE_NODE ? (
         <Display
           type="binance"

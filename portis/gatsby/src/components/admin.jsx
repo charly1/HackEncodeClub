@@ -82,7 +82,6 @@ class AdminUI extends React.Component {
     .then(([admin, owner, expiry, forSale]) => {
       // console.log("🚀 ~ file: admin.jsx", admin, owner, expiry, forSale)
       this.setState(prevState => ({
-        ...prevState,
         licenses: {
           ...prevState.licenses,
           [licenseAddr]: {
@@ -158,29 +157,31 @@ class AdminUI extends React.Component {
     // func.showLogs({ type: '[INFO]:', msg: "sync currExpiry" + currExpiry })
   }
 
-  setLForSale() {
-    // event.persist() // uncomment to log event object
-    //   L_set_for_sale = (account=account_1, price=10) => {
-    //     var query = contract_l.methods.set_for_sale(String(price));
-    //     var encodedABI = query.encodeABI();
+  setLForSale(licenseAddr, state, price) {
+    const { web3, address } = this.props;
+    const { licenses } = this.state;
+    const targetLicense = licenses[licenseAddr];
+    if (!targetLicense) return;
     
-    //     account.signTransaction({
-    //         data: encodedABI,
-    //         from: account.address,
-    //         gas: gasUseEveryWhere,
-    //         to: contract_l.options.address,
-    //     })
-    //     .then(signedTx => {
-    //         return w.eth.sendSignedTransaction(signedTx.rawTransaction);
-    //     })
-    //     .then(res => {
-    //         func.showLogs({ type: '[INFO]:', msg: "successfully sent signed transaction\n", res);
-    //     })
-    //     .catch(err => {
-    //         console.error("An error occured while calling a payable func:", err);
-    //     });
-    // }
-    // this.setState({ currForSale: !forSale });
+    let payableFct = null;
+    if (state) payableFct = func.L_set_for_sale;
+    else payableFct = func.L_remove_for_sale;
+  
+    payableFct(targetLicense.liContract, web3, address, price || 10)
+      .then(res => {
+        func.showLogs({ type: '[INFO]', msg: JSON.stringify(res) });
+        if (res && res.status) {
+          this.setState(prevState => ({
+            licenses: {
+              ...prevState.licenses,
+              [licenseAddr]: {
+                ...targetLicense,
+                forSale: !state,
+              },
+            },
+          }));
+        }
+      });
   }
 
   handleInputChange(event) {

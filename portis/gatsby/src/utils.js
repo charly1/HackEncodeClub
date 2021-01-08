@@ -6,6 +6,29 @@ export function showLogs({ msg = '', type = '[ERROR]' }) {
 
 // functions to talk with smart contracts
 
+const gasUseEveryWhere = 4000000;
+
+function _signTransaction(contract_l, web3, encodedABI, account) {
+    return web3.eth.signTransaction({
+        data: encodedABI,
+        from: account,
+        gas: gasUseEveryWhere,
+        to: contract_l.options.address,
+    })
+      .then(signedTx => {
+          showLogs({ type: '[INFO]:', msg: "signed transaction" + signedTx });
+          return web3.eth.sendSignedTransaction(signedTx.raw);
+      })
+      .then(res => {
+          showLogs({ type: '[INFO]:', msg: "successfully sent signed transaction\n" + res });
+          return res;
+      })
+      .catch(err => {
+          console.error("An error occured while calling a payable func:", err);
+          return false;
+      });
+}
+
 // SH functions
 export function SH_list_softwares(contract_sh) {
   return contract_sh.methods.getNbOfSoftware().call()
@@ -222,44 +245,19 @@ export function L_get_is_for_sale(contract_l) {
 //   });
 // }
 
-// L_set_for_sale = (account=account_1, price=10) => {
-//   var query = contract_l.methods.set_for_sale(String(price));
-//   var encodedABI = query.encodeABI();
+export function L_set_for_sale(contract_l, web3, account, price=10) {
+  if (!web3 || !account) return false;
 
-//   account.signTransaction({
-//       data: encodedABI,
-//       from: account.address,
-//       gas: gasUseEveryWhere,
-//       to: contract_l.options.address,
-//   })
-//   .then(signedTx => {
-//       return w.eth.sendSignedTransaction(signedTx.rawTransaction);
-//   })
-//   .then(res => {
-//       showLogs({ type: '[INFO]:', msg: "successfully sent signed transaction\n", res);
-//   })
-//   .catch(err => {
-//       console.error("An error occured while calling a payable func:", err);
-//   });
-// }
+  const query = contract_l.methods.set_for_sale(String(price));
+  const encodedABI = query.encodeABI();
 
-// L_remove_for_sale = (account=account_1) => {
-//   var query = contract_l.methods.remove_for_sale();
-//   var encodedABI = query.encodeABI();
+  return _signTransaction(contract_l, web3, encodedABI, account);
+}
 
-//   account.signTransaction({
-//       data: encodedABI,
-//       from: account.address,
-//       gas: gasUseEveryWhere,
-//       to: contract_l.options.address,
-//   })
-//   .then(signedTx => {
-//       return w.eth.sendSignedTransaction(signedTx.rawTransaction);
-//   })
-//   .then(res => {
-//       showLogs({ type: '[INFO]:', msg: "successfully sent signed transaction\n", res);
-//   })
-//   .catch(err => {
-//       console.error("An error occured while calling a payable func:", err);
-//   });
-// }
+export function L_remove_for_sale(contract_l, web3, account) {
+    if (!web3 || !account) return false;
+    const query = contract_l.methods.remove_for_sale();
+    const encodedABI = query.encodeABI();
+
+    return _signTransaction(contract_l, web3, encodedABI, account);
+}
