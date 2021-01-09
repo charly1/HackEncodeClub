@@ -1,7 +1,7 @@
 import React from "react"
 import Web3 from "web3";
 import AdminUI from '../components/admin';
-import { showLogs } from '../utils';
+import { showLogs, typeCheckAddress } from '../utils';
 
 class PortisUI extends React.Component {
   constructor(props) {
@@ -76,6 +76,7 @@ class PortisUI extends React.Component {
   getBalance() {
     const { web3, address } = this.state;
     if (!web3 || !address) return;
+    if (!typeCheckAddress(address)) return;
     web3.eth.getBalance(address)
       .then((balance) => {
         showLogs({ type: '[WEB3] WALLET BALANCE: ', msg: balance })
@@ -105,10 +106,18 @@ class PortisUI extends React.Component {
         break;
       case 's_address':
         // check address validity
+        if (!typeCheckAddress(address)) {
+          alert('WARNING: invalid characters !');
+          break;
+        }
         portis.importWallet(address);
         break;
       case 's_tosign':
         // check address validity
+        if (!typeCheckAddress(address)) {
+          alert('WARNING: invalid characters !');
+          break;
+        }
         web3.eth.sign(tosign, address, (signed) => {
           if (typeof signed !== 'string') console.error(signed);
           else this.setState({ signed })
@@ -161,7 +170,7 @@ class PortisUI extends React.Component {
                 <form name="s_network" onSubmit={this.handleSubmit}>
                   <label>
                     <span className="description">Network:
-                    <select name="f_network" onChange={this.handleChange} >
+                    <select name="f_network" onChange={this.handleChange} onBlur={this.handleChange} >
                       <option value="ropsten">Ropsten</option>
                       <option value="kovan">Kovan</option>
                       <option value="rinkeby">Rinkeby</option>

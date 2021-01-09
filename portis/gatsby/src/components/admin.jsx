@@ -80,7 +80,7 @@ class AdminUI extends React.Component {
       func.L_get_is_for_sale(liContract),
     ])
     .then(([admin, owner, expiry, forSale]) => {
-      // console.log("🚀 ~ file: admin.jsx", admin, owner, expiry, forSale)
+      // console.log("🚀 ~ file: admin.jsx", admin, owner, typeof expiry, expiry, forSale)
       this.setState(prevState => ({
         licenses: {
           ...prevState.licenses,
@@ -90,7 +90,7 @@ class AdminUI extends React.Component {
             liContract,
             admin,
             owner,
-            expiry: expiry === '0' ? 'infinity' : expiry,
+            expiry: expiry ? '' : new Date(expiry).toISOString().split('T')[0],
             forSale,
           },
         },
@@ -103,6 +103,10 @@ class AdminUI extends React.Component {
     event.preventDefault(); // avoid page reloading
     const { web3 } = this.props;
     const { contractAddress } = this.state;
+    if (!func.typeCheckAddress(contractAddress)) {
+      alert('WARNING: contract invalid characters !');
+      return;
+    }
     const handlerContract = web3 ? new web3.eth.Contract(abi.HANDLER_ABI, contractAddress) : null;
     loadAll(handlerContract, web3)
       .then((softwares) => {
@@ -128,33 +132,104 @@ class AdminUI extends React.Component {
   setSWAdmin(event) {
     // event.persist() // uncomment to log event object
     event.preventDefault(); // avoid page reloading
+    if (!func.typeCheckAddress(event.target.value)) {
+      alert('WARNING: address invalid characters !');
+      return;
+    }
     // const { currAdmin, swContract } = this.state;
     // swContract.methods.adminsetd(currAdmin).send();
     // func.showLogs({ type: '[INFO]:', msg: "sync currAdmin " + currAdmin })
   }
 
-  setLAdmin(event) {
-    // event.persist() // uncomment to log event object
-    event.preventDefault(); // avoid page reloading
-    // const { currAdmin, swContract } = this.state;
-    // swContract.methods.adminsetd(currAdmin).send();
-    // func.showLogs({ type: '[INFO]:', msg: "sync currAdmin " + currAdmin })
+  setLAdmin(licenseAddr, admin) {
+    if (!func.typeCheckAddress(admin)) {
+      alert('WARNING: address invalid characters !');
+      return;
+    }
+    const { web3, address } = this.props;
+    const { licenses } = this.state;
+    const targetLicense = licenses[licenseAddr];
+    if (!targetLicense) return;
+
+    func.L_set_owner(targetLicense.liContract, web3, address, admin)
+    .then(res => {
+      func.showLogs({ type: '[INFO]', msg: JSON.stringify(res) });
+      if (res && res.status) {
+        alert('SUCESS setting new admin !');
+        this.setState(prevState => ({
+          licenses: {
+            ...prevState.licenses,
+            [licenseAddr]: {
+              ...targetLicense,
+              admin,
+            },
+          },
+        }));
+      } else {
+        alert('ERROR setting new admin...');
+      }
+    });
   }
 
-  setLOwner(event) {
-    // event.persist() // uncomment to log event object
-    event.preventDefault(); // avoid page reloading
-    // const { currOwner, swContract } = this.state;
-    // swContract.methods.adminChanged(currOwner).call();
-    // func.showLogs({ type: '[INFO]:', msg: "sync currOwner " + currOwner })
+  setLOwner(licenseAddr, owner) {
+    if (!func.typeCheckAddress(owner)) {
+      alert('WARNING: address invalid characters !');
+      return;
+    }
+    const { web3, address } = this.props;
+    const { licenses } = this.state;
+    const targetLicense = licenses[licenseAddr];
+    if (!targetLicense) return;
+
+    func.L_set_owner(targetLicense.liContract, web3, address, owner)
+      .then(res => {
+        func.showLogs({ type: '[INFO]', msg: JSON.stringify(res) });
+        if (res && res.status) {
+          alert('SUCESS setting new owner !');
+          this.setState(prevState => ({
+            licenses: {
+              ...prevState.licenses,
+              [licenseAddr]: {
+                ...targetLicense,
+                owner,
+              },
+            },
+          }));
+        } else {
+          alert('ERROR setting new owner...');
+        }
+      });
   }
 
-  setLDate(event) {
-    // event.persist() // uncomment to log event object
-    // event.preventDefault(); // avoid page reloading
-    // // const { portis, web3, email, network } = this.props;
-    // const { currExpiry } = this.state;
-    // func.showLogs({ type: '[INFO]:', msg: "sync currExpiry" + currExpiry })
+  setLDate(licenseAddr, date) {
+    const { web3, address } = this.props;
+    const { licenses } = this.state;
+    const targetLicense = licenses[licenseAddr];
+    if (!targetLicense) return;
+
+    let payableFct = null;
+    if (date) payableFct = func.L_set_expiration_timestamp;
+    else payableFct = func.L_remove_expiration_timestamp;
+
+    const timestamp = date ? new Date(date).getTime() : 0;
+    payableFct(targetLicense.liContract, web3, address, timestamp)
+      .then(res => {
+        func.showLogs({ type: '[INFO]', msg: JSON.stringify(res) });
+        if (res && res.status) {
+          alert('SUCESS setting expiration date !');
+          this.setState(prevState => ({
+            licenses: {
+              ...prevState.licenses,
+              [licenseAddr]: {
+                ...targetLicense,
+                expiry: date || '',
+              },
+            },
+          }));
+        } else {
+          alert('ERROR setting expiration date...');
+        }
+      });
   }
 
   setLForSale(licenseAddr, state, price) {
@@ -164,13 +239,14 @@ class AdminUI extends React.Component {
     if (!targetLicense) return;
     
     let payableFct = null;
-    if (state) payableFct = func.L_set_for_sale;
-    else payableFct = func.L_remove_for_sale;
+    if (state) payableFct = func.L_remove_for_sale;
+    else payableFct = func.L_set_for_sale;
   
     payableFct(targetLicense.liContract, web3, address, price || 10)
       .then(res => {
         func.showLogs({ type: '[INFO]', msg: JSON.stringify(res) });
         if (res && res.status) {
+          alert('SUCESS setting license for sale !');
           this.setState(prevState => ({
             licenses: {
               ...prevState.licenses,
@@ -180,6 +256,8 @@ class AdminUI extends React.Component {
               },
             },
           }));
+        } else {
+          alert('ERROR setting license for sale...');
         }
       });
   }
