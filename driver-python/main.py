@@ -1,14 +1,15 @@
 # Python 3 server example
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from webbrowser import open as open_webpage
-import time
 import threading
-from pathlib import Path
+# from pathlib import Path
 from mimelib import url as mime
 from urllib.parse import urlparse
 import json
 import tkinter as tk
 import tkinter.ttk as ttk
+from compressed_public import data as public_files
+from public2py import decompress_data
 
 # ------------------------- changeable parameters -------------------------
 hostName = "localhost"
@@ -38,23 +39,24 @@ class MyServer(BaseHTTPRequestHandler):
         url = urlparse(self.path) # parse url, query and all url possible stuff
 
         if url.path == '/':
-            file = Path('public/html/index.html')
+            file = 'public/html/index.html'
         elif url.path[:7] == '/public':
-            file = Path(url.path[1:])
+            file = url.path[1:]
         else:
-            file = Path('file.notexists')
+            file = 'file.notexists'
 
-        if file.exists():
+
+        if file in public_files:
             self.send_response(200)
-            self.send_header('Content-type', mime(str(file.absolute())).mime_type)
+            self.send_header('Content-type', mime(file).mime_type)
             self.end_headers()
-            self.wfile.write(file.read_bytes())
+            self.wfile.write(decompress_data(public_files[file]))
 
         else:
             self.send_response(404)
             self.send_header("Content-type", "text/html")
             self.end_headers()
-            self.wfile.write(Path('public/html/404.html').read_bytes())
+            self.wfile.write(decompress_data(public_files['public/html/404.html']).read_bytes())
 
     def do_POST(self):
         url = urlparse(self.path) # parse url, query and all url possible stuff
