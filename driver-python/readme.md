@@ -10,6 +10,11 @@ This soft launch a fake software (pretending to be solidworks or photoshop or wh
 
 ## Compile
 
+### Add content to public/
+
+If you change any content or add files or folder to public/, you will have to compress it using `python3 public2py.py`.
+Indeed the files have to be compressed in order to be embedded in the .exe
+
 ### Prod (without console)
 
 `pyinstaller --onefile --windowed main.py`
