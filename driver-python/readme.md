@@ -21,3 +21,7 @@ You may find the executable in dist/main.exe (for windows)
 `pyinstaller --onefile main.py`
 
 You may find the executable in dist/main.exe (for windows)
+
+## Edit ui
+
+You may use pygubu-designer to edit the UI (find tkinter.ui) and copy paste the code in main.py
