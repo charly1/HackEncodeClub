@@ -1,7 +1,23 @@
-same than driver but python version
+# Driver API (python version)
 
-to generate an executable launch:
+## Description
 
-`pyinstaller --add-data "public;public" main.py`
+This soft launch a fake software (pretending to be solidworks or photoshop or whatev') and verify the license authencity.
 
-and you will find the result in `dist/main/main.exe` for windows
+## Run (in debug, requires python3 and many lib)
+
+`python3 main.py`
+
+## Compile
+
+### Prod (without console)
+
+`pyinstaller --onefile --windowed main.py`
+
+You may find the executable in dist/main.exe (for windows)
+
+### Debug (with console)
+
+`pyinstaller --onefile main.py`
+
+You may find the executable in dist/main.exe (for windows)
