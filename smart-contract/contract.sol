@@ -172,6 +172,11 @@ contract Software is Util {
     address payable public admin;
     License[] public licenses;
     mapping (address => License) public ownerLicense;
+
+    string public name;
+    string public version;
+    string public company_name; // to be removed
+    uint public license_time_default; 
     
     modifier ownerLicenseMatch(address owner, License license) {
         require (
