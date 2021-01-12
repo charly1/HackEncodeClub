@@ -29,7 +29,7 @@ def compress_content(directory='public', dest='compressed_public.py'):
                 dest_file.write(b',')
 
             dest_file.write(bytes('\n    "' + current + '" : "', 'utf-8'))
-            dest_file.write(base64.b64encode(zlib.compress(open(current_path, 'rb').read())))
+            dest_file.write(base64.b85encode(zlib.compress(open(current_path, 'rb').read())))
             dest_file.write(b'"')
 
 
@@ -39,7 +39,7 @@ def compress_content(directory='public', dest='compressed_public.py'):
     print("\nSuccessfully compressed " + str(counter) + " files into " + dest)
 
 def decompress_data(data):
-    return zlib.decompress(base64.b64decode(data))
+    return zlib.decompress(base64.b85decode(data))
 
 if __name__ == '__main__':
     compress_content()
