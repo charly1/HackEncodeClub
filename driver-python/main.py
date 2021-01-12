@@ -5,7 +5,7 @@ serverPort = 3000
 use_binance = True # binance test or ropsten
 use_working_contract = True
 
-use_separate_gui_for_website = True
+use_separate_gui_for_website = False
 # ------------------------- end of changeable parameters ------------------
 
 
@@ -54,7 +54,7 @@ def cb_license_was_checked(valid):
 def start_license_check():
     print("btn clicked")
     UI_set_label_text("License status: being verified...")
-    
+
     if use_separate_gui_for_website:
         WEBGUI_open_another_Thread(url_to_open)
         # WEBGUI_open(url_to_open)
