@@ -1,27 +1,32 @@
-# Python 3 server example
-from http.server import BaseHTTPRequestHandler, HTTPServer
-from webbrowser import open as open_webpage
-import threading
-# from pathlib import Path
-from mimelib import url as mime
-from urllib.parse import urlparse
-import json
-import tkinter as tk
-import tkinter.ttk as ttk
-from compressed_public import data as public_files
-from public2py import decompress_data
-
 # ------------------------- changeable parameters -------------------------
 hostName = "localhost"
 serverPort = 3000
 
 use_binance = True # binance test or ropsten
 use_working_contract = True
+
+use_separate_gui_for_website = True
 # ------------------------- end of changeable parameters ------------------
 
+
+
+### import :
+
+# ui
+from UiHandler import UI_start, UI_set_btn_callback, UI_set_gui_exit_callback, UI_set_label_text, UI_stop
+
+# web server
+from WebServer import WEBSERVER_start, WEBSERVER_set_post_callback, WEBSERVER_stop
+
+# web browser url opener
+if use_separate_gui_for_website:
+    from WebBrowserGui import WEBGUI_open, WEBGUI_open_another_Thread, WEBGUI_stop, WEBGUI_run
+else:
+    from webbrowser import open as open_webpage
+
+### consts
+
 software_contract_adr = ""
-app = None
-webServerData = {}
 
 if use_binance and use_working_contract:
     software_contract_adr = "0x0440829FeDcf48f26F77c2C2dBb49a14fa286111"
@@ -34,126 +39,48 @@ else:
 
 url_to_open = "http://" + hostName + ":" + str(serverPort) + "?contract=" + software_contract_adr + "&network=" + ("binance" if use_binance else "ropsten")
 
-class MyServer(BaseHTTPRequestHandler):
-    def do_GET(self):
-        url = urlparse(self.path) # parse url, query and all url possible stuff
+### func
 
-        if url.path == '/':
-            file = 'public/html/index.html'
-        elif url.path[:7] == '/public':
-            file = url.path[1:]
-        else:
-            file = 'file.notexists'
-
-
-        if file in public_files:
-            self.send_response(200)
-            self.send_header('Content-type', mime(file).mime_type)
-            self.end_headers()
-            self.wfile.write(decompress_data(public_files[file]))
-
-        else:
-            self.send_response(404)
-            self.send_header("Content-type", "text/html")
-            self.end_headers()
-            self.wfile.write(decompress_data(public_files['public/html/404.html']))
-
-    def do_POST(self):
-        url = urlparse(self.path) # parse url, query and all url possible stuff
-
-        if url.path == '/check_owner':
-            try:
-                content_length = int(self.headers['Content-Length']) # <--- Gets the size of data
-                post_data = json.loads(self.rfile.read(content_length)) # <--- Gets the data itself
-
-                self.send_response(200)
-                self.send_header("Content-type", "application/json")
-                self.end_headers()
-                self.wfile.write(b'{"status":"ok"}')
-
-                if 'is_valid' in post_data:
-                    if post_data['is_valid']:
-                        print("successfully verified the authencity of the license")
-                        license_check(True)
-                    else:
-                        print("failed to verify license authencity: invalid license")
-                        license_check(False)
-
-            except:
-                self.send_response(400)
-                self.send_header("Content-type", "application/json")
-                self.end_headers()
-                self.wfile.write(b'{"status":"incorrect data format"}')
-
-        else:
-            self.send_response(404)
-            self.send_header("Content-type", "application/json")
-            self.end_headers()
-            self.wfile.write(b'{"status":"not found"}')
-
-
-
-def webserver_start(data):
-    data['webServer'] = HTTPServer((hostName, serverPort), MyServer)
-    print("Server started http://%s:%s" % (hostName, serverPort))
-    
-    try:
-        data['webServer'].serve_forever()
-    except KeyboardInterrupt:
-        pass
-
-
-
-
-class Ui:
-    def __init__(self, master=None):
-        # build ui
-        self.frame_1 = ttk.Frame(master)
-        self.button_load_license = ttk.Button(self.frame_1)
-        self.button_load_license.config(text='Load License')
-        self.button_load_license.pack(side='top')
-        self.button_load_license.configure(command=self.cb_button_clicked)
-        self.label_license = ttk.Label(self.frame_1)
-        self.label_license.config(text='License state: not load for now.')
-        self.label_license.pack(side='top')
-        self.frame_1.config(height='400', width='400')
-        self.frame_1.pack(side='top')
-
-        # Main widget
-        self.mainwindow = self.frame_1
-
-    def cb_button_clicked(self):
-        print("button clicked")
-        open_webpage(url_to_open)
-        self.setLabelText("License is loading..")
-
-    def run(self):
-        self.mainwindow.mainloop()
-
-    def setLabelText(self, text):
-        app.label_license.config(text=text)
-    
-
-def license_check(valid):
+def cb_license_was_checked(valid):
     if valid:
-        app.setLabelText("license is valid")
+        print("successfully verified the authencity of the license")
+        UI_set_label_text("license is valid")
+        UI_set_label_text("License status: valid !")
     else:
-        app.setLabelText("license is invalid")
+        print("failed to verify license authencity: invalid license")
+        UI_set_label_text("license is invalid")
+        UI_set_label_text("License status: invalid.\nCLick on the button again to reverify the license.")
 
+def start_license_check():
+    print("btn clicked")
+    UI_set_label_text("License status: being verified...")
+    
+    if use_separate_gui_for_website:
+        WEBGUI_open_another_Thread(url_to_open)
+        # WEBGUI_open(url_to_open)
 
+        # import time
+        # now = time.time()
+        # while (time.time() - now < 10): pass
+        # WEBGUI_run("document.getElementById('text').innerHTML = 'loool'")
+
+    else:
+        open_webpage(url_to_open)
+
+def stop_all():
+    UI_stop()
+    WEBSERVER_stop()
+    WEBGUI_stop()
 
 if __name__ == "__main__":
 
-    # start webserver
-    webserver_thread = threading.Thread(target=webserver_start, args=(webServerData,))
-    webserver_thread.start()
+    # ui setup
+    UI_start()
+    UI_set_btn_callback(start_license_check)
+    UI_set_label_text("License status: not verified")
+    UI_set_gui_exit_callback(stop_all)
 
-    # start ui
-    root = tk.Tk()
-    app = Ui(root)
-    app.run()
+    # web server handler
+    WEBSERVER_start(hostName, serverPort)
+    WEBSERVER_set_post_callback(cb_license_was_checked)
 
-    webServerData['webServer'].shutdown()
-    webServerData['webServer'].server_close()
-
-    print("Server stopped.")
