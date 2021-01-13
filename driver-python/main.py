@@ -28,6 +28,7 @@ from webbrowser import open as open_webpage
 
 ### consts
 
+network = 'binance-test' if use_binance else 'ropsten'
 software_contract_adr = ""
 
 if use_binance and use_working_contract:
@@ -40,9 +41,6 @@ else:
     software_contract_adr = "0xe4bfA4cA25D3C8E88C4E50C7AeF148685a53b988"
 
 url_to_open = "http://" + hostName + ":" + str(serverPort)
-
-if not use_binance or not use_working_contract:
-    url_to_open += "?contract=" + software_contract_adr + "&network=" + ("binance-test" if use_binance else "ropsten")
 
 ### func
 
@@ -81,6 +79,6 @@ if __name__ == "__main__":
     UI_set_gui_exit_callback(stop_all)
 
     # web server handler
-    WEBSERVER_start(hostName, serverPort)
+    WEBSERVER_start(hostName, serverPort, software_contract_adr, network)
     WEBSERVER_set_post_callback(cb_license_was_checked)
 

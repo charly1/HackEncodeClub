@@ -30,11 +30,13 @@ function set_status(text=null, icon="loading", text_debug=null) {
 
 set_status("Initialisation", "loading");
 
+console.log("CONSTS_contract_adr: *" + CONSTS_contract_adr + "*, CONSTS_network: *" + CONSTS_network + "*");
+
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
-const software_contract = (urlParams.get('contract') || "0x0440829FeDcf48f26F77c2C2dBb49a14fa286111").trim();
+const software_contract = (urlParams.get('contract') || CONSTS_contract_adr || "").trim();
 const signing_required = (urlParams.get('sign_required') || 'false').trim().toLowerCase() === 'true';
-const network = (urlParams.get('network') || 'binance-test').trim();
+const network = (urlParams.get('network') || CONSTS_network ||'binance-test').trim();
 
 set_status("Loading your account...", "loading");
 

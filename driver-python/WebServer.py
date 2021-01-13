@@ -20,8 +20,16 @@ class MyServer(BaseHTTPRequestHandler):
 
         if url.path == '/':
             file = 'public/html/index.html'
+
+        elif url.path == '/public/js/consts.js':
+            self.send_response(200)
+            self.send_header('Content-type', "application/javascript")
+            self.end_headers()
+            self.wfile.write(('CONSTS_contract_adr="' + self.server.contract_adr + '";\nCONSTS_network="' + self.server.network + '";\n').encode('UTF-8'))
+
         elif url.path[:7] == '/public':
             file = url.path[1:]
+
         else:
             file = 'file.notexists'
 
@@ -83,12 +91,16 @@ class ThreadedHTTPServer(ThreadingMixIn, HTTPServer):
 
 
 # ---- EXPORT FUNC
-def WEBSERVER_start(hostName="localhost", serverPort=3000):
+def WEBSERVER_start(hostName="localhost", serverPort=3000, contract_adr="0x0440829FeDcf48f26F77c2C2dBb49a14fa286111", network='binance-test'):
     global_data['hostName'] = hostName
     global_data['serverPort'] = serverPort
+    global_data['contract_adr'] = contract_adr
+    global_data['network'] = network
 
     global_data['server'] = ThreadedHTTPServer((hostName, serverPort), MyServer)
     global_data['server'].cb = None
+    global_data['server'].contract_adr = contract_adr
+    global_data['server'].network = network
     web_thread = threading.Thread(target=global_data['server'].serve_forever)
     web_thread.start()
 
