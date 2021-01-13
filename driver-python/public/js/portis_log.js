@@ -32,16 +32,16 @@ set_status("Initialisation", "loading");
 
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
-const software_contract = (urlParams.get('contract') || "").trim();
+const software_contract = (urlParams.get('contract') || "0x0440829FeDcf48f26F77c2C2dBb49a14fa286111").trim();
 const signing_required = (urlParams.get('sign_required') || 'false').trim().toLowerCase() === 'true';
-const network = (urlParams.get('network') || 'ropsten').trim();
+const network = (urlParams.get('network') || 'binance-test').trim();
 
 set_status("Loading your account...", "loading");
 
 /*Authentification*/
 var NodeUsed = 'ropsten'
 
-if (network.startsWith('binance')) {
+if (network.startsWith('binance-test')) {
 
     // binance test network
     NodeUsed = {

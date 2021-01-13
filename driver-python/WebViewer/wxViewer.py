@@ -20,17 +20,11 @@ def web_thread_start(data_struct, url):
     data_struct['app'].MainLoop() 
 
 # --------------- EXPORT FUNC 
-def WEBGUI_open_another_Thread(url='https://www.google.com'):
+def WEBVIEWER_open(url='https://www.google.com'):
     web_thread = threading.Thread(target=web_thread_start, args=(global_data,url,))
     web_thread.start()
 
-def WEBGUI_open(url='https://www.google.com'):
-    web_thread_start(global_data,url)
-
-def WEBGUI_run(script):
-    global_data['dialog'].browser.RunScript(script)
-
-def WEBGUI_stop():
+def WEBVIEWER_stop():
     try:
         # global_data['dialog'].Close()
         global_data['dialog'].Destroy()
