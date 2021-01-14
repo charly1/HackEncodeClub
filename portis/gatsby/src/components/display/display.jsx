@@ -1,6 +1,6 @@
 import React from "react"
 import Web3 from "web3";
-import AdminUI from '../components/admin';
+import AdminUI from './admin';
 import { showLogs, typeCheckAddress } from '../utils';
 
 class PortisUI extends React.Component {
@@ -33,7 +33,7 @@ class PortisUI extends React.Component {
       const Portis = require('@portis/web3');
       const dappId = process.env.DAPP_ID || '';
       const network = node || 'ropsten';
-      const portis = new Portis(dappId, network, { scope: ['email'] }); // 'reputation' off
+      const portis = new Portis(dappId, network, { scope: ['email'], gasRelay: true }); // 'reputation' off
       const web3 = new Web3(portis.provider);
       this.setState({ portis, web3, network });
 
@@ -95,6 +95,7 @@ class PortisUI extends React.Component {
     event.preventDefault(); // avoid page reloading
     // event.persist() // uncomment to log event object
     const { portis, web3, address, email, network, tosign } = this.state;
+    let option = '';
     switch (event.target.name) {
       case 's_email':
         // check email validity
@@ -102,7 +103,12 @@ class PortisUI extends React.Component {
         break;
       case 's_network':
         // check network validity maybe selector
-        portis.changeNetwork(network);
+        if (network === 'binance-test') {
+          option = { name: 'binance testnet', nodeUrl: process.env.BINANCE_NODE, chainId: 97 };
+        } else if (network === 'binance-main') {
+          option = { name: 'binance mainnet', nodeUrl: process.env.BINANCE_NODE, chainId: 97 };
+        }
+        portis.changeNetwork(option || network);
         break;
       case 's_address':
         // check address validity
@@ -171,11 +177,10 @@ class PortisUI extends React.Component {
                   <label>
                     <span className="description">Network:
                     <select name="f_network" onChange={this.handleChange} onBlur={this.handleChange} >
-                      <option value="ropsten">Ropsten</option>
-                      <option value="kovan">Kovan</option>
-                      <option value="rinkeby">Rinkeby</option>
-                      <option value="goerli">Goerli</option>
-                      <option value="mainnet">Mainnet</option>
+                      <option value="ropsten">Ethereum Test-net (Ropsten)</option>
+                      <option value="mainnet">Ethereum Main-net</option>
+                      <option value="binance-test">Binance Test-net</option>
+                      <option value="binance-main">Binance Main-net</option>
                     </select>
                     </span>
                   </label>
@@ -233,7 +238,7 @@ class PortisUI extends React.Component {
         </div>
         {logged ? (
           <AdminUI
-            type={this.props.type}
+            type={this.props.smartchain}
             portis={portis}
             web3={web3}
             email={email}
