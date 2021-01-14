@@ -13,12 +13,15 @@ from compressed_public import data as public_files
 from public2py import decompress_data
 
 
-global_data = { 'cb' : None }
+global_data = { 'cb' : None, 'rand' : "" }
 class MyServer(BaseHTTPRequestHandler):
     def do_GET(self):
         url = urlparse(self.path) # parse url, query and all url possible stuff
 
         if url.path == '/':
+            file = 'file.notexists' # deactivated path
+
+        elif url.path == '/' + self.server.rand:
             file = 'public/html/index.html'
 
         elif url.path == '/public/js/consts.js':
@@ -50,7 +53,7 @@ class MyServer(BaseHTTPRequestHandler):
         url = urlparse(self.path) # parse url, query and all url possible stuff
         post_data = None
 
-        if url.path == '/check_owner':
+        if url.path == '/' + self.server.rand + '/check_owner':
             try:
                 content_length = int(self.headers['Content-Length']) # <--- Gets the size of data
                 post_data = json.loads(self.rfile.read(content_length)) # <--- Gets the data itself
@@ -104,8 +107,11 @@ def WEBSERVER_start(hostName="localhost", serverPort=3000, contract_adr="0x04408
     web_thread = threading.Thread(target=global_data['server'].serve_forever)
     web_thread.start()
 
-    print("Server start host on", hostName + ":" + str(serverPort))
+    print("Server start host on http://" + hostName + ":" + str(serverPort) + "/")
 
+def WEBSERBER_set_rand(rand_str):
+    global_data['rand'] = rand_str
+    global_data['server'].rand = rand_str
 
 def WEBSERVER_set_post_callback(cb):
     global_data['server'].cb = cb

@@ -16,7 +16,7 @@ use_separate_gui_for_website = False
 from UiHandler import UI_start, UI_set_btn_callback, UI_set_gui_exit_callback, UI_set_label_text, UI_stop
 
 # web server
-from WebServer import WEBSERVER_start, WEBSERVER_set_post_callback, WEBSERVER_stop
+from WebServer import WEBSERVER_start, WEBSERVER_set_post_callback, WEBSERBER_set_rand, WEBSERVER_stop
 
 # default browser url opener
 from webbrowser import open as open_webpage 
@@ -25,6 +25,7 @@ from webbrowser import open as open_webpage
 # from WebViewer.wxViewer import WEBVIEWER_open, WEBVIEWER_stop
 # from WebViewer.chromeSelenium import WEBVIEWER_open, WEBVIEWER_stop
 
+import random
 
 ### consts
 
@@ -40,7 +41,8 @@ elif use_binance and (not use_working_contract):
 else: 
     software_contract_adr = "0xe4bfA4cA25D3C8E88C4E50C7AeF148685a53b988"
 
-url_to_open = "http://" + hostName + ":" + str(serverPort)
+url_to_open = "http://" + hostName + ":" + str(serverPort) + "/"
+rand_added = '%030x' % random.randrange(16**64) # 64 hex char rand
 
 ### func
 
@@ -57,11 +59,13 @@ def cb_license_was_checked(valid):
 def start_license_check():
     print("btn clicked")
     UI_set_label_text("License status: being verified...")
+    rand_added = '%030x' % random.randrange(16**64) # regenerate rand
+    WEBSERBER_set_rand(rand_added)
 
     if use_separate_gui_for_website:
-        WEBVIEWER_open(url_to_open)
+        WEBVIEWER_open(url_to_open + rand_added)
     else:
-        open_webpage(url_to_open)
+        open_webpage(url_to_open + rand_added)
 
 def stop_all():
     UI_stop()
@@ -81,4 +85,5 @@ if __name__ == "__main__":
     # web server handler
     WEBSERVER_start(hostName, serverPort, software_contract_adr, network)
     WEBSERVER_set_post_callback(cb_license_was_checked)
+    WEBSERBER_set_rand(rand_added)
 

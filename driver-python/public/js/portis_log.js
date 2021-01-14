@@ -100,18 +100,18 @@ portis.onLogin((walletAddress, email, reputation) => {
                 }
                 else {
                     set_status("Key successfully validated", "valid", "You can close this window.");
-                    post('/check_owner', {contr_adr: software_contract, is_valid: true});
+                    post(window.location.pathname + '/check_owner', {contr_adr: software_contract, is_valid: true});
                 }
             }
             else {
                 set_status("Invalid key. You have no right to use this software with this license.", "invalid", "You can close this window.");
-                post('/check_owner', {contr_adr: software_contract, is_valid: false});
+                post(window.location.pathname + '/check_owner', {contr_adr: software_contract, is_valid: false});
             }
         })
         .then(signedMessage => {
             if (signing_required) {
                 set_status("Key successfully validated", "valid", "You can close this window.");
-                post('/check_owner', {contr_adr: software_contract, is_valid: true, proof: { wallet: walletAddress, message: message, signature: signedMessage}});
+                post(window.location.pathname + '/check_owner', {contr_adr: software_contract, is_valid: true, proof: { wallet: walletAddress, message: message, signature: signedMessage}});
             }
         })
         .catch(error => {
