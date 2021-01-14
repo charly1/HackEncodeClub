@@ -27,6 +27,25 @@
 	},
 	{
 		"anonymous": false,
+		"inputs": [],
+		"name": "deleted",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "licenceDeleted",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
 		"inputs": [
 			{
 				"indexed": false,
@@ -157,25 +176,6 @@
 	{
 		"inputs": [
 			{
-				"internalType": "uint256",
-				"name": "_expiration_timestamp",
-				"type": "uint256"
-			}
-		],
-		"name": "add_license",
-		"outputs": [
-			{
-				"internalType": "contract License",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
 				"internalType": "address payable",
 				"name": "_owner",
 				"type": "address"
@@ -193,6 +193,13 @@
 		"type": "function"
 	},
 	{
+		"inputs": [],
+		"name": "destroy",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "address",
@@ -206,6 +213,39 @@
 			}
 		],
 		"name": "licenseHasChangedOwner",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "remove_all_licenses",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "contract License",
+				"name": "_license",
+				"type": "address"
+			}
+		],
+		"name": "remove_license",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "index",
+				"type": "uint256"
+			}
+		],
+		"name": "remove_license",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -263,10 +303,6 @@
 		"type": "function"
 	},
 	{
-		"stateMutability": "payable",
-		"type": "receive"
-	},
-	{
 		"inputs": [
 			{
 				"internalType": "string",
@@ -291,6 +327,10 @@
 		],
 		"stateMutability": "nonpayable",
 		"type": "constructor"
+	},
+	{
+		"stateMutability": "payable",
+		"type": "receive"
 	},
 	{
 		"inputs": [],
@@ -391,6 +431,25 @@
 	{
 		"inputs": [
 			{
+				"internalType": "contract License",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "licenseIndex",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
 				"internalType": "uint256",
 				"name": "",
 				"type": "uint256"
@@ -432,6 +491,19 @@
 		"outputs": [
 			{
 				"internalType": "contract License",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "softwareHandler",
+		"outputs": [
+			{
+				"internalType": "contract SoftwareHandler",
 				"name": "",
 				"type": "address"
 			}

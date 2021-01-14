@@ -5,26 +5,26 @@ Compiled using version 0.7.6
 
 ## Smart contract on ropsten: 
 
-SoftwareHandle:  0x0F398EdDcB4FF9d6e20B0388E0fdCEDBa55117CE  
-https://ropsten.etherscan.io/address/0x0F398EdDcB4FF9d6e20B0388E0fdCEDBa55117CE
+SoftwareHandle:  0x201AA22CC95409FA2EF3f858B1A355F3c32982b7  
+https://ropsten.etherscan.io/address/0x201AA22CC95409FA2EF3f858B1A355F3c32982b7
 
-Software (index 0 of previous SoftwareHandle):  0xAD186262602936193FABd5d2Cca2160C5fE1c2A1  
-https://ropsten.etherscan.io/address/0xAD186262602936193FABd5d2Cca2160C5fE1c2A1
+Software (index 0 of previous SoftwareHandle):  0x7a92a4CcF0c3A77635a870f43FC0C0aAE58Ebf46  
+https://ropsten.etherscan.io/address/0x7a92a4CcF0c3A77635a870f43FC0C0aAE58Ebf46
 
-License (index 0 of previous Software):  0xcAB72379D87124dc9Ba6Aa218f00E789a76e5A55  
-https://ropsten.etherscan.io/address/0xcAB72379D87124dc9Ba6Aa218f00E789a76e5A55
+License (index 0 of previous Software):  0x3B02B27Cc6A640091158a1828Da145d095Fe3591  
+https://ropsten.etherscan.io/address/0x3B02B27Cc6A640091158a1828Da145d095Fe3591
 
 
 ## Smart contract on binance test-net: 
 
-SoftwareHandle:  0xEeB40c84882Cb22B2E679f40F2ADB1456214D7e8  
-https://testnet.bscscan.com/address/0xEeB40c84882Cb22B2E679f40F2ADB1456214D7e8
+SoftwareHandle:  0x0BfA6DCA42Aa3AbA8002c2cBdCe83ed0b2B09192  
+https://testnet.bscscan.com/address/0x0BfA6DCA42Aa3AbA8002c2cBdCe83ed0b2B09192
 
-Software (index 0 of previous SoftwareHandle):  0xb034eBCe58014E0766D18f6834A65293AdFe4d7D  
-https://testnet.bscscan.com/address/0xb034eBCe58014E0766D18f6834A65293AdFe4d7D
+Software (index 0 of previous SoftwareHandle):  0xFBaD789afcbF2daE8874Bb203c7a8A884f26c2C7  
+https://testnet.bscscan.com/address/0xFBaD789afcbF2daE8874Bb203c7a8A884f26c2C7
 
-License (index 0 of previous Software):  0xfcC4171E99a8045F01Aeb46b88316d4eD9FD9d02  
-https://testnet.bscscan.com/address/0xfcC4171E99a8045F01Aeb46b88316d4eD9FD9d02
+License (index 0 of previous Software):  0xE3dF492FEfbED10aa5aD6dca6a125B5a22DC0115  
+https://testnet.bscscan.com/address/0xE3dF492FEfbED10aa5aD6dca6a125B5a22DC0115
 
 ## SoftwareHandler contract:
 
@@ -42,18 +42,18 @@ The name parameter is here to fill the software name field of Software, same for
 
 same as before but with possibility to specify the license_time_default. Warning this is an offset that the smart contract will add the the timestamp at the time of function execution
 
-- `addSoftware(string name, string version, address software_admin)`
-
-Same as before but here the admin can be specified to a different address.
-Be careful with the admin address, if not specify correctly, you may completely loose access to the software.
-
 - `addSoftware(string name, string version, uint license_time_default, address software_admin)`
 
-Same as beforebut with all parameters specified.
+Same as beforebut with all parameters specified but with admin address specified as well.
+Be careful with the admin address, if not specify correctly, you may completely loose access to the software.
 
 - `softwares(uint index)`
 
 Access to the array of Software. Returns the address of the Software smart-contracts
+
+- `softwareIndex(Software _software)`
+
+Return the index of the software address specified.
 
 - `getNbOfSoftware()`
 
@@ -65,16 +65,20 @@ Returns the list of Software contract address that has `_admin` as admin.
 
 - `removeSoftware(uint index)`
 
-not implemented yet
+Remove the software at index n. Restricted to the admin of the software that will be deleted. Delete the software which means you no longer will be able to access to the software's data and also delete all the related licenses.
 
-- `removeSoftware(address softwareAddress)`
+- `removeSoftware(Software _software) `
 
-not implemented yet
+Remove the software with specified address (only if the sotware was created by this contract). Restricted to the admin of the software that will be deleted. Delete the software which means you no longer will be able to access to the software's data and also delete all the related licenses.
 
 ### Events:
 - `softwareAdded(address)`
 
 emited when a new software is added using the softwareHandle structure. The address is the address of the new Software.
+
+- `softwareDeleted(address)`
+
+emited when a software is removed.
 
 ## Software contract:
 
@@ -120,6 +124,14 @@ Return the software license_time_default.
 
 Change the software license_time_default.
 Restricted to the current admin.
+
+- `ownerLicense(address _owner)`
+
+Returns one license address which has as owner `_owner` (only if the license was created by this contract)
+
+- `licenseIndex(License _license)`
+
+Returns the index of the License address provided (only if the license was created by this contract)
 
 - `add_license()`
 
@@ -167,13 +179,13 @@ Returns the list of License contract address that has `_admin` as admin.
 
 Returns the list of License contract address that has `_owner` as owner.
 
-- `remove_license(uint index)`
+- `removeLicense(uint index)`
 
-not implemented yet
+Remove the license at index n. Restricted to the admin of the software. Delete the license which means you no longer will be able to access to the license's data.
 
-- `remove_license(address softwareAddress)`
+- `removeLicense(License _license) `
 
-not implemented yet
+Remove the license with specified address (only if the license was created by this contract). Restricted to the admin of the software. Delete the license which means you no longer will be able to access to the license's data.
 
 ### Events:
 
@@ -196,6 +208,14 @@ emited when a new default license time is set. The uint is the default license t
 - `licenseAdded(address)`
 
 emited when a license is created. The address is the new license address
+
+- `deleted()`
+
+emited when the contract is deleted
+
+- `licenceDeleted(address)`
+
+emited when a license of the contract is deleted
 
 
 ## License contract:
@@ -283,3 +303,7 @@ emited when the license is removed from sale (not anymore for sale then).
 - `licenseSold(uint, address, address)`
 
 emited when the license was sold using a transaction exchange. An event of type ownerChanged(...) should also be emit. The number is the price for which the license was sold, the first address is the old owner (who received the monney) and the second address is the new owner (who paid).
+
+ - `deleted()`
+
+emited when the license is destroyed

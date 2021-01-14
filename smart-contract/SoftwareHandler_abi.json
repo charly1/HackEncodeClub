@@ -13,33 +13,17 @@
 		"type": "event"
 	},
 	{
+		"anonymous": false,
 		"inputs": [
 			{
-				"internalType": "string",
-				"name": "name",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "version",
-				"type": "string"
-			},
-			{
-				"internalType": "address payable",
-				"name": "admin",
-				"type": "address"
-			}
-		],
-		"name": "addSoftware",
-		"outputs": [
-			{
-				"internalType": "contract Software",
+				"indexed": false,
+				"internalType": "address",
 				"name": "",
 				"type": "address"
 			}
 		],
-		"stateMutability": "nonpayable",
-		"type": "function"
+		"name": "softwareDeleted",
+		"type": "event"
 	},
 	{
 		"inputs": [
@@ -125,6 +109,32 @@
 				"type": "address"
 			}
 		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "contract Software",
+				"name": "_software",
+				"type": "address"
+			}
+		],
+		"name": "removeSoftware",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "index",
+				"type": "uint256"
+			}
+		],
+		"name": "removeSoftware",
+		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
@@ -154,6 +164,25 @@
 	{
 		"inputs": [],
 		"name": "getNbOfSoftware",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "contract Software",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "softwareIndex",
 		"outputs": [
 			{
 				"internalType": "uint256",
