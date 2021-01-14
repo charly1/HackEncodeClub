@@ -17,9 +17,10 @@ global_data = { 'cb' : None, 'rand' : "" }
 class MyServer(BaseHTTPRequestHandler):
     def do_GET(self):
         url = urlparse(self.path) # parse url, query and all url possible stuff
+        file = 'file.notexists'
 
         if url.path == '/':
-            file = 'file.notexists' # deactivated path
+            pass # deactivated path
 
         elif url.path == '/' + self.server.rand:
             file = 'public/html/index.html'
@@ -29,13 +30,10 @@ class MyServer(BaseHTTPRequestHandler):
             self.send_header('Content-type', "application/javascript")
             self.end_headers()
             self.wfile.write(('CONSTS_contract_adr="' + self.server.contract_adr + '";\nCONSTS_network="' + self.server.network + '";\n').encode('UTF-8'))
+            return;
 
         elif url.path[:7] == '/public':
             file = url.path[1:]
-
-        else:
-            file = 'file.notexists'
-
 
         if file in public_files:
             self.send_response(200)
