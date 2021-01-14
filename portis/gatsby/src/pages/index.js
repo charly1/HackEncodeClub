@@ -1,6 +1,6 @@
 import React from "react"
-import Display from "../components/display/display";
 import Menu from "../components/display/menu";
+import CompanyView from "../components/display/company";
 
 const IndexPortis = () => {
   return (
@@ -9,7 +9,10 @@ const IndexPortis = () => {
       <meta charSet="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <Menu type="company" />
-      <Display type="ethereum" />
+      <CompanyView 
+        bgColor="red"
+        mainBgColor="gold"
+      />
     </main>
   )
 }

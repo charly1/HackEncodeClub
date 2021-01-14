@@ -1,6 +1,6 @@
 import React from "react"
 import Menu from "../components/display/menu";
-import Admin from "../components/display/admin";
+import AdminView from "../components/display/admin";
 
 const IndexBinance = () => {
   return (
@@ -9,8 +9,9 @@ const IndexBinance = () => {
       <meta charSet="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <Menu type="admin" />
-      <Admin
-        bgColor="#b2bf97"
+      <AdminView
+        bgColor="grey"
+        mainBgColor="cyan"
       />
     </main>
   )

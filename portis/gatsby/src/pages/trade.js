@@ -1,6 +1,6 @@
 import React from "react"
 import Menu from "../components/display/menu";
-import PortisDisplay from "../components/display/portis";
+import CustomerView from "../components/display/customer";
 
 const IndexBinance = () => {
   return (
@@ -9,10 +9,9 @@ const IndexBinance = () => {
       <meta charSet="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <Menu type="trade" />
-      <PortisDisplay
-        bgColor="mediumpurple"
-        mainBgColor="orange"
-        view="customer"
+      <CustomerView
+        bgColor="#b2bf97"
+        mainBgColor="purple"
       />
     </main>
   )

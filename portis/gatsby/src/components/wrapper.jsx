@@ -93,8 +93,6 @@ function portisWrapper(WrappedComponent) {
     }
 
     handleSubmit(event, action, value) {
-      console.log("🚀 ~ file: wrapper.jsx ~ line 95 ~ Portis ~ handleSubmit ~ value", value)
-      console.log("🚀 ~ file: wrapper.jsx ~ line 95 ~ Portis ~ handleSubmit ~ action", action)
       event.preventDefault(); // avoid page reloading
       // event.persist() // uncomment to log event object
       const { portis, web3, address } = this.state;
@@ -119,6 +117,7 @@ function portisWrapper(WrappedComponent) {
             break;
           }
           portis.importWallet(value);
+          this.setState({ address: value })
           break;
         case 'tosign':
           // check address validity
@@ -153,11 +152,11 @@ function portisWrapper(WrappedComponent) {
 
     render() {
       const { portis, web3, logged, email, address, network, tosign, signed, reputation, balance } = this.state;
+      const { title, mainBgColor, bgColor } = this.props;
       if (!portis) return <h1>Portis module not loaded...</h1>
       return (
         <>
           <PortisDisplay
-            portis={portis}
             email={email}
             network={network}
             address={address}
@@ -168,6 +167,7 @@ function portisWrapper(WrappedComponent) {
             handleSubmit={this.handleSubmit}
             handleLogout={this.handleLogout}
             isLoggedIn={this.isLoggedIn}
+            showPortis={() => portis.showPortis()}
             title={title}
             mainBgColor={mainBgColor}
             bgColor={bgColor}
@@ -179,11 +179,7 @@ function portisWrapper(WrappedComponent) {
             network={network}
             address={address}
             logged={logged}
-            balance={balance}
-            getBalance={this.getBalance}
-            handleSubmit={this.handleSubmit}
-            handleLogout={this.handleLogout}
-            isLoggedIn={this.isLoggedIn}
+            showPortis={() => portis.showPortis()}
             {...this.props}
           />
         </>

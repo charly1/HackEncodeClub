@@ -3,7 +3,6 @@ import React, { useState } from "react"
 export function PortisDisplay(props) {
   const {
     // wrapper props
-    portis,
     logged,
     network,
     balance,
@@ -14,22 +13,22 @@ export function PortisDisplay(props) {
     handleLogout,
     handleSubmit,
     getBalance,
+    showPortis,
     // user props
     title,
     mainBgColor,
     bgColor,
   } = props;
 
-  const [selection, setTextSelector] = useState(network || '');
-  const [wallet, setTextWallet] = useState(address || '');
-
-  console.log("🚀 ~ file: portis.jsx ~ line 22 ~ PortisDisplay ~ address", address, 'wallet', wallet)
+  const [wallet, setTextWallet] = useState(address);
+  console.log("🚀 ~ file: portis.jsx ~ line 24 ~ PortisDisplay ~ wallet", address, 'wallet', wallet)
+  const [selection, setTextSelector] = useState(network);
 
   return (
     <div className="block-main">
       <h2>{title || 'Hackathon challenge !'}</h2>
       <div className="block-sub">
-        <button onClick={() => portis.showPortis()}>Show Portis</button>
+        <button onClick={() => showPortis()}>Show Portis</button>
         <button onClick={() => isLoggedIn()}>Logged: {logged ? '🔵' : '🔴'}</button>
         <button onClick={() => handleLogout()}>Logout</button>
       </div>
