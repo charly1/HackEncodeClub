@@ -16,7 +16,7 @@ class Ui:
         self.label_license = ttk.Label(self.frame_1)
         self.label_license.config(text='License state: not load for now.')
         self.label_license.pack(side='top')
-        self.frame_1.config(height='400', width='400')
+        self.frame_1.config(height='400', width='400', padding='30')
         self.frame_1.pack(side='top')
 
         # Main widget
