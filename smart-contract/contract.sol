@@ -163,20 +163,20 @@ contract License is Util {
 contract Software is Util {
     
     event adminChanged(address);
-    event companyNameChanged(string);
+    event nameChanged(string);
+    event versionChanged(string);
+    event defaultLicenseTimeChanged(uint);
     event licenseAdded(address);
     //event deleted();
     //event lisenceCouldNotBeDeleted(address);
     
-    string public company_name;
     address payable public admin;
     License[] public licenses;
     mapping (address => License) public ownerLicense;
 
     string public name;
     string public version;
-    string public company_name; // to be removed
-    uint public license_time_default; 
+    uint public license_time_default; // license time-to-live in second. 0 for infinite
     
     modifier ownerLicenseMatch(address owner, License license) {
         require (
@@ -187,9 +187,11 @@ contract Software is Util {
         _;
     }
     
-    constructor (string memory company, address payable _admin)
+    constructor (string memory _name, string memory _version, uint _license_time_default, address payable _admin)
     {
-        company_name = company;
+        name = _name;
+        version = _version;
+        license_time_default = _license_time_default;
         admin = _admin;
     }
     
@@ -242,12 +244,28 @@ contract Software is Util {
         emit adminChanged(admin);
     }
     
-    function set_company_name(string calldata _company_name)
+    function set_name(string calldata _name)
         public
         onlyBy(admin)
     {
-        company_name = _company_name;
-        emit companyNameChanged(company_name);
+        name = _name;
+        emit nameChanged(name);
+    }
+    
+    function set_version(string calldata _version)
+        public
+        onlyBy(admin)
+    {
+        version = _version;
+        emit versionChanged(version);
+    }
+    
+    function set_license_time_default(uint _license_time_default)
+        public
+        onlyBy(admin)
+    {
+        license_time_default = _license_time_default;
+        emit defaultLicenseTimeChanged(license_time_default);
     }
     
     function add_license() // default value: admin:admin, owner:admin, expiration: 0
@@ -255,7 +273,7 @@ contract Software is Util {
         onlyBy(admin) 
         returns (License)
     {
-        return add_license(admin, payable(admin), 0);
+        return add_license(admin, payable(admin));
     }
     
     function add_license(address payable _owner)  // default value: admin:admin, owner:owner, expiration: 0
@@ -263,7 +281,7 @@ contract Software is Util {
         onlyBy(admin) 
         returns (License)
     {
-        return add_license(admin, _owner, 0);
+        return add_license(admin, _owner);
     }
     
     function add_license(uint _expiration_timestamp)  // default value: admin:admin, owner:admin, expiration: exp
@@ -280,6 +298,17 @@ contract Software is Util {
         returns (License)
     {
         return add_license(admin, _owner, _expiration_timestamp);
+    }
+    
+    function add_license(address payable _admin, address payable _owner)  // default value: admin:admin, owner:owner, expiration: 0
+        public
+        onlyBy(admin) 
+        returns (License)
+    {
+        if (license_time_default == 0)
+            return add_license(_admin, _owner, 0);
+        else
+            return add_license(_admin, _owner, block.timestamp + license_time_default);
     }
     
     function add_license(address payable _admin, address payable _owner, uint _expiration_timestamp)
@@ -315,7 +344,7 @@ contract Software is Util {
                 counter++;
             }
         }
-        
+
         
         License[] memory ret = new License[](counter);
         uint j = 0;
@@ -367,18 +396,32 @@ contract SoftwareHandler is Util
         refuseTransaction
     {}
     
-    function addSoftware(string calldata company_name) 
+    function addSoftware(string calldata name, string calldata version) 
         public 
         returns (Software) 
     {
-        return addSoftware(company_name, msg.sender);
+        return addSoftware(name, version, 0, msg.sender);
     }
     
-    function addSoftware(string calldata company_name, address payable software_admin) 
+    function addSoftware(string calldata name, string calldata version, uint license_time_default) 
+        public 
+        returns (Software) 
+    {
+        return addSoftware(name, version, license_time_default, msg.sender);
+    }
+    
+    function addSoftware(string calldata name, string calldata version, address payable admin) 
+        public 
+        returns (Software) 
+    {
+        return addSoftware(name, version, 0, admin);
+    }
+    
+    function addSoftware(string calldata name, string calldata version, uint license_time_default, address payable admin) 
         public
         returns (Software)
     {
-        Software newSoftware = new Software(company_name, software_admin);
+        Software newSoftware = new Software(name, version, license_time_default, admin);
         softwares.push(newSoftware);
 
         emit softwareAdded(address(newSoftware));

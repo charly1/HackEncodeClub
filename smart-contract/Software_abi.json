@@ -17,12 +17,12 @@
 		"inputs": [
 			{
 				"indexed": false,
-				"internalType": "string",
+				"internalType": "uint256",
 				"name": "",
-				"type": "string"
+				"type": "uint256"
 			}
 		],
-		"name": "companyNameChanged",
+		"name": "defaultLicenseTimeChanged",
 		"type": "event"
 	},
 	{
@@ -39,6 +39,32 @@
 		"type": "event"
 	},
 	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"name": "nameChanged",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"name": "versionChanged",
+		"type": "event"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "address payable",
@@ -49,6 +75,30 @@
 				"internalType": "uint256",
 				"name": "_expiration_timestamp",
 				"type": "uint256"
+			}
+		],
+		"name": "add_license",
+		"outputs": [
+			{
+				"internalType": "contract License",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address payable",
+				"name": "_admin",
+				"type": "address"
+			},
+			{
+				"internalType": "address payable",
+				"name": "_owner",
+				"type": "address"
 			}
 		],
 		"name": "add_license",
@@ -176,12 +226,38 @@
 	{
 		"inputs": [
 			{
+				"internalType": "uint256",
+				"name": "_license_time_default",
+				"type": "uint256"
+			}
+		],
+		"name": "set_license_time_default",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
 				"internalType": "string",
-				"name": "_company_name",
+				"name": "_name",
 				"type": "string"
 			}
 		],
-		"name": "set_company_name",
+		"name": "set_name",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_version",
+				"type": "string"
+			}
+		],
+		"name": "set_version",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -194,8 +270,18 @@
 		"inputs": [
 			{
 				"internalType": "string",
-				"name": "company",
+				"name": "_name",
 				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_version",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_license_time_default",
+				"type": "uint256"
 			},
 			{
 				"internalType": "address payable",
@@ -233,19 +319,6 @@
 				"internalType": "bool",
 				"name": "",
 				"type": "bool"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "company_name",
-		"outputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
 			}
 		],
 		"stateMutability": "view",
@@ -303,6 +376,19 @@
 		"type": "function"
 	},
 	{
+		"inputs": [],
+		"name": "license_time_default",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -322,6 +408,19 @@
 		"type": "function"
 	},
 	{
+		"inputs": [],
+		"name": "name",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "address",
@@ -335,6 +434,19 @@
 				"internalType": "contract License",
 				"name": "",
 				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "version",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
 			}
 		],
 		"stateMutability": "view",

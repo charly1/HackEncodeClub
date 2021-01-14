@@ -16,7 +16,41 @@
 		"inputs": [
 			{
 				"internalType": "string",
-				"name": "company_name",
+				"name": "name",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "version",
+				"type": "string"
+			},
+			{
+				"internalType": "address payable",
+				"name": "admin",
+				"type": "address"
+			}
+		],
+		"name": "addSoftware",
+		"outputs": [
+			{
+				"internalType": "contract Software",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "name",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "version",
 				"type": "string"
 			}
 		],
@@ -35,12 +69,51 @@
 		"inputs": [
 			{
 				"internalType": "string",
-				"name": "company_name",
+				"name": "name",
 				"type": "string"
 			},
 			{
+				"internalType": "string",
+				"name": "version",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "license_time_default",
+				"type": "uint256"
+			}
+		],
+		"name": "addSoftware",
+		"outputs": [
+			{
+				"internalType": "contract Software",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "name",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "version",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "license_time_default",
+				"type": "uint256"
+			},
+			{
 				"internalType": "address payable",
-				"name": "software_admin",
+				"name": "admin",
 				"type": "address"
 			}
 		],

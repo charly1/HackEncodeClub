@@ -5,26 +5,26 @@ Compiled using version 0.7.6
 
 ## Smart contract on ropsten: 
 
-SoftwareHandle:  0xf81512792f6eadf8993059e5e8077951b1a1b535  
-https://ropsten.etherscan.io/address/0x30e6D8c504d45a63570a93fa4D278B6A8f0109a6
+SoftwareHandle:  0x0F398EdDcB4FF9d6e20B0388E0fdCEDBa55117CE  
+https://ropsten.etherscan.io/address/0x0F398EdDcB4FF9d6e20B0388E0fdCEDBa55117CE
 
-Software (index 0 of previous SoftwareHandle):  0xC4899e1C9DEa0870b63587300E50D8d423dCCe87  
-https://ropsten.etherscan.io/address/0xC4899e1C9DEa0870b63587300E50D8d423dCCe87
+Software (index 0 of previous SoftwareHandle):  0xAD186262602936193FABd5d2Cca2160C5fE1c2A1  
+https://ropsten.etherscan.io/address/0xAD186262602936193FABd5d2Cca2160C5fE1c2A1
 
-License (index 0 of previous Software):  0x60dBFB0bb7bac751F9a7a7FE9AA600c85a11cBaD  
-https://ropsten.etherscan.io/address/0x60dBFB0bb7bac751F9a7a7FE9AA600c85a11cBaD
+License (index 0 of previous Software):  0xcAB72379D87124dc9Ba6Aa218f00E789a76e5A55  
+https://ropsten.etherscan.io/address/0xcAB72379D87124dc9Ba6Aa218f00E789a76e5A55
 
 
 ## Smart contract on binance test-net: 
 
-SoftwareHandle:  0x6c1fe2de3150edd0fe0991fed6da01f33938f05b  
-https://testnet.bscscan.com/address/0x6c1fe2de3150edd0fe0991fed6da01f33938f05b
+SoftwareHandle:  0xEeB40c84882Cb22B2E679f40F2ADB1456214D7e8  
+https://testnet.bscscan.com/address/0xEeB40c84882Cb22B2E679f40F2ADB1456214D7e8
 
-Software (index 0 of previous SoftwareHandle):  0x0440829FeDcf48f26F77c2C2dBb49a14fa286111  
-https://testnet.bscscan.com/address/0x0440829FeDcf48f26F77c2C2dBb49a14fa286111
+Software (index 0 of previous SoftwareHandle):  0xb034eBCe58014E0766D18f6834A65293AdFe4d7D  
+https://testnet.bscscan.com/address/0xb034eBCe58014E0766D18f6834A65293AdFe4d7D
 
-License (index 0 of previous Software):  0xA7f3d6F7e8D7f71D6BFFb3738138fC585B69EAE7  
-https://testnet.bscscan.com/address/0xA7f3d6F7e8D7f71D6BFFb3738138fC585B69EAE7
+License (index 0 of previous Software):  0xfcC4171E99a8045F01Aeb46b88316d4eD9FD9d02  
+https://testnet.bscscan.com/address/0xfcC4171E99a8045F01Aeb46b88316d4eD9FD9d02
 
 ## SoftwareHandler contract:
 
@@ -33,15 +33,23 @@ Root Smart-Contract, on which everything is based. This contract holds a list of
 Nothing is restricted for anybody in this contract, everybody can create a new Software contract using this contract.
 
 ### Functions:
-- `addSoftware(string company_name)`
+- `addSoftware(string name, string version)`
 
-creates a new Software Smart-Contract. This Software will automatically have, as an admin, the sender of this function.
-The company_name parameter is here to fill the company_name field of Software.
+creates a new Software Smart-Contract. This Software will automatically have, as an admin, the sender of this function and as default license time 0.
+The name parameter is here to fill the software name field of Software, same for version.
 
-- `addSoftware(string company_name, address software_admin)`
+- `addSoftware(string name, string version, uint license_time_default)`
+
+same as before but with possibility to specify the license_time_default. Warning this is an offset that the smart contract will add the the timestamp at the time of function execution
+
+- `addSoftware(string name, string version, address software_admin)`
 
 Same as before but here the admin can be specified to a different address.
 Be careful with the admin address, if not specify correctly, you may completely loose access to the software.
+
+- `addSoftware(string name, string version, uint license_time_default, address software_admin)`
+
+Same as beforebut with all parameters specified.
 
 - `softwares(uint index)`
 
@@ -86,13 +94,31 @@ Return the current admin address.
 Change the admin address. 
 Restricted to the current admin.
 
-- `company_name()`
+- `name()`
 
-Return the company name.
+Return the software name.
 
-- `set_company_name(string new_company_name)`
+- `set_name(string new_name)`
 
-Change the company name.
+Change the software name.
+Restricted to the current admin.
+
+- `version()`
+
+Return the software version.
+
+- `set_version(string new_version)`
+
+Change the software version.
+Restricted to the current admin.
+
+- `license_time_default()`
+
+Return the software license_time_default.
+
+- `set_license_time_default(string new_license_time_default)`
+
+Change the software license_time_default.
 Restricted to the current admin.
 
 - `add_license()`
@@ -155,9 +181,17 @@ not implemented yet
 
 emited when a new admin is set. The address is the address of the new admin.
 
-- `companyNameChanged(string)`
+- `nameChanged(string)`
 
-emited when a new company name is set. The string is the company name.
+emited when a new name is set. The string is the Software name.
+
+- `versionChanged(string)`
+
+emited when a new version is set. The string is the Software version.
+
+- `defaultLicenseTimeChanged(uint)`
+
+emited when a new default license time is set. The uint is the default license time.
 
 - `licenseAdded(address)`
 
