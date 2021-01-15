@@ -46,6 +46,19 @@ function _signTransaction(contract_l, web3, encodedABI, account) {
 }
 
 // SH functions
+export function SH_get_softwares_with_admin(contract_sh, admin) {
+    if (!admin) return false;
+    return contract_sh.methods.get_softwares_with_admin(admin).call()
+    .then(res => {
+        showLogs({ type: '[INFO]:', msg: "software owned by admin" + res })
+        return res;
+    })
+    .catch(err => {
+        console.error("An error occured while calling the func:", err);
+        return false;
+    });
+}
+
 export function SH_list_softwares(contract_sh) {
   return contract_sh.methods.getNbOfSoftware().call()
   .then(size => {
@@ -116,6 +129,17 @@ export function S_get_admin(contract_s) {
   });
 }
 
+export function S_get_company_name(contract_s) {
+    return contract_s.methods.company_name().call()
+    .then(adr => {
+        showLogs({ type: '[INFO]:', msg: "Company name:", adr })
+        return adr;
+    })
+    .catch(err => {
+        console.error("An error occured while calling the func:", err);
+        return false;
+    });
+}
 // export function S_set_admin(contract_s, { account, new_admin }) {
 //   var query = contract_s.methods.set_admin(new_admin);
 //   var encodedABI = query.encodeABI();

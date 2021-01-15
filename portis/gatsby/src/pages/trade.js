@@ -1,6 +1,6 @@
 import React from "react"
 import Menu from "../components/display/menu";
-import CompanyView from "../components/display/company";
+import CustomerView from "../components/display/customer";
 
 const Page = () => {
   return (
@@ -8,10 +8,10 @@ const Page = () => {
       <title>Dapp Web UI</title>
       <meta charSet="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
-      <Menu type="company" />
-      <CompanyView 
-        bgColor="red"
-        mainBgColor="gold"
+      <Menu type="trade" />
+      <CustomerView
+        bgColor="#b2bf97"
+        mainBgColor="purple"
       />
     </main>
   )

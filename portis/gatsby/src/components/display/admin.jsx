@@ -1,8 +1,8 @@
 import React from "react"
-import abi from '../config/abi';
+import abi from '../../config/abi';
 import * as func from '../utils';
-
 import LicenseInfo from './licenceUI';
+import portisWrapper from '../wrapper';
 
 function loadAll(contract_sh, web3) {
   return func.SH_list_softwares(contract_sh)
@@ -15,7 +15,8 @@ function loadAll(contract_sh, web3) {
             promisesSoftware.push(
               func.S_list_licenses(swContract)
                 .then((licenses) => func.S_get_admin(swContract).then((admin) => ({ admin, licenses })))
-                .then(({ admin, licenses }) => {
+                .then(({ admin, licenses }) => func.S_get_company_name(swContract).then((name) => ({ name, admin, licenses })))
+                .then(({ name, admin, licenses }) => {
                   if (!admin) return {};
                   // console.log('ALL', swContract, admin, sofwares, licenses)
                   return {
@@ -24,6 +25,7 @@ function loadAll(contract_sh, web3) {
                     addr: software,
                     contract: swContract,
                     licenses,
+                    name,
                   };
                 })
             )
@@ -55,9 +57,8 @@ class AdminUI extends React.Component {
     this.setLDate = this.setLDate.bind(this);
     this.setLForSale = this.setLForSale.bind(this);
 
-    let contractAddress = '';
-    if (this.props.type === 'ethereum') contractAddress = process.env.ROPSTEN_CONTRACT_HANDLER;
-    if (this.props.type === 'binance') contractAddress = process.env.BINANCE_CONTRACT_HANDLER;
+    let contractAddress = process.env.ROPSTEN_CONTRACT_HANDLER;
+    if (this.props.network && this.props.network.includes('binance')) contractAddress = process.env.BINANCE_CONTRACT_HANDLER;
     this.state = {
       contractAddress,
       softwares: [],
@@ -288,8 +289,8 @@ class AdminUI extends React.Component {
       currSw,
       currAdmin,
     } = this.state;
-    const bgColor = this.props.type === 'ethereum' ? 'mediumpurple' : '#b2bf97';
     const mainBGColor = 'lightgrey';
+    const bgColor = this.props.bgColor || 'lightgrey';
     const currentSoftware = softwares.find(sw => sw.addr === currSw);
     return (
       <div className="block-main" style={{ backgroundColor: mainBGColor }}>
@@ -344,4 +345,4 @@ class AdminUI extends React.Component {
   }
 }
 
-export default AdminUI;
+export default portisWrapper(AdminUI);

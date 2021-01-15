@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 
 const LicenseDisplay = ({
   license,
@@ -8,13 +8,16 @@ const LicenseDisplay = ({
   setForSale,
   bgColor,
 }) => {
-  const [admin, setTextAdmin] = useState(license.admin || '');
-  const [owner, setTextOwner] = useState(license.owner || '');
-  const [date, setTextDate] = useState(license.expiry || '');
+  const [admin, setTextAdmin] = useState(license.admin);
+  const [owner, setTextOwner] = useState(license.owner);
+  const [date, setTextDate] = useState(license.expiry);
+  useEffect(() => { setTextAdmin(license.admin)}, [license.admin] );
+  useEffect(() => { setTextOwner(license.owner)}, [license.owner] );
+  useEffect(() => { setTextDate(license.expiry)}, [license.expiry] );
 
   return (
     <div className="block-sub" style={{ backgroundColor: bgColor || 'lightgrey' }}>
-      <h3>License Adress: {license.addr}</h3>
+      <h3>License: {license.name ? license.name : ''} {license.addr}</h3>
       <div>
         <form name="s_admin" onSubmit={
           (evt) => {
