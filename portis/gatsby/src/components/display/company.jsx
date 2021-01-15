@@ -14,8 +14,16 @@ function loadAll(contract_sh, web3, admin) {
           if (swContract) {
             promisesSoftware.push(
               func.S_list_licenses(swContract)
-                .then((licenses) => func.S_get_company_name(swContract).then((name) => ({ name, licenses })))
-                .then(({ name, licenses }) => {
+                .then(
+                  (licenses) => func.S_get_name(swContract)
+                    .then((name) => ({ name, licenses })))
+                .then(
+                  ({ name, licenses }) => func.S_get_version(swContract)
+                    .then((version) => ({ name, licenses, version })))
+                .then(
+                  ({ name, licenses, version }) => func.S_get_time_default(swContract)
+                    .then((defaultTime) => ({ name, licenses, version, defaultTime })))
+                .then(({ name, licenses, version, defaultTime }) => {
                   // console.log('ALL', swContract, admin, sofwares, licenses)
                   return {
                     type: 'software',
@@ -24,6 +32,8 @@ function loadAll(contract_sh, web3, admin) {
                     addr: software,
                     contract: swContract,
                     licenses,
+                    version,
+                    defaultTime,
                   };
                 })
             )
@@ -292,19 +302,19 @@ class CompanyUI extends React.Component {
           <form name="s_address" onSubmit={this.loadSoftwares}>
             <label>
               <span className="description">Handler contract address:</span>
-              <input type="text" value={contractAddress} name="contractAddress" onChange={this.handleInputChange} size="50" />
+              <input type="text" value={contractAddress} name="contractAddress" onChange={this.handleInputChange} size="50" disabled />
             </label>
-            <input type="submit" value="Load" />
+            <input type="submit" value="Load softwares" />
           </form>
         </div>
         {softwares.length ? (
           <>
             <form name="f_sw" style={{ marginTop: '10px', marginBottom: '10px' }}>
               <label>
-                <span className="description">Software addr: 
+                <span className="description">Software:
                 <select name={`sw_${currSw}`} value={currSw} onChange={this.handleSwSelect} onBlur={this.handleSwSelect}>
                   {softwares.map(item => (
-                    <option key={item.addr} value={item.addr}>{`${item.name} (${item.addr})`}</option>
+                    <option key={item.addr} value={item.addr}>{`${item.name} (version: ${item.version})`}</option>
                   ))}
                 </select>
                 </span>

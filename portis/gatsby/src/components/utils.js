@@ -129,8 +129,8 @@ export function S_get_admin(contract_s) {
   });
 }
 
-export function S_get_company_name(contract_s) {
-    return contract_s.methods.company_name().call()
+export function S_get_name(contract_s) {
+    return contract_s.methods.name().call()
     .then(adr => {
         showLogs({ type: '[INFO]:', msg: "Company name:", adr })
         return adr;
@@ -140,6 +140,31 @@ export function S_get_company_name(contract_s) {
         return false;
     });
 }
+
+export function S_get_version(contract_s) {
+    return contract_s.methods.version().call()
+    .then(ver => {
+        showLogs({ type: '[INFO]:', msg: "Version name:", ver })
+        return ver;
+    })
+    .catch(err => {
+        console.error("An error occured while calling the func:", err);
+        return false;
+    });
+}
+
+export function S_get_time_default(contract_s) {
+    return contract_s.methods.license_time_default().call()
+    .then(res => {
+        showLogs({ type: '[INFO]:', msg: "Company name:", res })
+        return res;
+    })
+    .catch(err => {
+        console.error("An error occured while calling the func:", err);
+        return false;
+    });
+}
+
 // export function S_set_admin(contract_s, { account, new_admin }) {
 //   var query = contract_s.methods.set_admin(new_admin);
 //   var encodedABI = query.encodeABI();
