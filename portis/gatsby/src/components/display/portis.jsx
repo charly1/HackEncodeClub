@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 
 export function PortisDisplay(props) {
   const {
@@ -21,8 +21,9 @@ export function PortisDisplay(props) {
   } = props;
 
   const [wallet, setTextWallet] = useState(address);
-  console.log("🚀 ~ file: portis.jsx ~ line 24 ~ PortisDisplay ~ wallet", address, 'wallet', wallet)
   const [selection, setTextSelector] = useState(network);
+  useEffect(() => { setTextWallet(address)}, [address] );
+  useEffect(() => { setTextSelector(network)}, [network] );
 
   return (
     <div className="block-main">

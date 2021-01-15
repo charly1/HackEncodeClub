@@ -41,7 +41,7 @@ function loadAll(contract_sh, web3) {
         return false;
       });
 }
-class AdminUI extends React.Component {
+class CustomerUI extends React.Component {
   constructor(props) {
     super(props);
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -329,4 +329,4 @@ class AdminUI extends React.Component {
   }
 }
 
-export default portisWrapper(AdminUI);
+export default portisWrapper(CustomerUI);

@@ -2,7 +2,7 @@ import React from "react"
 import Menu from "../components/display/menu";
 import CompanyView from "../components/display/company";
 
-const IndexPortis = () => {
+const Page = () => {
   return (
     <main>
       <title>Dapp Web UI</title>
@@ -17,4 +17,4 @@ const IndexPortis = () => {
   )
 }
 
-export default IndexPortis;
+export default Page;

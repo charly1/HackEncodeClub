@@ -2,6 +2,7 @@ import React from "react"
 import abi from '../../config/abi';
 import * as func from '../utils';
 import portisWrapper from "../wrapper";
+import LicenseInfo from './licenceUI';
 
 function loadAll(contract_sh, web3, admin) {
   return func.SH_get_softwares_with_admin(contract_sh, admin)
@@ -41,7 +42,7 @@ function loadAll(contract_sh, web3, admin) {
         return false;
       });
 }
-class AdminUI extends React.Component {
+class CompanyUI extends React.Component {
   constructor(props) {
     super(props);
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -83,7 +84,6 @@ class AdminUI extends React.Component {
       func.L_get_is_for_sale(liContract),
     ])
     .then(([admin, owner, expiry, forSale]) => {
-      // console.log("🚀 ~ file: admin.jsx", admin, owner, typeof expiry, expiry, forSale)
       this.setState(prevState => ({
         licenses: {
           ...prevState.licenses,
@@ -111,7 +111,6 @@ class AdminUI extends React.Component {
       return;
     }
     if (!func.typeCheckAddress(address)) {
-      console.log("🚀 ~ file: company.jsx ~ line 112 ~ AdminUI ~ loadSoftwares ~ address", address)
       alert('WARNING: address invalid characters !');
       return;
     }
@@ -311,6 +310,21 @@ class AdminUI extends React.Component {
                 </span>
               </label>
             </form>
+            {currentSoftware && currentSoftware.licenses && currentSoftware.licenses.length
+              ? currentSoftware.licenses.map((license, i) => {
+                return (
+                  <LicenseInfo
+                    key={'lc' + i}
+                    license={licenses[license] || {}}
+                    setForSale={this.setLForSale}
+                    setDate={this.setLDate}
+                    setOwner={this.setLOwner}
+                    setAdmin={this.setLAdmin}
+                    bgColor={bgColor}
+                  />
+                );
+              })
+              : (<h4>No License for this software</h4>)}
           </>
         ) : null}
       </div>
@@ -318,4 +332,4 @@ class AdminUI extends React.Component {
   }
 }
 
-export default portisWrapper(AdminUI);
+export default portisWrapper(CompanyUI);

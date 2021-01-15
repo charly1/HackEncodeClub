@@ -2,6 +2,7 @@ import React from "react"
 import Web3 from "web3";
 import { showLogs, typeCheckAddress } from './utils';
 import PortisDisplay from './display/portis';
+import Loader from './display/loader';
 
 function portisWrapper(WrappedComponent) {
   class Portis extends React.Component {
@@ -172,16 +173,20 @@ function portisWrapper(WrappedComponent) {
             mainBgColor={mainBgColor}
             bgColor={bgColor}
           />
-          <WrappedComponent
-            portis={portis}
-            web3={web3}
-            email={email}
-            network={network}
-            address={address}
-            logged={logged}
-            showPortis={() => portis.showPortis()}
-            {...this.props}
-          />
+          {logged ? (
+            <WrappedComponent
+              portis={portis}
+              web3={web3}
+              email={email}
+              network={network}
+              address={address}
+              logged={logged}
+              showPortis={() => portis.showPortis()}
+              {...this.props}
+            />
+          ) : (
+            <Loader />
+          )}
         </>
       );
     }

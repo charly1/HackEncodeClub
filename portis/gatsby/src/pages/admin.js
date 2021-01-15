@@ -2,7 +2,7 @@ import React from "react"
 import Menu from "../components/display/menu";
 import AdminView from "../components/display/admin";
 
-const IndexBinance = () => {
+const Page = () => {
   return (
     <main>
       <title>Dapp Web UI</title>
@@ -17,4 +17,4 @@ const IndexBinance = () => {
   )
 }
 
-export default IndexBinance;
+export default Page;
