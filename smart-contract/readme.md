@@ -5,33 +5,33 @@ Compiled using version 0.7.6
 
 ## Smart contract on ropsten: 
 
-SoftwareHandle:  0x5fD461Bd89c15ae53E5394cd3792b20e3201E7aB  
-https://ropsten.etherscan.io/address/0x5fD461Bd89c15ae53E5394cd3792b20e3201E7aB
+SoftwareHandle:  0x82D9aeFCBEA54Fa29411439eE0Be275f0d52044C  
+https://ropsten.etherscan.io/address/0x82D9aeFCBEA54Fa29411439eE0Be275f0d52044C
 
-Software (index 0 of previous SoftwareHandle):  0xEa2b519a52D36FAD4e57f821f959AB9309e49510  
-https://ropsten.etherscan.io/address/0xEa2b519a52D36FAD4e57f821f959AB9309e49510
+Software (index 0 of previous SoftwareHandle):  0xe1dd7DD66305E23b8eCeBbbf0b8e6d69034f6acF  
+https://ropsten.etherscan.io/address/0xe1dd7DD66305E23b8eCeBbbf0b8e6d69034f6acF
 
-License NOT FOR SALE (index 0 of previous Software):  0xd5d467828f5F063106030F451479Bf5bB11f34FE  
-https://ropsten.etherscan.io/address/0xd5d467828f5F063106030F451479Bf5bB11f34FE
+License NOT FOR SALE (index 0 of previous Software):  0x1b1dbca19545D5C4e94D5D4936cf7241112fb5c3  
+https://ropsten.etherscan.io/address/0x1b1dbca19545D5C4e94D5D4936cf7241112fb5c3
 
-License FOR SALE (index 1 of previous Software):  0x5046D1100d0d9c508c8A44bc5Ad929814a8075f2  
-https://ropsten.etherscan.io/address/0x5046D1100d0d9c508c8A44bc5Ad929814a8075f2
+License FOR SALE (index 1 of previous Software):  0x524cF656b3EDAcF389Afa0f5F56DA5575cf27416  
+https://ropsten.etherscan.io/address/0x524cF656b3EDAcF389Afa0f5F56DA5575cf27416
 price: 5000000000000000 WEI = 0.005 ETH
 
 
 ## Smart contract on binance test-net: 
 
-SoftwareHandle:  0xEac2956fFa43e4B40b8d605383B535F3B8C772E5  
-https://testnet.bscscan.com/address/0xEac2956fFa43e4B40b8d605383B535F3B8C772E5
+SoftwareHandle:  0x7CcaCC2Cb85c49999B0631De6977D95e443a3D03  
+https://testnet.bscscan.com/address/0x7CcaCC2Cb85c49999B0631De6977D95e443a3D03
 
-Software (index 0 of previous SoftwareHandle):  0x710eEB17b2e3356277fafaE2eeea893AA58Ea47F  
-https://testnet.bscscan.com/address/0x710eEB17b2e3356277fafaE2eeea893AA58Ea47F
+Software (index 0 of previous SoftwareHandle):  0x6158B1d47c1566158C58d763c390474069ceFa05  
+https://testnet.bscscan.com/address/0x6158B1d47c1566158C58d763c390474069ceFa05
 
-License NOT FOR SALE (index 0 of previous Software):  0x85597A855B7323B21455E5C6DCDDb6E07f239353  
-https://ropsten.etherscan.io/address/0x85597A855B7323B21455E5C6DCDDb6E07f239353
+License NOT FOR SALE (index 0 of previous Software):  0xC06D9C2dE1DCee70B96fBa6601A52d0dC452D1b9  
+https://ropsten.etherscan.io/address/0xC06D9C2dE1DCee70B96fBa6601A52d0dC452D1b9
 
-License FOR SALE (index 1 of previous Software):  0xE34049a5FF7418C8F319293A9Eefe35a0E01e4Fb
-https://ropsten.etherscan.io/address/0xE34049a5FF7418C8F319293A9Eefe35a0E01e4Fb
+License FOR SALE (index 1 of previous Software):  0x7236424eC932877F5C3fe6C255Fdc1b82812CAC3
+https://ropsten.etherscan.io/address/0x7236424eC932877F5C3fe6C255Fdc1b82812CAC3
 price: 5000000000000000 WEI = 0.005 BNB
 
 ## SoftwareHandler contract:

@@ -162,6 +162,35 @@
 		"type": "function"
 	},
 	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_admin",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_owner",
+				"type": "address"
+			},
+			{
+				"internalType": "uint8",
+				"name": "_for_sale",
+				"type": "uint8"
+			}
+		],
+		"name": "getLicenses",
+		"outputs": [
+			{
+				"internalType": "contract License[]",
+				"name": "",
+				"type": "address[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [],
 		"name": "getNbOfSoftware",
 		"outputs": [

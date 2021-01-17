@@ -1,42 +1,82 @@
 pragma solidity >=0.7.0 <0.8.0;
 
+
 function onlyBy1(address from, address by1) 
-    view
+    pure
 {
     require(
        from == by1,
-        "Sender not authorized."
+        "Sender forbidden"
     );
 }
 
-function onlyBy2(address from, address by1, address by2) 
-    view
-{
-    require(
-       from == by1 || from == by2,
-        "Sender not authorized."
-    );
-}
+// function onlyBy2(address from, address by1, address by2) 
+//     pure
+// {
+//     require(
+//       from == by1 || from == by2,
+//         "Sender not authorized."
+//     );
+// }
 
-function refuseTransaction()
-    view
-{
-    require(
-        false,
-        "This contract does not accept incomming transaction."
-    );
-}
+// function refuseTransaction()
+//     pure
+// {
+//     require(
+//         false,
+//         "This contract does not accept incomming transaction."
+//     );
+// }
 
 function validIndex(uint index, uint array_size) 
-    view
+    pure
 {
     require(
         index < array_size,
-        "index is not valid."
+        "index is not valid"
     );
 }
 
-contract License {
+interface Util {
+    
+    // modifier mod_onlyBy1(address by1) {
+    //     require(
+    //       msg.sender == by1,
+    //         "Sender not authorized."
+    //     );
+        
+    //     _;
+    // }
+    
+    modifier mod_onlyBy2(address by1, address by2) {
+        require(
+           msg.sender == by1 || msg.sender == by2,
+            "Sender not authorized"
+        );
+        
+        _;
+    }
+    
+    modifier mod_refuseTransaction(){
+        require(
+            false,
+            "This contract does not accept incomming transaction"
+        );
+        
+        _;
+    }
+    
+    // modifier mod_validIndex(uint index, uint array_size) {
+    //     require(
+    //         index < array_size,
+    //         "index is not valid."
+    //     );
+        
+    //     _;
+    // }
+}
+
+contract License is Util {
     
     event adminChanged(address);
     event ownerChanged(address);
@@ -140,8 +180,9 @@ contract License {
     
     function set_owner(address payable new_owner)
         public
+        mod_onlyBy2(owner, admin)
     {
-        onlyBy2(msg.sender, owner, admin);
+        // onlyBy2(msg.sender, owner, admin);
 
         softwareLinked.licenseHasChangedOwner(owner, new_owner);
         owner = new_owner;
@@ -175,7 +216,7 @@ contract License {
     }
 }
 
-contract Software {
+contract Software is Util {
     
     event adminChanged(address);
     event nameChanged(string);
@@ -236,8 +277,9 @@ contract Software {
     receive()
         external
         payable
+        mod_refuseTransaction
     {
-        refuseTransaction();
+        // refuseTransaction();
     }
     
     function licenseHasChangedOwner(address oldOwner, address newOwner) 
@@ -307,6 +349,7 @@ contract Software {
     function get_license_informations (uint license_index)
         public
         view
+        // mod_validIndex(license_index, licenses.length)
         returns (address payable, address payable, Software, uint, bool, uint)
     {
         validIndex(license_index, licenses.length);
@@ -462,6 +505,7 @@ contract Software {
     
     function remove_license(uint index)
         public
+        // mod_validIndex(index, licenses.length)
     {
         onlyBy1(msg.sender, admin);
         validIndex(index, licenses.length);
@@ -509,8 +553,9 @@ contract Software {
     
     function remove_all_licenses()
         public
+        mod_onlyBy2(admin, address(softwareHandler))
     {
-        onlyBy2(msg.sender, admin, address(softwareHandler));
+        // onlyBy2(msg.sender, admin, address(softwareHandler));
 
         for (uint i = 0; i < licenses.length; i++) {
             
@@ -531,7 +576,7 @@ contract Software {
     }
 }
 
-contract SoftwareHandler {
+contract SoftwareHandler is Util {
     event softwareAdded(address);
     event softwareDeleted(address);
 
@@ -550,8 +595,9 @@ contract SoftwareHandler {
     receive()
         external
         payable
+        mod_refuseTransaction
     {
-        refuseTransaction();
+        // refuseTransaction();
     }
     
     function addSoftware(string calldata name, string calldata version) 
@@ -614,6 +660,58 @@ contract SoftwareHandler {
         return ret;
     }
     
+    // return licenses filtered by admin, owner and for_sale status
+    // for _admin and _owner, if they are = 0x0, not filtered
+    // for sale:
+    //      - 0: filter by licenses that are not for sale
+    //      - 1: filter by licenses that are for sale
+    //      - 2 or more: do not filter by for sale.
+    function getLicenses(address _admin, address _owner, uint8 _for_sale)
+        public
+        view
+        returns (License[] memory)
+    {
+        require (
+            !(_admin == address(0) && _owner == address(0) && _for_sale >= 2)
+            // ,
+            // "You need at least one active filter."
+        );
+        
+        
+        bool _for_sale_bool = (_for_sale == 1);
+        uint counter = 0;
+        for (uint i = 0 ; i < softwares.length ; i++) {
+            Software current_software = softwares[i];
+            for (uint j=0 ; j < current_software.get_nb_license() ; j++) {
+                License current_license = current_software.licenses(j);
+                if ( (_admin == address(0) || current_license.admin() == _admin) &&
+                     (_owner == address(0) || current_license.owner() == _owner) &&
+                     (_for_sale >= 2 || current_license.license_for_sale() == _for_sale_bool) )
+                {
+                    counter++;
+                }
+            }
+        }
+        
+        License[] memory ret = new License[](counter);
+        uint counter2 = 0;
+        for (uint i = 0 ; i < softwares.length ; i++) {
+            Software current_software = softwares[i];
+            for (uint j=0 ; j < current_software.get_nb_license() ; j++) {
+                License current_license = current_software.licenses(j);
+                if ( (_admin == address(0) || current_license.admin() == _admin) &&
+                     (_owner == address(0) || current_license.owner() == _owner) &&
+                     (_for_sale >= 2 || current_license.license_for_sale() == _for_sale_bool) )
+                {
+                    ret[counter2] = current_license;
+                    counter2++;
+                }
+            }
+        }
+        
+        return ret;
+    }
+    
     function removeSoftware(Software _software) 
         public
         softwareExists(_software)
@@ -626,6 +724,7 @@ contract SoftwareHandler {
     
     function removeSoftware(uint index)
         public
+        // mod_validIndex(index, softwares.length)
     {
         onlyBy1(msg.sender, softwares[index].admin());
         validIndex(index, softwares.length);
@@ -637,7 +736,7 @@ contract SoftwareHandler {
         // destroy contract
         softwares[index].destroy();
         
-        // emit the deletedetion
+        // emit the deletion
         emit softwareDeleted(software_adr);
         
         // adjust mapping index
