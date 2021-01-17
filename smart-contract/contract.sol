@@ -1,52 +1,49 @@
 pragma solidity >=0.7.0 <0.8.0;
 
-interface Util {
-    
-    modifier onlyBy(address by) {
-        require(
-            msg.sender == by,
-            "Sender not authorized."
-        );
-
-        _;
-    }
-    
-    modifier onlyBy2(address by, address by2) {
-        require(
-            msg.sender == by || msg.sender == by2,
-            "Sender not authorized."
-        );
-
-        _;
-    }
-    
-    modifier refuseTransaction() {
-        require(
-            false,
-            "This contract do not accept incomming transaction."
-        );
-
-        _;
-    }
-    
-    modifier validIndex(uint index, uint array_size) {
-        require(
-            index < array_size,
-            "index is not valid."
-        );
-
-        _;
-    }
+function onlyBy1(address from, address by1) 
+    view
+{
+    require(
+       from == by1,
+        "Sender not authorized."
+    );
 }
 
-contract License is Util {
+function onlyBy2(address from, address by1, address by2) 
+    view
+{
+    require(
+       from == by1 || from == by2,
+        "Sender not authorized."
+    );
+}
+
+function refuseTransaction()
+    view
+{
+    require(
+        false,
+        "This contract does not accept incomming transaction."
+    );
+}
+
+function validIndex(uint index, uint array_size) 
+    view
+{
+    require(
+        index < array_size,
+        "index is not valid."
+    );
+}
+
+contract License {
     
     event adminChanged(address);
     event ownerChanged(address);
     event expirationTimestampChanged(uint);
     event licenseSetForSale(uint);
     event licenseRemovedFromSale();
-    event licenseSold(uint, address, address); // price, oldOwner, newOwner
+    event licenseSold(uint, address, address); // (price, oldOwner, newOwner)
     event deleted();
 
     address payable public admin; //administrator of the license, basically, who created it
@@ -86,8 +83,10 @@ contract License is Util {
     
     function destroy()
         public
-        onlyBy(address(softwareLinked))
+        //onlyBy(address(softwareLinked))
     {
+        onlyBy1(msg.sender, address(softwareLinked));
+
         emit deleted();
         selfdestruct(admin);
     }
@@ -109,10 +108,20 @@ contract License is Util {
         remove_for_sale();
     }
     
+    function get_informations ()
+        public
+        view
+        returns (address payable, address payable, Software, uint, bool, uint)
+    {
+        return (admin, owner, softwareLinked, expiration_timestamp, license_for_sale, selling_price);
+    }
+    
     function set_for_sale(uint _selling_price) 
         public
-        onlyBy(owner)
+        //onlyBy(owner)
     {
+        onlyBy1(msg.sender, owner);
+
         license_for_sale = true;
         selling_price = _selling_price;
         emit licenseSetForSale(_selling_price);
@@ -120,8 +129,10 @@ contract License is Util {
     
     function remove_for_sale()
         public
-        onlyBy(owner)
+        //onlyBy(owner)
     {
+        onlyBy1(msg.sender, owner);
+
         license_for_sale = false;
         selling_price = 0;
         emit licenseRemovedFromSale();
@@ -129,8 +140,9 @@ contract License is Util {
     
     function set_owner(address payable new_owner)
         public
-        onlyBy2(owner, admin)
     {
+        onlyBy2(msg.sender, owner, admin);
+
         softwareLinked.licenseHasChangedOwner(owner, new_owner);
         owner = new_owner;
         emit ownerChanged(owner);
@@ -138,29 +150,32 @@ contract License is Util {
     
     function set_admin(address payable new_admin)
         public
-        onlyBy(admin)
     {
+        onlyBy1(msg.sender, admin);
+
         admin = new_admin;
         emit adminChanged(admin);
     }
     
     function set_expiration_timestamp(uint new_timestamp)
         public
-        onlyBy(admin)
     {
+        onlyBy1(msg.sender, admin);
+
         expiration_timestamp = new_timestamp;
-        emit expirationTimestampChanged(expiration_timestamp);
+        emit expirationTimestampChanged(expiration_timestamp); //expirationTimestampChanged(expiration_timestamp);
     }
     
     function remove_expiration_timestamp()
         public
-        onlyBy(admin)
     {
+        onlyBy1(msg.sender, admin);
+
         set_expiration_timestamp(0);
     }
 }
 
-contract Software is Util {
+contract Software {
     
     event adminChanged(address);
     event nameChanged(string);
@@ -209,8 +224,9 @@ contract Software is Util {
     
     function destroy()
         public
-        onlyBy(address(softwareHandler))
     {
+        onlyBy1(msg.sender, address(softwareHandler));
+
         remove_all_licenses();
         
         emit deleted();
@@ -220,8 +236,9 @@ contract Software is Util {
     receive()
         external
         payable
-        refuseTransaction
-    {}
+    {
+        refuseTransaction();
+    }
     
     function licenseHasChangedOwner(address oldOwner, address newOwner) 
         public
@@ -241,65 +258,119 @@ contract Software is Util {
     
     function set_admin(address payable _admin)
         public
-        onlyBy(admin) 
+        //onlyBy(admin) 
     {
+        onlyBy1(msg.sender, admin);
+
         admin = _admin;
         emit adminChanged(admin);
     }
     
     function set_name(string calldata _name)
         public
-        onlyBy(admin)
+        //onlyBy(admin)
     {
+        onlyBy1(msg.sender, admin);
+
         name = _name;
         emit nameChanged(name);
     }
     
     function set_version(string calldata _version)
         public
-        onlyBy(admin)
+        //onlyBy(admin)
     {
+        onlyBy1(msg.sender, admin);
+
         version = _version;
         emit versionChanged(version);
     }
     
     function set_license_time_default(uint _license_time_default)
         public
-        onlyBy(admin)
+        //onlyBy(admin)
     {
+        onlyBy1(msg.sender, admin);
+
         license_time_default = _license_time_default;
         emit defaultLicenseTimeChanged(license_time_default);
     }
     
+    function get_informations ()
+        public
+        view
+        returns (string memory, string memory, uint, address payable, uint)
+    {
+        return (name, version, license_time_default, admin, licenses.length);
+    }
+    
+    function get_license_informations (uint license_index)
+        public
+        view
+        returns (address payable, address payable, Software, uint, bool, uint)
+    {
+        validIndex(license_index, licenses.length);
+
+        return licenses[license_index].get_informations();
+    }
+    
+    function get_licenses_for_sale (bool _for_sale)
+        public
+        view
+        returns (License[] memory)
+    {
+        uint counter = 0;
+        for (uint i = 0 ; i < licenses.length ; i++) {
+            if (licenses[i].license_for_sale() == _for_sale) {
+                counter++;
+            }
+        }
+
+        License[] memory ret = new License[](counter);
+        uint j = 0;
+        for (uint i = 0; i < licenses.length ; i++) {
+            if (licenses[i].license_for_sale() == _for_sale) {
+                ret[j] = licenses[i];
+                j++;
+            }
+        }
+        
+        return ret;
+    }
+    
     function add_license() // default value: admin:admin, owner:admin, expiration: 0
         public
-        onlyBy(admin) 
         returns (License)
     {
+        onlyBy1(msg.sender, admin);
+
         return add_license(admin, payable(admin));
     }
     
     function add_license(address payable _owner)  // default value: admin:admin, owner:owner, expiration: 0
         public
-        onlyBy(admin) 
         returns (License)
     {
+        onlyBy1(msg.sender, admin);
+
         return add_license(admin, _owner);
     }
     
     function add_license(address payable _owner, uint _expiration_timestamp) // default value: admin:admin, owner:owner, expiration: exp
         public
-        onlyBy(admin) 
         returns (License)
     {
+        onlyBy1(msg.sender, admin);
+
         return add_license(admin, _owner, _expiration_timestamp);
     }
     
     function add_license(address payable _admin, address payable _owner)  // default value: admin:admin, owner:owner, expiration: 0
         public
-        onlyBy(admin) 
         returns (License)
     {
+        onlyBy1(msg.sender, admin);
+
         if (license_time_default == 0)
             return add_license(_admin, _owner, 0);
         else
@@ -308,9 +379,10 @@ contract Software is Util {
     
     function add_license(address payable _admin, address payable _owner, uint _expiration_timestamp)
         public
-        onlyBy(admin) 
         returns (License)
     {
+        onlyBy1(msg.sender, admin);
+
         License newLicense = new License(_admin, _owner, _expiration_timestamp);
         licenses.push(newLicense);
         
@@ -382,16 +454,18 @@ contract Software is Util {
     function remove_license(License _license) 
         public
         licenseExists(_license)
-        onlyBy(admin)
     {
+        onlyBy1(msg.sender, admin);
+
         remove_license(licenseIndex[_license]);
     }
     
     function remove_license(uint index)
         public
-        onlyBy(admin)
-        validIndex(index, licenses.length)
     {
+        onlyBy1(msg.sender, admin);
+        validIndex(index, licenses.length);
+
         // cache owner and license adr
         address payable owner = licenses[index].owner();
         address license_adr = address(licenses[index]);
@@ -408,7 +482,7 @@ contract Software is Util {
         // rearrange array
         for (uint i = index; i < licenses.length-1; i++)
         {
-           // shift license in the array
+          // shift license in the array
             licenses[i] = licenses[i+1];
             
             // apply the shift to the mapping 
@@ -435,8 +509,9 @@ contract Software is Util {
     
     function remove_all_licenses()
         public
-        onlyBy2(admin, address(softwareHandler))
     {
+        onlyBy2(msg.sender, admin, address(softwareHandler));
+
         for (uint i = 0; i < licenses.length; i++) {
             
             // update mapping ownerLicense
@@ -456,8 +531,7 @@ contract Software is Util {
     }
 }
 
-contract SoftwareHandler is Util
-{
+contract SoftwareHandler {
     event softwareAdded(address);
     event softwareDeleted(address);
 
@@ -476,8 +550,9 @@ contract SoftwareHandler is Util
     receive()
         external
         payable
-        refuseTransaction
-    {}
+    {
+        refuseTransaction();
+    }
     
     function addSoftware(string calldata name, string calldata version) 
         public 
@@ -527,7 +602,6 @@ contract SoftwareHandler is Util
             }
         }
         
-        
         Software[] memory ret = new Software[](counter);
         uint j = 0;
         for (uint i = 0; i < softwares.length ; i++) {
@@ -543,24 +617,27 @@ contract SoftwareHandler is Util
     function removeSoftware(Software _software) 
         public
         softwareExists(_software)
-        onlyBy(_software.admin())
 
     {
+        onlyBy1(msg.sender, _software.admin());
+
         removeSoftware(softwareIndex[_software]);
     }
     
     function removeSoftware(uint index)
         public
-        validIndex(index, softwares.length)
-        onlyBy(softwares[index].admin())
     {
+        onlyBy1(msg.sender, softwares[index].admin());
+        validIndex(index, softwares.length);
+
+
         // cache software adr
         address software_adr = address(softwares[index]);
         
         // destroy contract
         softwares[index].destroy();
         
-        // emit the deletion
+        // emit the deletedetion
         emit softwareDeleted(software_adr);
         
         // adjust mapping index

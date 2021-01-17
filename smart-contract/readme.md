@@ -5,26 +5,34 @@ Compiled using version 0.7.6
 
 ## Smart contract on ropsten: 
 
-SoftwareHandle:  0x201AA22CC95409FA2EF3f858B1A355F3c32982b7  
-https://ropsten.etherscan.io/address/0x201AA22CC95409FA2EF3f858B1A355F3c32982b7
+SoftwareHandle:  0x5fD461Bd89c15ae53E5394cd3792b20e3201E7aB  
+https://ropsten.etherscan.io/address/0x5fD461Bd89c15ae53E5394cd3792b20e3201E7aB
 
-Software (index 0 of previous SoftwareHandle):  0x7a92a4CcF0c3A77635a870f43FC0C0aAE58Ebf46  
-https://ropsten.etherscan.io/address/0x7a92a4CcF0c3A77635a870f43FC0C0aAE58Ebf46
+Software (index 0 of previous SoftwareHandle):  0xEa2b519a52D36FAD4e57f821f959AB9309e49510  
+https://ropsten.etherscan.io/address/0xEa2b519a52D36FAD4e57f821f959AB9309e49510
 
-License (index 0 of previous Software):  0x3B02B27Cc6A640091158a1828Da145d095Fe3591  
-https://ropsten.etherscan.io/address/0x3B02B27Cc6A640091158a1828Da145d095Fe3591
+License NOT FOR SALE (index 0 of previous Software):  0xd5d467828f5F063106030F451479Bf5bB11f34FE  
+https://ropsten.etherscan.io/address/0xd5d467828f5F063106030F451479Bf5bB11f34FE
+
+License FOR SALE (index 1 of previous Software):  0x5046D1100d0d9c508c8A44bc5Ad929814a8075f2  
+https://ropsten.etherscan.io/address/0x5046D1100d0d9c508c8A44bc5Ad929814a8075f2
+price: 5000000000000000 WEI = 0.005 ETH
 
 
 ## Smart contract on binance test-net: 
 
-SoftwareHandle:  0x0BfA6DCA42Aa3AbA8002c2cBdCe83ed0b2B09192  
-https://testnet.bscscan.com/address/0x0BfA6DCA42Aa3AbA8002c2cBdCe83ed0b2B09192
+SoftwareHandle:  0xEac2956fFa43e4B40b8d605383B535F3B8C772E5  
+https://testnet.bscscan.com/address/0xEac2956fFa43e4B40b8d605383B535F3B8C772E5
 
-Software (index 0 of previous SoftwareHandle):  0xFBaD789afcbF2daE8874Bb203c7a8A884f26c2C7  
-https://testnet.bscscan.com/address/0xFBaD789afcbF2daE8874Bb203c7a8A884f26c2C7
+Software (index 0 of previous SoftwareHandle):  0x710eEB17b2e3356277fafaE2eeea893AA58Ea47F  
+https://testnet.bscscan.com/address/0x710eEB17b2e3356277fafaE2eeea893AA58Ea47F
 
-License (index 0 of previous Software):  0xE3dF492FEfbED10aa5aD6dca6a125B5a22DC0115  
-https://testnet.bscscan.com/address/0xE3dF492FEfbED10aa5aD6dca6a125B5a22DC0115
+License NOT FOR SALE (index 0 of previous Software):  0x85597A855B7323B21455E5C6DCDDb6E07f239353  
+https://ropsten.etherscan.io/address/0x85597A855B7323B21455E5C6DCDDb6E07f239353
+
+License FOR SALE (index 1 of previous Software):  0xE34049a5FF7418C8F319293A9Eefe35a0E01e4Fb
+https://ropsten.etherscan.io/address/0xE34049a5FF7418C8F319293A9Eefe35a0E01e4Fb
+price: 5000000000000000 WEI = 0.005 BNB
 
 ## SoftwareHandler contract:
 
@@ -132,6 +140,21 @@ Returns one license address which has as owner `_owner` (only if the license was
 - `licenseIndex(License _license)`
 
 Returns the index of the License address provided (only if the license was created by this contract)
+
+- `get_informations()`
+
+Return a tuple with the general informations of the software:
+(name, version, license_time_default, admin, number_of_licenses)
+
+- `get_license_informations (uint index)`
+
+Return a tuple with the general informations of a license (requiert an index as this is a Software call):
+(admin, owner, software_address_linked, expiration_timestamp, license_for_sale_as_boolean, selling_price)
+
+- `get_licenses_for_sale (bool _for_sale)`
+
+returns a list address filtered by the "for_sale" parameter.
+To get the current license that are for sale call: `Software.get_licenses_for_sale(true)`
 
 - `add_license()`
 
@@ -277,6 +300,11 @@ Restricted to the admin only.
 
  Remove the expiration date (basically to the same than `set_expiration_timestamp(0)`).
  Restricted to the admin only.
+
+ - `get_informations ()`
+
+Return a tuple with the general informations of a license:
+(admin, owner, software_address_linked, expiration_timestamp, license_for_sale_as_boolean, selling_price)
 
 ### Events:
 
