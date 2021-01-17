@@ -63,6 +63,12 @@ Access to the array of Software. Returns the address of the Software smart-contr
 
 Return the index of the software address specified.
 
+- `getLicenses(address _admin, address _owner, uint8 _for_sale)`
+
+Return all the licensed filtered by admin, owner or for_sale status. To not filter by admin or owner, send address(0).
+for_sale works this way: 0 to filter with licenses that are not for sale; 1 to filter licenses that are for sale, 2 or more for all license.
+You cannot request all license without any filtering.
+
 - `getNbOfSoftware()`
 
 Returns the Number of Software in the array.
