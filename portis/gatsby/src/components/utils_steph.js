@@ -14,7 +14,9 @@ export function typeCheckAddress(address, prefix=true) {
 
 // functions to talk with smart contracts
 
-const gasUseEveryWhere = 4000000;
+const gasUseEveryWhere = 10000000;
+const NULL_ADR = "0x0000000000000000000000000000000000000000"
+const FOR_SALE_NO_FILTER = 2
 
 const wei2eth = (amount) => {
     return parseFloat(amount) / 1000000000000000000;
@@ -56,7 +58,6 @@ export function SH_addSoftware(contract_sh, web3, account, name, version, licens
 }
 
 export function SH_get_softwares_from_index(contract_sh, index) {
-    if (!index) return false;
     return contract_sh.methods.softwares(index).call()
     .then(res => {
         showLogs({ type: '[INFO]:', msg: `software[${index}]'s address is ${res}` })
@@ -94,7 +95,7 @@ export function SH_get_nb_of_softwares (contract_sh) {
 }
 
 export function SH_remove_software_from_index (contract_sh, web3, account, index) {
-  if (!web3 || !account || !index) 
+  if (!web3 || !account) 
     return false;
 
   const encodedABI = contract_sh.methods.removeSoftware(index).encodeABI();
@@ -153,6 +154,58 @@ export function SH_list_softwares(contract_sh) {
   });
 }
 
+export function SH_get_licenses_with_admin(constract_sh, admin) {
+  if (!admin) return false;
+    return contract_sh.methods.getLicenses(admin, NULL_ADR, FOR_SALE_NO_FILTER).call()
+    .then(res => {
+        showLogs({ type: '[INFO]:', msg: `all licenses with admin ${admin}:\n${res}` })
+        return res;
+    })
+    .catch(err => {
+        console.error("An error occured while calling the func:", err);
+        return false;
+    });
+}
+
+export function SH_get_licenses_with_owner(constract_sh, owner) {
+  if (!owner) return false;
+    return contract_sh.methods.getLicenses(NULL_ADR, owner, FOR_SALE_NO_FILTER).call()
+    .then(res => {
+        showLogs({ type: '[INFO]:', msg: `all licenses with owner ${owner}:\n${res}` })
+        return res;
+    })
+    .catch(err => {
+        console.error("An error occured while calling the func:", err);
+        return false;
+    });
+}
+
+export function SH_get_licenses_that_are_for_sale(constract_sh, for_sale=true) {
+  var for_sale_int = for_sale ? 1 : 0;
+    return contract_sh.methods.getLicenses(NULL_ADR, NULL_ADR, for_sale_int).call()
+    .then(res => {
+        showLogs({ type: '[INFO]:', msg: `all licenses that are ${for_sale?"":"NOT "}for sale:\n${res}` })
+        return res;
+    })
+    .catch(err => {
+        console.error("An error occured while calling the func:", err);
+        return false;
+    });
+}
+
+export function SH_get_licenses_filtered(constract_sh, admin, owner, for_sale) {
+  if (!owner || !admin) return false;
+    return contract_sh.methods.getLicenses(admin, owner, for_sale).call()
+    .then(res => {
+        showLogs({ type: '[INFO]:', msg: `all licenses filtered:\n${res}` })
+        return res;
+    })
+    .catch(err => {
+        console.error("An error occured while calling the func:", err);
+        return false;
+    });
+}
+
 // S functions
 export function S_set_admin (contract_s, web3, account, admin_address) {
   if (!web3 || !account || !admin_address) 
@@ -191,7 +244,6 @@ export function S_set_license_time_default (contract_s, web3, account, license_t
 }
 
 export function S_get_licenses_from_index(contract_s, index) {
-    if (!index) return false;
     return contract_s.methods.licenses(index).call()
     .then(res => {
         showLogs({ type: '[INFO]:', msg: `license[${index}]'s address is: ${res}` })
@@ -227,7 +279,7 @@ export function S_get_software_info(contract_s) {
           'nb_license': res['4'],
           'software_address': res['5'],
         }
-        showLogs({ type: '[INFO]:', msg: `name: ${results['name']}, version: ${results['version']}, license_time_default: ${results['license_time_default']}, admin: ${results['admin']}, nb_license: ${results['nb_license']}, software address: ${result['software_address']}` });
+        showLogs({ type: '[INFO]:', msg: `name: ${results['name']}, version: ${results['version']}, license_time_default: ${results['license_time_default']}, admin: ${results['admin']}, nb_license: ${results['nb_license']}, software address: ${results['software_address']}` });
         return results;
     })
     .catch(err => {
@@ -237,7 +289,6 @@ export function S_get_software_info(contract_s) {
 }
 
 export function S_get_license_info_from_index(contract_s, index) {
-    if (!index) return false;
     return contract_s.methods.get_license_informations(index).call()
     .then(res => {
         results = {
@@ -247,7 +298,7 @@ export function S_get_license_info_from_index(contract_s, index) {
           'expiration_timestamp' : res['3'],
           'license_for_sale': res['4'],
           'selling_price_wei': res['5'],
-          'selling_price_ETH': wei2eth(res['5']),
+          'selling_price_ETH': String(wei2eth(res['5'])),
           'license_address': res['6'],
         }
         showLogs({ type: '[INFO]:', msg: `admin: ${results['admin']}, owner: ${results['owner']}, software_address_linked: ${results['software_address_linked']}, expiration_timestamp: ${results['expiration_timestamp']}, license_for_sale: ${results['license_for_sale']}, selling_price in wei: ${results['selling_price_wei']} and in ETH/BNB: ${results['selling_price_ETH']}, license address: ${results['license_address']}` });
@@ -344,7 +395,7 @@ export function S_get_license_with_owner(contract_s, owner) {
 }
 
 export function S_remove_license_with_index(contract_s, web3, account, index) {
-  if (!web3 || !account || !index) 
+  if (!web3 || !account) 
     return false;
 
   const encodedABI = contract_s.methods.removeLicense(index).encodeABI();
@@ -362,7 +413,6 @@ export function S_remove_license_with_address(contract_s, web3, account, adr) {
 }
 
 export function S_get_info_software_and_all_licenses(contract_s) {
-    if (!owner) return false;
     var software_info = null;
     return S_get_software_info(contract_s)
     .then(res => {
@@ -479,7 +529,7 @@ export function L_get_informations(contract_l) {
           'expiration_timestamp' : res['3'],
           'license_for_sale': res['4'],
           'selling_price_wei': res['5'],
-          'selling_price_ETH': wei2eth(res['5']),
+          'selling_price_ETH': String(wei2eth(res['5'])),
           'license_address': res['6'],
         }
         showLogs({ type: '[INFO]:', msg: `admin: ${results['admin']}, owner: ${results['owner']}, software_address_linked: ${results['software_address_linked']}, expiration_timestamp: ${results['expiration_timestamp']}, license_for_sale: ${results['license_for_sale']}, selling_price in wei: ${results['selling_price_wei']} and in ETH/BNB: ${results['selling_price_ETH']}, license address: ${results['license_address']}` });

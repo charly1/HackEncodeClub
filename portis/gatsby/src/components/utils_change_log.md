@@ -12,6 +12,13 @@
 
 - `SH_remove_software (contract_sh, web3, account, address)`
 
+- `SH_get_licenses_with_admin(constract_sh, admin)`
+
+- `SH_get_licenses_with_owner(constract_sh, owner)`
+
+- `SH_get_licenses_that_are_for_sale(constract_sh, for_sale=true)`
+
+
 # Software: 
 
 - `S_set_admin (contract_s, web3, account, admin_address)`
@@ -52,39 +59,39 @@
 - `S_get_info_software_and_all_licenses(contract_s, web3, account)`
 
 this function returns a data of this type with only one call for the software and one call for each license:
-AIN'T SURE ABOUT THE STRING/NUMBER type is the fields: TO BE CHECKED !
+
 ```
 {
-  'software' : {
-    'name' : 'software name',
-    'version' : '1.0.0',
-    'license_time_default': '3600',
-    'admin' : '0x...',
-    'nb_license': 2,
-    'software_address': '0x...',
-  },
-  'licenses' : [
-    {
-      'admin' : '0x...',
-      'owner' : '0x...',
-      'software_address_linked': '0x...',
-      'expiration_timestamp' : 0,
-      'license_for_sale': true,
-      'selling_price_wei': '5000000000000000',
-      'selling_price_ETH': 0.005,
-      'license_address': '0x...',
+    "software": {
+        "name": "softwareName",
+        "version": "1.0.0",
+        "license_time_default": "0",
+        "admin": "0xFe5a44605eEd83DAe7e2CA1A83F84Ed61Ce38DCD",
+        "nb_license": "2",
+        "software_address": "0x72472d223D80D14e1669791233E809a230D61407"
     },
-    {
-      'admin' : '0x...',
-      'owner' : '0x...',
-      'software_address_linked': '0x...',
-      'expiration_timestamp' : 0,
-      'license_for_sale': false,
-      'selling_price_wei': '0',
-      'selling_price_ETH': 0,
-      'license_address': '0x...',
-    }
-  ],
+    "licenses": [
+        {
+            "admin": "0xFe5a44605eEd83DAe7e2CA1A83F84Ed61Ce38DCD",
+            "owner": "0xFe5a44605eEd83DAe7e2CA1A83F84Ed61Ce38DCD",
+            "software_address_linked": "0x72472d223D80D14e1669791233E809a230D61407",
+            "expiration_timestamp": "0",
+            "license_for_sale": false,
+            "selling_price_wei": "0",
+            "selling_price_ETH": "0",
+            "license_address": "0x1E6b7fcFe44306aA1D5782DE693CD0Fa78b33F68"
+        },
+        {
+            "admin": "0xFe5a44605eEd83DAe7e2CA1A83F84Ed61Ce38DCD",
+            "owner": "0xFe5a44605eEd83DAe7e2CA1A83F84Ed61Ce38DCD",
+            "software_address_linked": "0x72472d223D80D14e1669791233E809a230D61407",
+            "expiration_timestamp": "0",
+            "license_for_sale": true,
+            "selling_price_wei": "5000000000000000",
+            "selling_price_ETH": "0.005",
+            "license_address": "0xd5de8C1F2474bC1DeA3E61601cB631659D95d7Bb"
+        }
+    ]
 }
 ```
 
