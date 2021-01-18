@@ -151,9 +151,9 @@ contract License is Util {
     function get_informations ()
         public
         view
-        returns (address payable, address payable, Software, uint, bool, uint)
+        returns (address payable, address payable, Software, uint, bool, uint, address)
     {
-        return (admin, owner, softwareLinked, expiration_timestamp, license_for_sale, selling_price);
+        return (admin, owner, softwareLinked, expiration_timestamp, license_for_sale, selling_price, address(this));
     }
     
     function set_for_sale(uint _selling_price) 
@@ -363,16 +363,16 @@ contract Software is Util {
     function get_informations ()
         public
         view
-        returns (string memory, string memory, uint, address payable, uint)
+        returns (string memory, string memory, uint, address payable, uint, address)
     {
-        return (name, version, license_time_default, admin, licenses.length);
+        return (name, version, license_time_default, admin, licenses.length, address(this));
     }
     
     function get_license_informations (uint license_index)
         public
         view
         // mod_validIndex(license_index, licenses.length)
-        returns (address payable, address payable, Software, uint, bool, uint)
+        returns (address payable, address payable, Software, uint, bool, uint, address)
     {
         validIndex(license_index, licenses.length);
 

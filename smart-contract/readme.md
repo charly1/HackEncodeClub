@@ -5,33 +5,33 @@ Compiled using version 0.7.6
 
 ## Smart contract on ropsten: 
 
-SoftwareHandle:  0x82D9aeFCBEA54Fa29411439eE0Be275f0d52044C  
-https://ropsten.etherscan.io/address/0x82D9aeFCBEA54Fa29411439eE0Be275f0d52044C
+SoftwareHandle:  0x7AdC4ED178B19CF8cF0Bb19CF17586a8782AAF82  
+https://ropsten.etherscan.io/address/0x7AdC4ED178B19CF8cF0Bb19CF17586a8782AAF82
 
-Software (index 0 of previous SoftwareHandle):  0xe1dd7DD66305E23b8eCeBbbf0b8e6d69034f6acF  
-https://ropsten.etherscan.io/address/0xe1dd7DD66305E23b8eCeBbbf0b8e6d69034f6acF
+Software (index 0 of previous SoftwareHandle):  0x72472d223D80D14e1669791233E809a230D61407  
+https://ropsten.etherscan.io/address/0x72472d223D80D14e1669791233E809a230D61407
 
-License NOT FOR SALE (index 0 of previous Software):  0x1b1dbca19545D5C4e94D5D4936cf7241112fb5c3  
-https://ropsten.etherscan.io/address/0x1b1dbca19545D5C4e94D5D4936cf7241112fb5c3
+License NOT FOR SALE (index 0 of previous Software):  0x1E6b7fcFe44306aA1D5782DE693CD0Fa78b33F68  
+https://ropsten.etherscan.io/address/0x1E6b7fcFe44306aA1D5782DE693CD0Fa78b33F68
 
-License FOR SALE (index 1 of previous Software):  0x524cF656b3EDAcF389Afa0f5F56DA5575cf27416  
-https://ropsten.etherscan.io/address/0x524cF656b3EDAcF389Afa0f5F56DA5575cf27416
+License FOR SALE (index 1 of previous Software):  0xd5de8C1F2474bC1DeA3E61601cB631659D95d7Bb  
+https://ropsten.etherscan.io/address/0xd5de8C1F2474bC1DeA3E61601cB631659D95d7Bb
 price: 5000000000000000 WEI = 0.005 ETH
 
 
 ## Smart contract on binance test-net: 
 
-SoftwareHandle:  0x7CcaCC2Cb85c49999B0631De6977D95e443a3D03  
-https://testnet.bscscan.com/address/0x7CcaCC2Cb85c49999B0631De6977D95e443a3D03
+SoftwareHandle:  0x463A8E493D25CC51b083d9DFFe30351e375652a8  
+https://testnet.bscscan.com/address/0x463A8E493D25CC51b083d9DFFe30351e375652a8
 
-Software (index 0 of previous SoftwareHandle):  0x6158B1d47c1566158C58d763c390474069ceFa05  
-https://testnet.bscscan.com/address/0x6158B1d47c1566158C58d763c390474069ceFa05
+Software (index 0 of previous SoftwareHandle):  0x2D8f5a0A0CEe39FeFcb64AB819D42f2687b63128  
+https://testnet.bscscan.com/address/0x2D8f5a0A0CEe39FeFcb64AB819D42f2687b63128
 
-License NOT FOR SALE (index 0 of previous Software):  0xC06D9C2dE1DCee70B96fBa6601A52d0dC452D1b9  
-https://ropsten.etherscan.io/address/0xC06D9C2dE1DCee70B96fBa6601A52d0dC452D1b9
+License NOT FOR SALE (index 0 of previous Software):  0xDEb4A50D5cb8BB97C6CC27Cc11b9Bdd3d2032a8C  
+https://ropsten.etherscan.io/address/0xDEb4A50D5cb8BB97C6CC27Cc11b9Bdd3d2032a8C
 
-License FOR SALE (index 1 of previous Software):  0x7236424eC932877F5C3fe6C255Fdc1b82812CAC3
-https://ropsten.etherscan.io/address/0x7236424eC932877F5C3fe6C255Fdc1b82812CAC3
+License FOR SALE (index 1 of previous Software):  0x3bed56F108Ae9Dc98f8Cc977F5cEA48F39c2857E
+https://ropsten.etherscan.io/address/0x3bed56F108Ae9Dc98f8Cc977F5cEA48F39c2857E
 price: 5000000000000000 WEI = 0.005 BNB
 
 ## SoftwareHandler contract:
@@ -150,12 +150,12 @@ Returns the index of the License address provided (only if the license was creat
 - `get_informations()`
 
 Return a tuple with the general informations of the software:
-(name, version, license_time_default, admin, number_of_licenses)
+(name, version, license_time_default, admin, number_of_licenses, self-address)
 
 - `get_license_informations (uint index)`
 
 Return a tuple with the general informations of a license (requiert an index as this is a Software call):
-(admin, owner, software_address_linked, expiration_timestamp, license_for_sale_as_boolean, selling_price)
+(admin, owner, software_address_linked, expiration_timestamp, license_for_sale_as_boolean, selling_price, self-address)
 
 - `get_licenses_for_sale (bool _for_sale)`
 
@@ -310,7 +310,7 @@ Restricted to the admin only.
  - `get_informations ()`
 
 Return a tuple with the general informations of a license:
-(admin, owner, software_address_linked, expiration_timestamp, license_for_sale_as_boolean, selling_price)
+(admin, owner, software_address_linked, expiration_timestamp, license_for_sale_as_boolean, selling_price, self-address)
 
 - `check_owner(address _owner)`
 
