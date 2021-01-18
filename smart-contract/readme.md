@@ -312,6 +312,10 @@ Restricted to the admin only.
 Return a tuple with the general informations of a license:
 (admin, owner, software_address_linked, expiration_timestamp, license_for_sale_as_boolean, selling_price)
 
+- `check_owner(address _owner)`
+
+Check if the license is valid with the owner specified. Also perform expiration_timestamp check with current block-timestamp
+
 ### Events:
 
 - `adminChanged(address)`

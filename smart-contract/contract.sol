@@ -33,7 +33,7 @@ function validIndex(uint index, uint array_size)
 {
     require(
         index < array_size,
-        "index is not valid"
+        "Index is not valid"
     );
 }
 
@@ -214,6 +214,14 @@ contract License is Util {
 
         set_expiration_timestamp(0);
     }
+    
+    function check_owner(address _owner)
+        public
+        view
+        returns (bool)
+    {
+        return _owner == owner && (expiration_timestamp >= block.timestamp || expiration_timestamp == 0);
+    }
 }
 
 contract Software is Util {
@@ -295,7 +303,21 @@ contract Software is Util {
         view
         returns (bool)
     {
-        return ownerLicense[adr] != License(0) && ownerLicense[adr].owner() == adr;
+        if (ownerLicense[adr] == License(0)) // user do not have at least one license at his name
+            return false; 
+            
+        if (ownerLicense[adr].check_owner(adr))
+            return true;
+            
+        // the user may have multiple license at his name.
+        License[] memory licenseOwner = get_licenses_with_owner(adr);
+        
+        for (uint i = 0 ; i < licenseOwner.length ; i++) {
+            if (licenseOwner[i].check_owner(adr))
+                return true;
+        }
+        
+        return false;
     }
     
     function set_admin(address payable _admin)
