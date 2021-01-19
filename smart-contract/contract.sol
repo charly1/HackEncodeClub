@@ -613,13 +613,12 @@ contract SoftwareHandler is Util {
         
         _;
     }
-    
-    receive()
+
+    receive() 
         external
         payable
-        mod_refuseTransaction
     {
-        // refuseTransaction();
+        msg.sender.transfer(msg.value);
     }
     
     function addSoftware(string calldata name, string calldata version) 
