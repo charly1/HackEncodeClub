@@ -4,13 +4,19 @@ import abi from '../../config/abi';
 import * as func from '../utils';
 import portisWrapper from "../wrapper";
 import LicenseInfo from './licenceUI';
+import Loader from './loader';
+
+
+function CardHeader(props) {
+
+}
 
 function loadAll(contract_sh, web3, admin) {
   return func.SH_get_softwares_with_admin(contract_sh, admin)
     .then(sofwares => {
       if (sofwares) {
         const promisesSoftware = [];
-        sofwares.forEach(software => {
+        sofwares.forEach((software, index) => {
           const swContract = web3 ? new web3.eth.Contract(abi.CONTRACT_ABI, software) : null;
           if (swContract) {
             promisesSoftware.push(
@@ -25,14 +31,15 @@ function loadAll(contract_sh, web3, admin) {
                   ({ name, licenses, version }) => func.S_get_time_default(swContract)
                     .then((defaultTime) => ({ name, licenses, version, defaultTime })))
                 .then(({ name, licenses, version, defaultTime }) => {
-                  // console.log('ALL', swContract, admin, sofwares, licenses)
+                  console.log('ALL', name, licenses)
                   return {
+                    id: software,
+                    title: name,
+                    cards: licenses.map(li => ({ id: li, title: li, description: li })),
                     type: 'software',
                     admin,
-                    name,
-                    addr: software,
                     contract: swContract,
-                    licenses,
+                    name,
                     version,
                     defaultTime,
                   };
@@ -53,6 +60,7 @@ function loadAll(contract_sh, web3, admin) {
         return false;
       });
 }
+
 class CompanyUI extends React.Component {
   constructor(props) {
     super(props);
@@ -64,6 +72,12 @@ class CompanyUI extends React.Component {
     this.setLOwner = this.setLOwner.bind(this);
     this.setLDate = this.setLDate.bind(this);
     this.setLForSale = this.setLForSale.bind(this);
+
+    this.onNewCard = this.onNewCard.bind(this);
+    this.onNewCardConfirm = this.onNewCardConfirm.bind(this);
+    this.onLaneRemove = this.onLaneRemove.bind(this);
+    this.onCardRemove = this.onCardRemove.bind(this);
+    this.onLaneRename = this.onLaneRename.bind(this);
 
     let contractAddress = process.env.ROPSTEN_CONTRACT_HANDLER;
     if (this.props.network && this.props.network.includes('binance')) contractAddress = process.env.BINANCE_CONTRACT_HANDLER;
@@ -84,33 +98,33 @@ class CompanyUI extends React.Component {
   }
 
   loadLicense(licenseAddr) {
-    const { web3 } = this.props;
-    const liContract = web3 ? new web3.eth.Contract(abi.LICENSE_ABI, licenseAddr) : null;
-    if (!liContract) return;
+    // const { web3 } = this.props;
+    // const liContract = web3 ? new web3.eth.Contract(abi.LICENSE_ABI, licenseAddr) : null;
+    // if (!liContract) return;
 
-    Promise.all([
-      func.L_get_admin(liContract),
-      func.L_get_owner(liContract),
-      func.L_get_expiration_timestamp(liContract),
-      func.L_get_is_for_sale(liContract),
-    ])
-    .then(([admin, owner, expiry, forSale]) => {
-      this.setState(prevState => ({
-        licenses: {
-          ...prevState.licenses,
-          [licenseAddr]: {
-            type: 'license',
-            addr: licenseAddr,
-            liContract,
-            admin,
-            owner,
-            expiry: expiry ? '' : new Date(expiry).toISOString().split('T')[0],
-            forSale,
-          },
-        },
-      }))
-    })
-    .catch(err => console.error(err));
+    // Promise.all([
+    //   func.L_get_admin(liContract),
+    //   func.L_get_owner(liContract),
+    //   func.L_get_expiration_timestamp(liContract),
+    //   func.L_get_is_for_sale(liContract),
+    // ])
+    // .then(([admin, owner, expiry, forSale]) => {
+    //   this.setState(prevState => ({
+    //     cards: {
+    //       ...prevState.cards,
+    //       [licenseAddr]: {
+    //         type: 'license',
+    //         addr: licenseAddr,
+    //         liContract,
+    //         admin,
+    //         owner,
+    //         expiry: expiry ? '' : new Date(expiry).toISOString().split('T')[0],
+    //         forSale,
+    //       },
+    //     },
+    //   }))
+    // })
+    // .catch(err => console.error(err));
   }
 
   loadSoftwares(event) {
@@ -138,11 +152,11 @@ class CompanyUI extends React.Component {
           handlerContract,
         })
 
-        softwares.forEach(sw => {
-          if (sw.licenses && sw.licenses.length) {
-            sw.licenses.forEach(license => this.loadLicense(license));
-          }
-        });
+        // softwares.forEach(sw => {
+        //   if (sw.licenses && sw.licenses.length) {
+        //     sw.licenses.forEach(license => this.loadLicense(license));
+        //   }
+        // });
       })
         .catch(err => func.showLogs({ type: '[ERROR]:', msg: err }));
   }
@@ -286,6 +300,30 @@ class CompanyUI extends React.Component {
     });
   }
 
+  onNewCard(args) {
+  console.log("🚀 ~ file: companyView.jsx ~ line 303 ~ CompanyUI ~ onNewCard ~ args", args)
+  }
+
+  onNewCardConfirm(draftCard) {
+    console.log("🚀 ~ file: companyView.jsx ~ line 307 ~ CompanyUI ~ onNewCardConfirm ~ draftCard", draftCard)
+    return {
+      id: new Date().getTime(),
+      ...draftCard
+    };
+  }
+
+  onLaneRemove(args) {
+  console.log("🚀 ~ file: companyView.jsx ~ line 315 ~ CompanyUI ~ onLaneRemove ~ args", args)
+  }
+
+  onCardRemove(args) {
+  console.log("🚀 ~ file: companyView.jsx ~ line 320 ~ CompanyUI ~ onCardRemove ~ args", args)
+  }
+
+  onLaneRename(args) {
+  console.log("🚀 ~ file: companyView.jsx ~ line 325 ~ CompanyUI ~ onLaneRename ~ args", args)
+  }
+
   render() {
     const {
       contractAddress,
@@ -294,50 +332,41 @@ class CompanyUI extends React.Component {
       currSw,
       currAdmin,
     } = this.state;
+      console.log("🚀 ~ file: company.jsx ~ line 298 ~ CompanyUI ~ render ~ softwares", softwares)
     const mainBGColor = 'lightgrey';
     const bgColor = this.props.bgColor || 'lightgrey';
     const currentSoftware = softwares.find(sw => sw.addr === currSw);
     return (
       <div className="block-main" style={{ backgroundColor: mainBGColor }}>
-        <div className="block-sub" style={{ bgColor }}>
-          <form name="s_address" onSubmit={this.loadSoftwares}>
-            <label>
-              <span className="description">Handler contract address:</span>
-              <input type="text" value={contractAddress} name="contractAddress" onChange={this.handleInputChange} size="50" disabled />
-            </label>
-            <input type="submit" value="Load softwares" />
-          </form>
-        </div>
-        {softwares.length ? (
-          <>
-            <form name="f_sw" style={{ marginTop: '10px', marginBottom: '10px' }}>
-              <label>
-                <span className="description">Software:
-                <select name={`sw_${currSw}`} value={currSw} onChange={this.handleSwSelect} onBlur={this.handleSwSelect}>
-                  {softwares.map(item => (
-                    <option key={item.addr} value={item.addr}>{`${item.name} (version: ${item.version})`}</option>
-                  ))}
-                </select>
-                </span>
-              </label>
-            </form>
-            {currentSoftware && currentSoftware.licenses && currentSoftware.licenses.length
-              ? currentSoftware.licenses.map((license, i) => {
-                return (
-                  <LicenseInfo
-                    key={'lc' + i}
-                    license={licenses[license] || {}}
-                    setForSale={this.setLForSale}
-                    setDate={this.setLDate}
-                    setOwner={this.setLOwner}
-                    setAdmin={this.setLAdmin}
-                    bgColor={bgColor}
-                  />
-                );
-              })
-              : (<h4>No License for this software</h4>)}
-          </>
-        ) : null}
+        {softwares && softwares.length ? (
+          // <Board
+          //   allowRemoveLane
+          //   allowRenameColumn
+          //   allowRemoveCard
+          //   disableColumnDrag
+          //   disableCardDrag
+          //   onLaneRemove={this.onLaneRemove}
+          //   onCardRemove={this.onCardRemove}
+          //   onLaneRename={this.onLaneRename}
+          //   allowAddCard={{ on: "top" }}
+          //   onNewCardConfirm={draftCard => this.onNewCardConfirm(draftCard)}
+          //   onCardNew={this.onNewCard}
+          //   // renderColumnHeader={
+          //   //   ({ title }, { removeColumn, renameColumn, addCard }) => (
+          //   //     <CardHeader>
+          //   //       {title}
+          //   //       <button type='button' onClick={removeColumn}>Remove Column</button>
+          //   //       <button type='button' onClick={() => renameColumn('New title')}>Rename Column</button>
+          //   //       <button type='button' onClick={() => addCard({ id: 99, title: 'New Card' })}>Add Card</button>
+          //   //     </CardHeader>
+          //   // )}
+          // >
+          //   {{ columns: softwares }}
+          // </Board>
+          null
+        ) : (
+          <Loader />
+        )}
       </div>
     );
   }

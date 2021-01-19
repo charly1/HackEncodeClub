@@ -1,6 +1,6 @@
 import React from "react"
 import Menu from "../components/display/menu";
-import CustomerView from "../components/display/customer";
+import CustomerView from "../components/display/companyView";
 
 const Page = () => {
   return (

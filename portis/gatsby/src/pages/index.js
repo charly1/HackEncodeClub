@@ -1,6 +1,5 @@
 import React from "react"
-import Menu from "../components/display/menu";
-import CompanyView from "../components/display/company";
+import LayoutView from "../components/tabs/layout";
 
 const Page = () => {
   return (
@@ -8,8 +7,7 @@ const Page = () => {
       <title>Dapp Web UI</title>
       <meta charSet="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
-      <Menu type="company" />
-      <CompanyView 
+      <LayoutView 
         bgColor="red"
         mainBgColor="gold"
       />
