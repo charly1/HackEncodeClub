@@ -1,6 +1,7 @@
 const fs = require('fs'); 
 const Web3 = require('web3');
 const Provider = require('@truffle/hdwallet-provider');
+const { ethers } = require('ethers');
 
 address_account_1 = '0xFe5a44605eEd83DAe7e2CA1A83F84Ed61Ce38DCD';
 private_account_1 = '0xe5944af0847c204cee609f7112c07a1a9331533507dab4128405d271ee11c9f9';
@@ -36,19 +37,9 @@ var web3 = new Web3(provider);
 
 account = web3.eth.accounts.privateKeyToAccount(privateKey)
 
-// var solc = null;
-// require('solc').loadRemoteVersion(solidity_compiler_version, async (err, new_solce) => {
-// 	if (err) 
-// 		console.error("ERROR", err); 
-// 	else {
-// 		console.log("Successfully imported solidity compiler: " + solidity_compiler_version)
-// 		solc = new_solce;
-// 		await main();
-// 	} 
-// });
-
-function compile(optimize=true) {
+function compile_contracts(optimize=true) {
 	return new Promise( (resolve, reject) => {
+		console.log("Loading compiler...")
 		require('solc').loadRemoteVersion(solidity_compiler_version, (err, solc) => {
 			if (err) {
 				console.error("ERROR", err); 
@@ -74,7 +65,7 @@ function compile(optimize=true) {
 				for (let contractName in output.contracts.contract_file) {
 					console.log("exporting contract", contractName)
 					fs.writeFileSync('./' + contractName + '_bytecode.json', JSON.stringify(output.contracts.contract_file[contractName].evm.bytecode, 0, 2));
-					fs.writeFileSync('./' + contractName + '.hex', output.contracts.contract_file[contractName].evm.deployedBytecode.object);
+					// fs.writeFileSync('./' + contractName + '_bytecode.json', output.contracts.contract_file[contractName].evm.bytecode);
 					fs.writeFileSync('./' + contractName + '_abi.json', JSON.stringify(output.contracts.contract_file[contractName].abi, 0, 2));
 				}
 
@@ -84,51 +75,145 @@ function compile(optimize=true) {
 	});
 }
 
-function deploy(contractName='SoftwareHandler') {
+function deploy_contract(contractName='SoftwareHandler') {
 
 	return new Promise( (resolve, reject) => {
 
-		// contract object
-		var contract = new web3.eth.Contract(JSON.parse(fs.readFileSync('./' + contractName + '_abi.json').toString()));
+		network = 'ropsten';
+		provider = new ethers.providers.InfuraProvider(network, '709fd1df01b54f5ab3b9f696894dfb10');
+		// Creating a signing account from a private key
+		signer = new ethers.Wallet(account.privateKey, provider);
+		// Using the signing account to deploy the contract
+		factory = new ethers.ContractFactory(
+					JSON.parse(fs.readFileSync('./' + contractName + '_abi.json').toString()),
+					JSON.parse(fs.readFileSync('./' + contractName + '_bytecode.json').toString()), 
+					signer);
+		contract = null 
+		factory.deploy()
+			.then(res => {
+				contract = res;
+				console.log('Mining transaction...');
+				console.log(`https://${network}.etherscan.io/tx/${contract.deployTransaction.hash}`);
 
-		var deployement = contract.deploy({
-			data: '0x' + fs.readFileSync('./' + contractName + '.hex').toString(),
-		    arguments: []
-		})
-
-		var gasEstimated = 0;
-
-		deployement.estimateGas()
-			.then(gas=>{return deployement.estimateGas()})
-			.then(gas => {
-				gasEstimated = gas;
-				console.log("estimated gas to deploy contract:", gas);
-
-				return web3.eth.getTransactionCount(account.address);
+				// Waiting for the transaction to be mined
+				return contract.deployTransaction.wait();
 			})
-			.then(nonce => {
-				return deployement.send({
-				    from: account.address,
-				    gas: parseInt(gasEstimated*1.1),
-				    nonce: nonce,
-				});
+			.then(() => {
+				// The contract is now deployed on chain!
+				console.log(`Contract deployed at ${contract.address}`);
+				resolve(contract.address)
 			})
-			.then(newContractInstance => {
-
-				console.log(`Successfully deployed contract: https://ropsten.etherscan.io/address/${newContractInstance.options.address}`);
-				resolve(newContractInstance.options.address);
-			})
-			.catch(err => {
+			.catch( err => {
 				reject(err);
 			})
 	});
 }
 
+function _signTransaction(_contract, _encodedABI, _account, _gas) {
+    return web3.eth.signTransaction({
+        data: _encodedABI,
+        from: _account,
+        gas: _gas,
+        to: _contract.options.address,
+    })
+      .then(signedTx => {
+          return web3.eth.sendSignedTransaction(signedTx.raw);
+      })
+      .then(res => {
+          return res;
+      })
+      .catch(err => {
+          console.error("An error occured while calling a payable func:", err);
+          return false;
+      });
+}
+
+function create_software(software_handler_adr, name, version, license_time_default=0, software_admin=account.address) {
+
+	var contract_sh = new web3.eth.Contract(JSON.parse(fs.readFileSync('./SoftwareHandler_abi.json').toString()), software_handler_adr);
+
+	const tx_call = contract_sh.methods.addSoftware(name, version, license_time_default, software_admin);
+
+	return tx_call.estimateGas({from:account.address})
+		.then(gas => {
+			return _signTransaction(contract_sh, tx_call.encodeABI(), account.address, gas);
+		})
+		.then(res => {
+			return contract_sh.methods.getNbOfSoftware().call();
+		})
+		.then(nb => {
+			return contract_sh.methods.softwares(nb-1).call()
+		})
+		.catch(err => {
+			console.error(err);
+			return false;
+		})
+}
+
+function create_license(software_adr, admin=account.address, owner=account.address, expiration_timestamp=0) {
+
+	var contract_s = new web3.eth.Contract(JSON.parse(fs.readFileSync('./Software_abi.json').toString()), software_adr);
+
+	const tx_call = contract_s.methods.add_license(admin, owner, expiration_timestamp);
+
+	return tx_call.estimateGas({from:account.address})
+		.then(gas => {
+			return _signTransaction(contract_s, tx_call.encodeABI(), account.address, gas);
+		})
+		.then(res => {
+			return contract_s.methods.get_nb_license().call();
+		})
+		.then(nb => {
+			return contract_s.methods.licenses(nb-1).call()
+		})
+		.catch(err => {
+			console.error(err);
+			return false;
+		})
+}
+
+function set_license_for_sale(license_adr, price=5000000000000000) {
+
+	var contract_l = new web3.eth.Contract(JSON.parse(fs.readFileSync('./License_abi.json').toString()), license_adr);
+	const tx_call = contract_l.methods.set_for_sale(price);
+
+	return tx_call.estimateGas({from:account.address})
+		.then(gas => {
+			return _signTransaction(contract_l, tx_call.encodeABI(), account.address, gas);
+		})
+		.catch(err => {
+			console.error(err);
+			return false;
+		})
+}
+
 (async function main() {
 	
 	try {
-		// await compile();
-		await deploy();
+		console.log("## compiling contract...");
+		await compile_contracts();
+		console.log("Successfully compiled contract(s)\n")
+
+		console.log("## creating SoftwareHandler...");
+		var software_handler_adr = await deploy_contract();
+		console.log("successfully created: " + software_handler_adr + "\n");
+
+		console.log("## creating Software...");
+		var software_adr = await create_software(software_handler_adr, "SoftwareName", "1.0.0", 0, account.address);
+		console.log("successfully created: " + software_adr + "\n");
+
+		console.log("## creating License 1...");
+		var license_1_adr = await create_license(software_adr, account.address, account.address, 0);
+		console.log("successfully created: " + license_1_adr + "\n");
+
+		console.log("## creating License 2...");
+		var license_2_adr = await create_license(software_adr, account.address, account.address, 0);
+		console.log("successfully created: " + license_2_adr + "\n");
+
+		console.log("## setting License 2 for sale");
+		await set_license_for_sale(license_2_adr, price=5000000000000000);
+		console.log("successfully set for sale !")
+
 		console.log ("all done...")
 	}
 	catch (err) {
