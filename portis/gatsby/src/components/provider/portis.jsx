@@ -1,7 +1,7 @@
 import React from "react"
 import Web3 from "web3";
-import { showLogs, typeCheckAddress } from '../utils';
 
+import { showLogs, typeCheckAddress } from '../utils';
 
 function portisWrapper(WrappedComponent) {
   class Portis extends React.Component {
@@ -151,7 +151,9 @@ function portisWrapper(WrappedComponent) {
     }
 
     render() {
-      const { portis, web3, logged, email, address, network, reputation, balance } = this.state;
+      const {
+        portis, web3, logged, email, address, network, reputation, balance,
+      } = this.state;
       return (
         <>
           <WrappedComponent
@@ -168,7 +170,6 @@ function portisWrapper(WrappedComponent) {
             handleSubmit={this.handleSubmit}
             handleLogout={this.handleLogout}
             isLoggedIn={this.isLoggedIn}
-            // {...this.props}
           />
         </>
       );

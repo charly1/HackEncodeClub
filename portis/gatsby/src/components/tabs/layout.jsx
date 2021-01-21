@@ -3,7 +3,6 @@ import { ButtonGroup, Button, Paper, Grid, Typography } from '@material-ui/core'
 
 import withPortisProvider from '../provider/portis';
 import PortisDisplay from '../display/portis';
-import Loader from '../display/loader';
 import SoftwarePage from './software';
 import LicensePage from './license';
 import BuyPage from './buy';
@@ -18,10 +17,6 @@ class Layout extends React.Component {
       type: null,
       drawerOpen: false,
     }
-  }
-
-  componentDidMount() {
-    // load portis
   }
 
   openDrawer() {
@@ -51,32 +46,51 @@ class Layout extends React.Component {
   }
 
   render() { // display tabs buttons
-    const { drawerOpen, type } = this.state;
+    const { drawerOpen, type, content } = this.state;
     const {
       portis, web3, logged, email, address, network, reputation, balance,
       getBalance, handleSubmit, handleLogout, isLoggedIn,
     } = this.props;
+
     const primColor = '#3f51b5';
     const primLight = '#757de8';
     const btnColor = "#3f51b552";
+
     return (
       <div>
         <Paper elevation={0}>
           <Grid container>
             <Grid item xs={12}>
-              <Button variant="contained" size="large" style={{ width: '350px', margin: '5px' }} onClick={() => this.openDrawer()}>
+              <Button
+                variant="contained"
+                size="large"
+                style={{ width: '350px', margin: '5px' }}
+                onClick={() => this.openDrawer()}
+              >
                 {email || 'Portis'}
               </Button>
             </Grid>
             <Grid item>
               <ButtonGroup color="primary" aria-label="outlined primary button group">
-                <Button variant="outlined" onClick={() => this.handleClick('software')} style={{ backgroundColor: type === 'software' ? btnColor : "inherit" }}>
+                <Button
+                  variant="outlined"
+                  onClick={() => this.handleClick('software')}
+                  style={{ backgroundColor: type === 'software' ? btnColor : "inherit" }}
+                >
                   My Softwares
                 </Button>
-                <Button variant="outlined" onClick={() => this.handleClick('license')} style={{ backgroundColor: type === 'license' ? btnColor : "inherit" }}>
+                <Button
+                  variant="outlined"
+                  onClick={() => this.handleClick('license')}
+                  style={{ backgroundColor: type === 'license' ? btnColor : "inherit" }}
+                >
                   My Licenses
                 </Button>
-                <Button variant="outlined" onClick={() => this.handleClick('buy')} style={{ backgroundColor: type === 'buy' ? btnColor : "inherit" }}>
+                <Button
+                  variant="outlined"
+                  onClick={() => this.handleClick('buy')}
+                  style={{ backgroundColor: type === 'buy' ? btnColor : "inherit" }}
+                >
                   Buy License
                 </Button>
               </ButtonGroup>
@@ -84,7 +98,7 @@ class Layout extends React.Component {
           </Grid>
         </Paper>
         <Grid container>
-            {this.state.content ? this.state.content : <Loader />}
+            {content}
         </Grid>
         <Drawer isOpen={drawerOpen} onClose={this.onDrawerClose} >
           {portis ? (
