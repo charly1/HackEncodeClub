@@ -45,7 +45,7 @@ const useStyles = makeStyles(theme => ({
 
 const Search = () => {
   const classes = useStyles();
-  const [value, setValue] = useState(null);
+  const [value, setValue] = useState('');
   return (
     <div className={classes.search}>
       <div className={classes.searchIcon}>

@@ -5,8 +5,8 @@ import Kanban from '../display/kanban';
 import CheckBox from '../display/checkFilters';
 
 const licenses = [
-  { title: 'Adobe', address: '0x12neo329239d0', total: 2 , date: new Date().toISOString(), info: 'you are owner' },
-  { title: 'Office', address: '0x12neoas329239d0', total: 2 },
+  { name: 'Adobe', swAddress: '0x12neo329239d0', liAddress: '0xgregc0eco329239d0', total: 2 , date: new Date(), info: 'you are owner' },
+  { name: 'Office', swAddress: '0x12neoas329239d0', liAddress: '0xDAsx0eco329239d0', total: 2 },
 ];
 
 class Licenses extends React.Component {
@@ -41,15 +41,16 @@ class Licenses extends React.Component {
           <SearchBar />
         </Grid>
         <Grid>
-          {licenses.map(el => (
+          {licenses && licenses.length ? licenses.map(el => (
             <Kanban
-              key={el.address}
-              details={el}
-              {...el}
+              key={el.liAddress}
+              item={el}
+              title={el.name}
+              address={el.liAddress}
               openKanban={this.openKanban}
               buttonLabel="View details"
             />
-          ))}
+          )) : null}
         </Grid>
       </Paper>
     );

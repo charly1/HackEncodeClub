@@ -11,6 +11,14 @@ const DrawerItem = ({
     <div>
       <Drawer anchor="left" open={isOpen} onClose={onClose}>
         {children}
+        <Button
+          variant="outlined"
+          color="primary"
+          style={{ margin: '15px' }}
+          onClick={onClose}
+        >
+          Close
+        </Button>
       </Drawer>
     </div>
   );

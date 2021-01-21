@@ -1,14 +1,11 @@
 import React from "react"
 import { Button, Paper, Grid, Typography, Dialog } from '@material-ui/core';
+
+import withLicenseForSale from '../provider/forSale';
 import SearchBar from '../display/searchbar';
 import Kanban from '../display/kanban';
 import CheckBox from '../display/checkFilters';
 import BuyForm from "../modal/buyForm";
-
-const softwares = [
-  { title: 'Adobe', address: '0x12neo329239d0', total: 2 , date: new Date().toISOString(), info: 'you are owner' },
-  { title: 'Office', address: '0x12neoas329239d0', total: 2 },
-];
 
 class Buy extends React.Component {
   constructor(props) {
@@ -23,37 +20,29 @@ class Buy extends React.Component {
     }
   }
 
-  componentDidMount() {
-    // load softwares
-  }
-
   handleFilter(filters) {
     this.setState(prevState => ({
       filters: filters ? { ...prevState.filters, ...filters } : {},
     }));
   }
 
-  openKanban(details) {
-    console.log("🚀 ~ file: softwares.jsx ~ line 33 ~ softwares ~ openKanban ~ details", details)
-    // query item
-    // then open modal
+  openKanban(item, contract) {
     this.setState({
       modalOpen: true,
-      currentLicense: {
-        name: 'LI1',
-        swAddress: '0x3r290j0eiwjed',
-        liAddress: '0x3r290j0eiwjed',
-      },
+      currentLicense: item,
+      currentContract: contract,
     });
   }
 
-  buyLicense(arg) {
-  console.log("🚀 ~ file: buy.jsx ~ line 41 ~ Buy ~ buyLicense ~ arg", arg)
+  buyLicense() {
+    const { currentLicense, currentContract } = this.state;
+  console.log("🚀 ~ file: ~ arg", currentLicense)
     this.setState({ modalOpen: false });
   }
 
   render() {
     const { currentLicense, filters, modalOpen } = this.state;
+    const { licenses } = this.props;
     return (
       <Paper elevation={0} style={{ backgroundColor: '#bec9e2', width: '100%' }}>
         <Grid>
@@ -61,30 +50,36 @@ class Buy extends React.Component {
           <SearchBar />
         </Grid>
         <Grid>
-          {softwares.map(el => (
+          {licenses && licenses.length ? licenses.map(el => (
             <Kanban
-              key={el.address}
-              details={el}
-              {...el}
-              openKanban={this.openKanban}
+              key={el.item.license_address}
+              title={el.item.name}
+              date={el.item.expiration_timestamp}
+              dateLabel="Expiry date"
+              price={el.item.selling_price_ETH}
+              adress={el.item.software_address_linked}
+              openKanban={() => this.openKanban(el.item, el.contract)}
               buttonLabel="Buy"
             />
-          ))}
+          )) : null}
         </Grid>
         <Dialog
           aria-labelledby="simple-dialog-title"
-          fullWidth
+          fullScreen={visualViewport.width < 500}
           onClose={() => this.setState({ modalOpen: false })}
           open={modalOpen}
         >
-          <BuyForm
-            license={currentLicense}
-            buyFunction={this.buyLicense}
-          />
+          <div style={{ minHeight: '95vh', minWidth: '600px', maxWidth: '100vw' }}>
+            <BuyForm
+              license={currentLicense}
+              buyFunction={this.buyLicense}
+              closeFunction={() => this.setState({ modalOpen: false })}
+            />
+          </div>
         </Dialog>
       </Paper>
     );
   }
 }
 
-export default Buy;
+export default withLicenseForSale(Buy);

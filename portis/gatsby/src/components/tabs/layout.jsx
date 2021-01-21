@@ -31,13 +31,13 @@ class Layout extends React.Component {
     let content = null;
     switch (type) {
       case 'software':
-        content = <SoftwarePage />
+        content = <SoftwarePage {...this.props} />
         break;
       case 'license':
-        content = <LicensePage />
+        content = <LicensePage {...this.props} />
         break;
       case 'buy':
-        content = <BuyPage />
+        content = <BuyPage {...this.props} />
         break;
       default:
         break;
@@ -58,45 +58,43 @@ class Layout extends React.Component {
 
     return (
       <div>
-        <Paper elevation={0}>
-          <Grid container>
-            <Grid item xs={12}>
-              <Button
-                variant="contained"
-                size="large"
-                style={{ width: '350px', margin: '5px' }}
-                onClick={() => this.openDrawer()}
-              >
-                {email || 'Portis'}
-              </Button>
-            </Grid>
-            <Grid item>
-              <ButtonGroup color="primary" aria-label="outlined primary button group">
-                <Button
-                  variant="outlined"
-                  onClick={() => this.handleClick('software')}
-                  style={{ backgroundColor: type === 'software' ? btnColor : "inherit" }}
-                >
-                  My Softwares
-                </Button>
-                <Button
-                  variant="outlined"
-                  onClick={() => this.handleClick('license')}
-                  style={{ backgroundColor: type === 'license' ? btnColor : "inherit" }}
-                >
-                  My Licenses
-                </Button>
-                <Button
-                  variant="outlined"
-                  onClick={() => this.handleClick('buy')}
-                  style={{ backgroundColor: type === 'buy' ? btnColor : "inherit" }}
-                >
-                  Buy License
-                </Button>
-              </ButtonGroup>
-            </Grid>
+        <Grid container justify="center">
+          <Grid item>
+            <Button
+              variant="contained"
+              size="large"
+              style={{ width: '350px', margin: '5px', alignSelf: 'center' }}
+              onClick={() => this.openDrawer()}
+            >
+              {email || 'Portis'}
+            </Button>
           </Grid>
-        </Paper>
+          <Grid item style={{ margin: '5px' }}>
+            <ButtonGroup color="primary" aria-label="outlined primary button group" disabled={!logged}>
+              <Button
+                variant="outlined"
+                onClick={() => this.handleClick('software')}
+                style={{ backgroundColor: type === 'software' ? btnColor : "inherit" }}
+              >
+                My Softwares
+              </Button>
+              <Button
+                variant="outlined"
+                onClick={() => this.handleClick('license')}
+                style={{ backgroundColor: type === 'license' ? btnColor : "inherit" }}
+              >
+                My Licenses
+              </Button>
+              <Button
+                variant="outlined"
+                onClick={() => this.handleClick('buy')}
+                style={{ backgroundColor: type === 'buy' ? btnColor : "inherit" }}
+              >
+                Buy License
+              </Button>
+            </ButtonGroup>
+          </Grid>
+        </Grid>
         <Grid container>
             {content}
         </Grid>

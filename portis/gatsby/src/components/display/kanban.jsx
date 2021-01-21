@@ -7,7 +7,7 @@ import { Grid, Card, CardActions, CardContent, Button, Typography }  from '@mate
 const useStyles = makeStyles({
   root: {
     display: 'inline-block',
-    minWidth: 275,
+    width: 270,
     maxWidth: 320,
     margin: '6px',
   },
@@ -19,15 +19,18 @@ const useStyles = makeStyles({
 
 const Kanban = ({
   title,
-  address,
-  total,
+  adress,
   date,
-  info,
-  details,
+  dateLabel='',
+  price,
+  total,
+  version,
   openKanban,
   buttonLabel,
 }) => {
   const classes = useStyles();
+  let displayDate = null;
+  if (date && date !== '0') displayDate = new Date(date).toISOString().split('.')[0].split('T');
 
   return (
     <Card className={classes.root}>
@@ -35,12 +38,19 @@ const Kanban = ({
         <Typography variant="h5" component="h2">
           {title}
         </Typography>
-        <Typography className={classes.pos} color="textSecondary">
-          {address}
-        </Typography>
+        {adress ? (
+          <Typography className={classes.pos} color="textSecondary" style={{ overflowWrap: "break-word" }}>
+            {adress}
+          </Typography>
+        ) : null}
+        {price ? (
+          <Typography variant="body2" component="p">
+            {`Price: ${price} ETH`}
+          </Typography>
+        ) : null}
         {date ? (
           <Typography variant="body2" component="p">
-            {date}
+            {`${dateLabel} ${displayDate || ': Never'}`}
           </Typography>
         ) : null}
         {total ? (
@@ -48,14 +58,14 @@ const Kanban = ({
             Number: {total}
           </Typography>
         ) : null}
-        {info ? (
+        {version ? (
           <Typography variant="body1" component="p">
-            {info}
+            {`version: ${version}`}
           </Typography>
         ) : null}
       </CardContent>
       <CardActions>
-        <Button size="small" variant="outlined" onClick={() => openKanban(details)}>{buttonLabel || 'View more'}</Button>
+        <Button size="small" variant="outlined" onClick={openKanban}>{buttonLabel || 'View more'}</Button>
       </CardActions>
     </Card>
   );

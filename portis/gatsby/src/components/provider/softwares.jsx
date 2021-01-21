@@ -2,7 +2,6 @@ import React from "react"
 
 import abi from '../../config/abi';
 import * as func from '../utils';
-import LicenseInfo from './licenceUI';
 
 function loadAll(contract_sh, web3, admin) {
   return func.SH_get_softwares_with_admin(contract_sh, admin)
@@ -10,7 +9,7 @@ function loadAll(contract_sh, web3, admin) {
       if (sofwares) {
         const promisesSoftware = [];
         sofwares.forEach(software => {
-          const swContract = web3 ? new web3.eth.Contract(abi.CONTRACT_ABI, software) : null;
+          const swContract = web3 ? new web3.eth.Contract(abi.SOFTWARE_ABI, software) : null;
           if (swContract) {
             promisesSoftware.push(
               func.S_list_licenses(swContract)
@@ -117,6 +116,7 @@ function softwareProvider(WrappedComponent) {
     loadSoftwares(event) {
       if (event) event.preventDefault(); // avoid page reloading
       const { web3, address } = this.props;
+      console.log("🚀 ~ file: softwares.jsx ~ line 120 ~ SoftwareFunctions ~ loadSoftwares ~ address", address)
       const { contractAddress } = this.state;
       if (!func.typeCheckAddress(contractAddress)) {
         alert('WARNING: contract invalid characters !');
@@ -295,6 +295,7 @@ function softwareProvider(WrappedComponent) {
         currSw,
         currAdmin,
       } = this.state;
+        console.log("🚀 ~ file: softwares.jsx ~ line 298 ~ SoftwareFunctions ~ render ~ softwares", softwares)
       const mainBGColor = 'lightgrey';
       const bgColor = this.props.bgColor || 'lightgrey';
       const currentSoftware = softwares.find(sw => sw.addr === currSw);
@@ -302,6 +303,8 @@ function softwareProvider(WrappedComponent) {
         <WrappedComponent
           contractAddress
           loadSoftwares={this.loadSoftwares}
+          softwares={softwares}
+          licenses={licenses}
         />
       );
 
@@ -358,4 +361,4 @@ function getDisplayName(WrappedComponent) {
   return WrappedComponent.displayName || WrappedComponent.name || 'Component';
 }
 
-export default SoftwareProvider;
+export default softwareProvider;
