@@ -1,8 +1,7 @@
 import React from "react"
 import Web3 from "web3";
-import { showLogs, typeCheckAddress } from './utils';
-import PortisDisplay from './display/portis';
-import Loader from './display/loader';
+import { showLogs, typeCheckAddress } from '../utils';
+
 
 function portisWrapper(WrappedComponent) {
   class Portis extends React.Component {
@@ -152,41 +151,25 @@ function portisWrapper(WrappedComponent) {
     }
 
     render() {
-      const { portis, web3, logged, email, address, network, tosign, signed, reputation, balance } = this.state;
-      const { title, mainBgColor, bgColor } = this.props;
-      if (!portis) return <h1>Portis module not loaded...</h1>
+      const { portis, web3, logged, email, address, network, reputation, balance } = this.state;
       return (
         <>
-          <PortisDisplay
+          <WrappedComponent
+            portis={portis}
+            web3={web3}
             email={email}
             network={network}
             address={address}
             logged={logged}
             balance={balance}
+            showPortis={() => portis.showPortis()}
             reputation={reputation}
             getBalance={this.getBalance}
             handleSubmit={this.handleSubmit}
             handleLogout={this.handleLogout}
             isLoggedIn={this.isLoggedIn}
-            showPortis={() => portis.showPortis()}
-            title={title}
-            mainBgColor={mainBgColor}
-            bgColor={bgColor}
+            // {...this.props}
           />
-          {logged ? (
-            <WrappedComponent
-              portis={portis}
-              web3={web3}
-              email={email}
-              network={network}
-              address={address}
-              logged={logged}
-              showPortis={() => portis.showPortis()}
-              {...this.props}
-            />
-          ) : (
-            <Loader />
-          )}
         </>
       );
     }

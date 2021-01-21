@@ -47,6 +47,7 @@ class Licenses extends React.Component {
               details={el}
               {...el}
               openKanban={this.openKanban}
+              buttonLabel="View details"
             />
           ))}
         </Grid>

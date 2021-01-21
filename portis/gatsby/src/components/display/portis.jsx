@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react"
 
 export function PortisDisplay(props) {
   const {
-    // wrapper props
     logged,
     network,
     balance,
@@ -14,7 +13,6 @@ export function PortisDisplay(props) {
     handleSubmit,
     getBalance,
     showPortis,
-    // user props
     title,
     mainBgColor,
     bgColor,

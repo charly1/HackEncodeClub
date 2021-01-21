@@ -1,6 +1,8 @@
 import React from "react"
 import { ButtonGroup, Button, Paper, Grid, Typography } from '@material-ui/core';
 
+import withPortisProvider from '../provider/portis';
+import PortisDisplay from '../display/portis';
 import Loader from '../display/loader';
 import SoftwarePage from './software';
 import LicensePage from './license';
@@ -50,6 +52,10 @@ class Layout extends React.Component {
 
   render() { // display tabs buttons
     const { drawerOpen, type } = this.state;
+    const {
+      portis, web3, logged, email, address, network, reputation, balance,
+      getBalance, handleSubmit, handleLogout, isLoggedIn,
+    } = this.props;
     const primColor = '#3f51b5';
     const primLight = '#757de8';
     const btnColor = "#3f51b552";
@@ -57,16 +63,13 @@ class Layout extends React.Component {
       <div>
         <Paper elevation={0}>
           <Grid container>
-            {/* <Grid item xs style={{ alignSelf: 'center' }}>
-              <Typography variant="h6" component="h1" style={{ borderRaduis: '5px', backgroundColor: primLight, padding: '3px', margin: '5px' }}>
-                User: blabla
-              </Typography>
-            </Grid> */}
+            <Grid item xs={12}>
+              <Button variant="contained" size="large" style={{ width: '350px', margin: '5px' }} onClick={() => this.openDrawer()}>
+                {email || 'Portis'}
+              </Button>
+            </Grid>
             <Grid item>
               <ButtonGroup color="primary" aria-label="outlined primary button group">
-                <Button variant="contained" disabled onClick={() => null}>
-                  User: blabla
-                </Button>
                 <Button variant="outlined" onClick={() => this.handleClick('software')} style={{ backgroundColor: type === 'software' ? btnColor : "inherit" }}>
                   My Softwares
                 </Button>
@@ -76,23 +79,45 @@ class Layout extends React.Component {
                 <Button variant="outlined" onClick={() => this.handleClick('buy')} style={{ backgroundColor: type === 'buy' ? btnColor : "inherit" }}>
                   Buy License
                 </Button>
-                <Button variant="outlined" onClick={() => this.openDrawer()}>
-                  Portis
-                </Button>
               </ButtonGroup>
             </Grid>
-            {/* <Grid xs style={{ alignItems: 'right' }}>
-              <Button variant="contained" style={{ margin: '5px 5px 5px 20px' }} size="large" onClick={() => this.openDrawer()}>Portis</Button>
-            </Grid> */}
           </Grid>
         </Paper>
         <Grid container>
             {this.state.content ? this.state.content : <Loader />}
         </Grid>
-        <Drawer isOpen={drawerOpen} onClose={this.onDrawerClose} />
+        <Drawer isOpen={drawerOpen} onClose={this.onDrawerClose} >
+          {portis ? (
+            <PortisDisplay
+            email={email}
+            network={network}
+            address={address}
+            logged={logged}
+            balance={balance}
+            reputation={reputation}
+            getBalance={getBalance}
+            handleSubmit={handleSubmit}
+            handleLogout={handleLogout}
+            isLoggedIn={isLoggedIn}
+            showPortis={() => portis.showPortis()}
+            title="Portis"
+            mainBgColor={primColor}
+            bgColor={primLight}
+          />
+          ) : (
+            <>
+              <Typography variant="h6" component="h1">
+                Portis
+              </Typography>
+              <Typography variant="body1" component="h4">
+                Could not load module...
+              </Typography>
+            </>
+          )}
+        </Drawer>
       </div>
     );
   }
 }
 
-export default Layout;
+export default withPortisProvider(Layout);

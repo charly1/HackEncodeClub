@@ -1,8 +1,8 @@
 import React from "react"
 import abi from '../../config/abi';
-import * as func from '../utils';
+import * as func from '../utils_old';
 import LicenseInfo from './licenceUI';
-import portisWrapper from '../wrapper';
+import portisWrapper from '../provider/portis';
 
 function loadAll(contract_sh, web3) {
   return func.SH_list_softwares(contract_sh)

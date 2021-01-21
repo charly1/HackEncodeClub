@@ -1,8 +1,8 @@
 import React from "react"
 
 import abi from '../../config/abi';
-import * as func from '../utils';
-import portisWrapper from "../wrapper";
+import * as func from '../utils_old';
+import portisWrapper from "../provider/portis";
 import LicenseInfo from './licenceUI';
 import Loader from './loader';
 
