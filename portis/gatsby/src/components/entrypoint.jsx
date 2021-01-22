@@ -53,7 +53,7 @@ class Layout extends React.Component {
             </Button>
           </Grid>
           <Grid item style={{ margin: '5px' }}>
-            <ButtonGroup color="primary" aria-label="outlined primary button group" disabled={!logged}>
+            <ButtonGroup key={type} color="primary" aria-label="outlined primary button group" disabled={!logged}>
               <Button
                 variant="outlined"
                 onClick={() => this.handleClick('software')}

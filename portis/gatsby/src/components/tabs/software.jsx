@@ -1,10 +1,10 @@
 import React from "react"
-import { Button, Paper, Grid, Typography } from '@material-ui/core';
+import { Button, Paper, Grid, Typography, Dialog } from '@material-ui/core';
 
 import SearchBar from '../display/searchbar';
 import Kanban from '../display/kanban';
 import CheckBox from '../display/checkFilters';
-
+import CreateForm from "../modal/createSoftware";
 
 class Softwares extends React.Component {
   constructor(props) {
@@ -35,19 +35,20 @@ class Softwares extends React.Component {
 
   render() {
     const { currentLicense, filters, modalOpen } = this.state;
-    const { softwares, loadSoftwares } = this.props;
+    const { softwares, loadSoftwares, createSoftware } = this.props;
     console.log("🚀 ~ file: software.jsx ~ line 41 ~ Softwares ~ render ~ softwares", softwares)
     return (
       <Paper elevation={0} style={{ backgroundColor: '#bec9e2', width: '100%' }}>
         <Grid>
-          <CheckBox handleFilter={this.handleFilter}/>
-          <SearchBar />
-          {/* <Button
-            variant="outlined"
-            onClick={() => loadSoftwares()}
+          <SearchBar items={softwares} searchFor="name" searchResult={(res) => console.log(res)} />
+          <Button
+            variant="contained"
+            color="primary"
+            style={{ width: '180px', margin: '5px 5px 18px 5px' }}
+            onClick={() => this.setState({ modalOpen: true })}
           >
-            Load
-          </Button> */}
+            Create software
+          </Button>
         </Grid>
         <Grid>
           {softwares && softwares.length ? softwares.map(el => (
@@ -65,17 +66,17 @@ class Softwares extends React.Component {
             />
           )) : null}
         </Grid>
-        {/* <Dialog
+        <Dialog
           aria-labelledby="simple-dialog-title"
           fullWidth
           onClose={() => this.setState({ modalOpen: false })}
           open={modalOpen}
         >
-          <BuyForm
-            license={currentLicense}
-            buyFunction={this.buyLicense}
+          <CreateForm
+            createSoftware={createSoftware}
+            closeFunction={() => this.setState({ modalOpen: false })}
           />
-        </Dialog> */}
+        </Dialog>
       </Paper>
     );
   }

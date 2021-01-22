@@ -18,6 +18,8 @@ class TabProvider extends React.Component {
     this.setLiForSale = this.setLiForSale.bind(this);
     this.setNewLiOwner = this.setNewLiOwner.bind(this);
     this.setLiExpiryDate = this.setLiExpiryDate.bind(this);
+    this.createLicense = this.createLicense.bind(this);
+    this.createSoftware = this.createSoftware.bind(this);
 
     this.state = {
       contractAddress: null,
@@ -104,6 +106,10 @@ class TabProvider extends React.Component {
       });
   }
 
+  createSoftware({ date, name, version }) {
+    console.log("create new SWOFTWARE", date, version, name)
+  }
+
   setLiForSale({ license, priceETH }) {
     console.log("sell LICENSE", license, priceETH)
   }
@@ -116,20 +122,26 @@ class TabProvider extends React.Component {
     console.log("set new owner LICENSE", license, newDate)
   }
 
+  createLicense({ price, date, software }) {
+    console.log("create new LICENSE", software, date)
+  }
+
   render() {
     const { swToShow, liToShow } = this.state;
-    const { type } = this.props;
+    const { type, address } = this.props;
 
     let content = null;
     switch (type) {
       case 'software':
         content = (
           <SoftwarePage
+            // softwares={swToShow}
             softwares={swToShow}
             loadSoftwares={this.loadSoftwares}
             getSWinfo={(args) => {
               this.getSWinfo(args)
             }}
+            createSoftware={this.createSoftware}
             {...this.props}
           />
         );
@@ -138,9 +150,11 @@ class TabProvider extends React.Component {
         content = (
           <LicensePage
             licenses={liToShow}
+            softwares={swToShow.filter(sw => sw.admin === address)}
             setForSale={this.setLiForSale}
             setNewOwner={this.setNewLiOwner}
             setExpiryDate={this.setLiExpiryDate}
+            createLicense={this.createLicense}
             {...this.props}
           />
         );

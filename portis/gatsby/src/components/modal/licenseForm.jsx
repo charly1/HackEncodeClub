@@ -4,6 +4,7 @@ import { Grid, Button, Typography, TextField, FormControlLabel, Checkbox } from 
 
 export function LicenseForm({
   license,
+  modifyLicense,
   sellFunction,
   changeOwner,
   changeExpiryDate,
@@ -136,7 +137,7 @@ export function LicenseForm({
             </Button>
           </div>
         </Grid>
-        <Grid style={{ display: 'flex', alignItems: 'center', marginTop: '15px' }}>
+        <Grid style={{ display: 'flex', alignItems: 'center', marginTop: '15px', marginBottom: '30px' }}>
           <div>
             <TextField
               label={date ? "Expiry date" : ""}

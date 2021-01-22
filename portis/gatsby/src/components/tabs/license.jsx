@@ -4,15 +4,18 @@ import SearchBar from '../display/searchbar';
 import Kanban from '../display/kanban';
 import CheckBox from '../display/checkFilters';
 import LicenseForm from "../modal/licenseForm";
+import CreateForm from "../modal/createLicense";
+
 
 class Licenses extends React.Component {
   constructor(props) {
     super(props);
     this.handleFilter = this.handleFilter.bind(this);
-    this.openKanban = this.openKanban.bind(this);
+    this.openModal = this.openModal.bind(this);
     this.state = {
       filters: {},
       modalOpen: false,
+      modalContent: null,
     }
   }
 
@@ -22,23 +25,60 @@ class Licenses extends React.Component {
     }));
   }
 
-  openKanban(item) {
-  console.log("🚀 ~ file: license.jsx ~ line 33 ~ Licenses ~ openKanban ~ details", item)
+  openModal(action, item) {
+    const {
+      setForSale, setNewOwner, setExpiryDate, createLicense, softwares,
+    } = this.props;
+    let modalContent = null;
+    switch(action) {
+      case 'edit':
+        modalContent = (
+          <LicenseForm
+            license={item}
+            sellFunction={setForSale}
+            changeOwner={setNewOwner}
+            changeExpiryDate={setExpiryDate}
+            closeFunction={() => this.setState({ modalOpen: false })}
+          />
+        );
+        break;
+      case 'create':
+        modalContent = (
+          <CreateForm
+            softwares={softwares}
+            createLicense={createLicense}
+            closeFunction={() => this.setState({ modalOpen: false })}
+          />
+        );
+        break;
+      default:
+        break;
+    }
     this.setState({
       modalOpen: true,
-      currentLicense: item,
+      modalContent,
     });
   }
 
   render() {
-    const { licenses, setForSale, setNewOwner, setExpiryDate } = this.props;
-    const { modalOpen, currentLicense } = this.state;
+    const { licenses, softwares } = this.props;
+    const { modalOpen, modalContent } = this.state;
+
 
     return (
       <Paper elevation={0} style={{ backgroundColor: '#bec9e2', width: '100%' }}>
         <Grid>
           <CheckBox handleFilter={this.handleFilter}/>
-          <SearchBar />
+          <SearchBar items={softwares} searchFor="name" />
+          <Button
+            disabled={!softwares.length}
+            variant="contained"
+            color="primary"
+            style={{ width: '180px', margin: '5px 5px 18px 5px' }}
+            onClick={() => this.openModal('create')}
+          >
+            Create license
+          </Button>
         </Grid>
         <Grid>
           {licenses && licenses.length ? licenses.map(el => (
@@ -51,7 +91,7 @@ class Licenses extends React.Component {
               version={el.version}
               forSale={el.license_for_sale}
               owner={el.owner}
-              openKanban={() => this.openKanban(el)}
+              openKanban={() => this.openModal('edit', el)}
               buttonLabel="View details"
             />
           )) : null}
@@ -63,13 +103,7 @@ class Licenses extends React.Component {
           open={modalOpen}
         >
           <div style={{ minHeight: '95vh', minWidth: '600px', maxWidth: '100vw' }}>
-            <LicenseForm
-              license={currentLicense}
-              sellFunction={setForSale}
-              changeOwner={setNewOwner}
-              changeExpiryDate={setExpiryDate}
-              closeFunction={() => this.setState({ modalOpen: false })}
-            />
+            {modalContent}
           </div>
         </Dialog>
       </Paper>

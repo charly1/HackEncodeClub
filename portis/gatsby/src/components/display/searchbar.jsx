@@ -43,7 +43,19 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const Search = () => {
+function searItem({ value, items, searchFor }) {
+  if (items && items.length) {
+    return items.filter(el => {
+      if(el[searchFor]) {
+        return el[searchFor].includes(value);
+      }
+      return false;
+    });
+  }
+  return [];
+}
+
+const Search = ({ items, searchFor, searchResult }) => {
   const classes = useStyles();
   const [value, setValue] = useState('');
   return (
@@ -59,7 +71,10 @@ const Search = () => {
         }}
         inputProps={{ 'aria-label': 'search' }}
         value={value}
-        onChange={(evt) => setValue(evt.target.value)}
+        onChange={(evt) => {
+          setValue(evt.target.value)
+          searchResult(searItem({ value, items, searchFor }));
+        }}
       />
     </div>
   );

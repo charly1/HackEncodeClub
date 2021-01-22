@@ -1,7 +1,6 @@
 import React from "react"
 import { Button, Paper, Grid, Typography, Dialog } from '@material-ui/core';
 
-import withLicenseForSale from '../provider/forSale';
 import SearchBar from '../display/searchbar';
 import Kanban from '../display/kanban';
 import CheckBox from '../display/checkFilters';
@@ -47,7 +46,7 @@ class Buy extends React.Component {
       <Paper elevation={0} style={{ backgroundColor: '#bec9e2', width: '100%' }}>
         <Grid>
           <CheckBox handleFilter={this.handleFilter}/>
-          <SearchBar />
+          <SearchBar items={[]} searchFor="name" />
         </Grid>
         <Grid>
           {licenses && licenses.length ? licenses.map(el => (
@@ -82,4 +81,4 @@ class Buy extends React.Component {
   }
 }
 
-export default withLicenseForSale(Buy);
+export default Buy;
