@@ -1,5 +1,5 @@
 import React from "react"
-import LayoutView from "../components/tabs/layout";
+import LayoutView from "../components/entrypoint";
 
 const Page = () => {
   return (
@@ -8,8 +8,9 @@ const Page = () => {
       <meta charSet="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <LayoutView 
-        bgColor="red"
-        mainBgColor="gold"
+        primColor="#3f51b5"
+        primLight="#757de8"
+        btnColor="#3f51b552"
       />
     </main>
   )

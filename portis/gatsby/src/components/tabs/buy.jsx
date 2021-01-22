@@ -55,9 +55,9 @@ class Buy extends React.Component {
               key={el.item.license_address}
               title={el.item.name}
               date={el.item.expiration_timestamp}
-              dateLabel="Expiry date"
+              dateLabel="Expiry date: "
               price={el.item.selling_price_ETH}
-              adress={el.item.software_address_linked}
+              address={el.item.software_address_linked}
               openKanban={() => this.openKanban(el.item, el.contract)}
               buttonLabel="Buy"
             />

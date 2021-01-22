@@ -1,15 +1,10 @@
 import React from "react"
 import { Button, Paper, Grid, Typography } from '@material-ui/core';
 
-import withSoftwareProvider from '../provider/softwares';
 import SearchBar from '../display/searchbar';
 import Kanban from '../display/kanban';
 import CheckBox from '../display/checkFilters';
 
-// const softwares = [
-//   { name: 'Adobe', swAddress: '0x12neo329239d0', liAddress: '0xgregc0eco329239d0', total: 2 , date: new Date(), info: 'you are owner' },
-//   { name: 'Office', swAddress: '0x12neoas329239d0', liAddress: '0xDAsx0eco329239d0', total: 2 },
-// ];
 
 class Softwares extends React.Component {
   constructor(props) {
@@ -27,8 +22,15 @@ class Softwares extends React.Component {
     }));
   }
 
-  openKanban(details) {
-  console.log("🚀 ~ file: softwares.jsx ~ line 33 ~ softwares ~ openKanban ~ details", details)
+  openKanban(software) {
+    const { getSWinfo } = this.props;
+    getSWinfo(software);
+  // console.log("🚀 ~ file: softwares.jsx ~ line 33 ~ softwares ~ openKanban ~ details", software)
+  //   this.setState({
+  //     // modalOpen: true,
+  //     // currentLicense: item,
+  //     // currentContract: contract,
+  //   });
   }
 
   render() {
@@ -50,11 +52,15 @@ class Softwares extends React.Component {
         <Grid>
           {softwares && softwares.length ? softwares.map(el => (
             <Kanban
-              key={el.swAddress}
-              item={el}
+              key={el.address}
               title={el.name}
-              address={el.swAddress}
-              openKanban={this.openKanban}
+              address={el.address}
+              date={el.license_time_default}
+              dateLabel="Expiry: "
+              total={el.nb_license}
+              totalLabel="Number of licenses "
+              version={el.version}
+              openKanban={() => this.openKanban(el)}
               buttonLabel="View Licenses"
             />
           )) : null}
@@ -75,4 +81,4 @@ class Softwares extends React.Component {
   }
 }
 
-export default withSoftwareProvider(Softwares);
+export default Softwares;

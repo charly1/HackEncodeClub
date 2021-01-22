@@ -19,12 +19,14 @@ const useStyles = makeStyles({
 
 const Kanban = ({
   title,
-  adress,
+  address,
   date,
   dateLabel='',
   price,
   total,
+  totalLabel='',
   version,
+  forSale,
   openKanban,
   buttonLabel,
 }) => {
@@ -38,9 +40,14 @@ const Kanban = ({
         <Typography variant="h5" component="h2">
           {title}
         </Typography>
-        {adress ? (
+        {address ? (
           <Typography className={classes.pos} color="textSecondary" style={{ overflowWrap: "break-word" }}>
-            {adress}
+            Address: {address}
+          </Typography>
+        ) : null}
+        {version ? (
+          <Typography variant="body1" component="p" style={{ marginBottom: '5px' }}>
+            {`version: ${version}`}
           </Typography>
         ) : null}
         {price ? (
@@ -50,17 +57,22 @@ const Kanban = ({
         ) : null}
         {date ? (
           <Typography variant="body2" component="p">
-            {`${dateLabel} ${displayDate || ': Never'}`}
+            {`${dateLabel}${displayDate || ': Never'}`}
           </Typography>
         ) : null}
         {total ? (
           <Typography variant="body2" component="p">
-            Number: {total}
+            {`${totalLabel}${total}`}
           </Typography>
         ) : null}
-        {version ? (
+        {/* {owner ? (
+          <Typography className={classes.pos} color="textSecondary" style={{ overflowWrap: "break-word" }}>
+            Owner: {owner}
+          </Typography>
+        ) : null} */}
+        {forSale !== undefined ? (
           <Typography variant="body1" component="p">
-            {`version: ${version}`}
+            Is for sale ? {forSale ? 'Yes' : 'No'}
           </Typography>
         ) : null}
       </CardContent>

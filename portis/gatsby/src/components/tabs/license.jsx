@@ -1,13 +1,9 @@
 import React from "react"
-import { Button, Paper, Grid, Typography } from '@material-ui/core';
+import { Button, Paper, Grid, Typography, Dialog } from '@material-ui/core';
 import SearchBar from '../display/searchbar';
 import Kanban from '../display/kanban';
 import CheckBox from '../display/checkFilters';
-
-const licenses = [
-  { name: 'Adobe', swAddress: '0x12neo329239d0', liAddress: '0xgregc0eco329239d0', total: 2 , date: new Date(), info: 'you are owner' },
-  { name: 'Office', swAddress: '0x12neoas329239d0', liAddress: '0xDAsx0eco329239d0', total: 2 },
-];
+import LicenseForm from "../modal/licenseForm";
 
 class Licenses extends React.Component {
   constructor(props) {
@@ -16,11 +12,8 @@ class Licenses extends React.Component {
     this.openKanban = this.openKanban.bind(this);
     this.state = {
       filters: {},
+      modalOpen: false,
     }
-  }
-
-  componentDidMount() {
-    // load licenses
   }
 
   handleFilter(filters) {
@@ -29,11 +22,18 @@ class Licenses extends React.Component {
     }));
   }
 
-  openKanban(details) {
-  console.log("🚀 ~ file: license.jsx ~ line 33 ~ Licenses ~ openKanban ~ details", details)
+  openKanban(item) {
+  console.log("🚀 ~ file: license.jsx ~ line 33 ~ Licenses ~ openKanban ~ details", item)
+    this.setState({
+      modalOpen: true,
+      currentLicense: item,
+    });
   }
 
   render() {
+    const { licenses, setForSale, setNewOwner, setExpiryDate } = this.props;
+    const { modalOpen, currentLicense } = this.state;
+
     return (
       <Paper elevation={0} style={{ backgroundColor: '#bec9e2', width: '100%' }}>
         <Grid>
@@ -43,15 +43,35 @@ class Licenses extends React.Component {
         <Grid>
           {licenses && licenses.length ? licenses.map(el => (
             <Kanban
-              key={el.liAddress}
-              item={el}
+              key={el.license_address}
               title={el.name}
-              address={el.liAddress}
-              openKanban={this.openKanban}
+              address={el.license_address}
+              date={el.expiration_timestamp}
+              dateLabel="Expiry: "
+              version={el.version}
+              forSale={el.license_for_sale}
+              owner={el.owner}
+              openKanban={() => this.openKanban(el)}
               buttonLabel="View details"
             />
           )) : null}
         </Grid>
+        <Dialog
+          aria-labelledby="simple-dialog-title"
+          fullScreen={visualViewport.width < 500}
+          onClose={() => this.setState({ modalOpen: false })}
+          open={modalOpen}
+        >
+          <div style={{ minHeight: '95vh', minWidth: '600px', maxWidth: '100vw' }}>
+            <LicenseForm
+              license={currentLicense}
+              sellFunction={setForSale}
+              changeOwner={setNewOwner}
+              changeExpiryDate={setExpiryDate}
+              closeFunction={() => this.setState({ modalOpen: false })}
+            />
+          </div>
+        </Dialog>
       </Paper>
     );
   }

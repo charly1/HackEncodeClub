@@ -1,21 +1,20 @@
-import React, { useState } from "react"
+import React from "react"
 import { Grid, Button, Typography, TextField } from '@material-ui/core';
 
 export function BuyForm({ license, buyFunction, closeFunction }) {
-  const [price, setPrice] = useState(0);
   if (!license) return <h>No licence to display</h>;
 
   const {
     name='',
     version='',
-    admin,
     expiration_timestamp,
     selling_price_ETH,
     license_address,
-    license_for_sale,
     software_address_linked,
     owner,
-    selling_price_wei,
+    // admin,
+    // license_for_sale,
+    // selling_price_wei,
   } = license;
 
     const date = expiration_timestamp && expiration_timestamp !== '0' ? new Date(expiration_timestamp) : null;
@@ -128,27 +127,6 @@ export function BuyForm({ license, buyFunction, closeFunction }) {
             Cancel
           </Button>
         </Grid>
-        {/* <Grid style={{ display: 'flex', alignItems: 'center', marginTop: '30px' }}>
-          <div>
-            <TextField
-              id="standard-number"
-              label="Price"
-              type="number"
-              variant="outlined"
-              onChange={(evt) => setPrice(evt.target.value)}
-            />
-          </div>
-          <div>
-            <Button
-              variant="contained"
-              color="primary"
-              style={{ margin: '15px' }}
-              onClick={(evt) => buyFunction({ action: 'buy', name, swAddress, liAddress, price, token })}
-            >
-              BUY
-            </Button>
-          </div>
-        </Grid> */}
       </Grid>
     );
 }

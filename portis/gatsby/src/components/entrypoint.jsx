@@ -1,20 +1,20 @@
 import React from "react"
-import { ButtonGroup, Button, Paper, Grid, Typography } from '@material-ui/core';
+import { ButtonGroup, Button, Paper, Grid, Typography, LinearProgress } from '@material-ui/core';
 
-import withPortisProvider from '../provider/portis';
-import PortisDisplay from '../display/portis';
-import SoftwarePage from './software';
-import LicensePage from './license';
-import BuyPage from './buy';
-import Drawer from '../display/drawer';
+import withPortisProvider from './provider/portis';
+import TabStateProvider from './tabHandler';
+import PortisDisplay from './display/portis';
+import Drawer from './display/drawer';
 
 class Layout extends React.Component {
   constructor(props) {
     super(props);
     this.onDrawerClose = this.onDrawerClose.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+
     this.state = {
       content: null,
-      type: null,
+      type: 'software',
       drawerOpen: false,
     }
   }
@@ -28,21 +28,7 @@ class Layout extends React.Component {
   }
 
   handleClick(type) {
-    let content = null;
-    switch (type) {
-      case 'software':
-        content = <SoftwarePage {...this.props} />
-        break;
-      case 'license':
-        content = <LicensePage {...this.props} />
-        break;
-      case 'buy':
-        content = <BuyPage {...this.props} />
-        break;
-      default:
-        break;
-    }
-    this.setState({ content, type });
+    this.setState({ type });
   }
 
   render() { // display tabs buttons
@@ -50,11 +36,8 @@ class Layout extends React.Component {
     const {
       portis, web3, logged, email, address, network, reputation, balance,
       getBalance, handleSubmit, handleLogout, isLoggedIn,
+      primColor, primLight, btnColor,
     } = this.props;
-
-    const primColor = '#3f51b5';
-    const primLight = '#757de8';
-    const btnColor = "#3f51b552";
 
     return (
       <div>
@@ -96,7 +79,11 @@ class Layout extends React.Component {
           </Grid>
         </Grid>
         <Grid container>
-            {content}
+            {logged && web3 ? (
+              <TabStateProvider type={type} switchTab={this.handleClick} {...this.props} />
+            ) : (
+              <LinearProgress />
+            )}
         </Grid>
         <Drawer isOpen={drawerOpen} onClose={this.onDrawerClose} >
           {portis ? (
