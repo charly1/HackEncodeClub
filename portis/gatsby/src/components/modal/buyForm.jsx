@@ -33,16 +33,6 @@ export function BuyForm({ license, buyFunction, closeFunction }) {
             {`Purchasing license of: ${name}`}
           </Typography>
         </Grid>
-        <Grid item>
-          <TextField
-            id="filled-read-only-input"
-            label="Software address"
-            defaultValue={software_address_linked}
-            InputProps={{ readOnly: true }}
-            variant="filled"
-            style={inputSizes}
-          />
-        </Grid>
         {version ? (
           <Grid item>
             <TextField
@@ -55,6 +45,16 @@ export function BuyForm({ license, buyFunction, closeFunction }) {
             />
           </Grid>
         ) : null}
+        <Grid item>
+          <TextField
+            id="filled-read-only-input"
+            label="Software address"
+            defaultValue={software_address_linked}
+            InputProps={{ readOnly: true }}
+            variant="filled"
+            style={inputSizes}
+          />
+        </Grid>
         <Grid item>
           <TextField
             id="filled-read-only-input"
@@ -110,7 +110,7 @@ export function BuyForm({ license, buyFunction, closeFunction }) {
         <Grid item>
           <Button
             variant="contained"
-            color="primary"
+            color="secondary"
             style={{ margin: '15px' }}
             onClick={buyFunction}
           >

@@ -1,5 +1,5 @@
 import React from "react"
-import { Button, Paper, Grid, Typography, Dialog } from '@material-ui/core';
+import { Paper, Grid, Dialog } from '@material-ui/core';
 
 import SearchBar from '../display/searchbar';
 import Kanban from '../display/kanban';
@@ -9,56 +9,82 @@ import BuyForm from "../modal/buyForm";
 class Buy extends React.Component {
   constructor(props) {
     super(props);
+    this.handleSearch = this.handleSearch.bind(this);
     this.handleFilter = this.handleFilter.bind(this);
-    this.openKanban = this.openKanban.bind(this);
-    this.buyLicense = this.buyLicense.bind(this);
+    this.openModal = this.openModal.bind(this);
     this.state = {
-      filters: {},
-      currentLicense: null,
+      filters: [{ tag: 'offers', state: false, label: 'Exclude mine' }],
+      modalContent: null,
       modalOpen: false,
+      toShow: [],
     }
   }
 
-  handleFilter(filters) {
-    this.setState(prevState => ({
-      filters: filters ? { ...prevState.filters, ...filters } : {},
-    }));
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.licenses !== this.props.licenses) {
+      this.setState({
+        toShow: this.props.licenses,
+      })
+    }
   }
 
-  openKanban(item, contract) {
+  handleSearch(filtered) {
     this.setState({
-      modalOpen: true,
-      currentLicense: item,
-      currentContract: contract,
+      toShow: filtered,
     });
   }
 
-  buyLicense() {
-    const { currentLicense, currentContract } = this.state;
-  console.log("🚀 ~ file: ~ arg", currentLicense)
-    this.setState({ modalOpen: false });
+  handleFilter(filter) {
+    const { licenses, address } = this.props;
+    if (!filter) {
+      return;
+    }
+    this.setState({
+      filters: [{ tag: 'offers', state: !filter.state, label: 'Exclude mine' }],
+      toShow: filter.state ? licenses : licenses.filter(el => el.owner.toUpperCase() !== address.toUpperCase()),
+    });
+  }
+
+  openModal(item) {
+    const { buyLicense } = this.props;
+    this.setState({
+      modalOpen: true,
+      modalContent: (
+        <BuyForm
+          license={item}
+          buyFunction={() => buyLicense({ toBuy: item })}
+          closeFunction={() => this.setState({ modalOpen: false })}
+        />
+      ),
+    });
   }
 
   render() {
-    const { currentLicense, filters, modalOpen } = this.state;
-    const { licenses } = this.props;
+    const { modalContent, filters, modalOpen, toShow } = this.state;
+    const { licenses, address } = this.props;
     return (
       <Paper elevation={0} style={{ backgroundColor: '#bec9e2', width: '100%' }}>
         <Grid>
-          <CheckBox handleFilter={this.handleFilter}/>
-          <SearchBar items={[]} searchFor="name" />
+          <CheckBox
+            filters={filters}
+            handleFilter={this.handleFilter}
+          />
+          <SearchBar items={licenses} searchField="name" handleSearch={this.handleSearch} />
         </Grid>
         <Grid>
-          {licenses && licenses.length ? licenses.map(el => (
+          {toShow && toShow.length ? toShow.map(el => (
             <Kanban
-              key={el.item.license_address}
-              title={el.item.name}
-              date={el.item.expiration_timestamp}
-              dateLabel="Expiry date: "
-              price={el.item.selling_price_ETH}
-              address={el.item.software_address_linked}
-              openKanban={() => this.openKanban(el.item, el.contract)}
-              buttonLabel="Buy"
+              key={el.license_address}
+              wallet={address}
+              title={el.name}
+              admin={el.admin}
+              address={el.license_address}
+              date={el.expiration_timestamp}
+              dateLabel="Expiry: "
+              version={el.version}
+              owner={el.owner}
+              openKanban={() => this.openModal(el)}
+              buttonLabel="Buy details"
             />
           )) : null}
         </Grid>
@@ -69,11 +95,7 @@ class Buy extends React.Component {
           open={modalOpen}
         >
           <div style={{ minHeight: '95vh', minWidth: '600px', maxWidth: '100vw' }}>
-            <BuyForm
-              license={currentLicense}
-              buyFunction={this.buyLicense}
-              closeFunction={() => this.setState({ modalOpen: false })}
-            />
+            {modalContent}
           </div>
         </Dialog>
       </Paper>

@@ -19,6 +19,7 @@ const useStyles = makeStyles({
 
 const Kanban = ({
   title,
+  wallet,
   address,
   date,
   dateLabel='',
@@ -29,7 +30,9 @@ const Kanban = ({
   forSale,
   openKanban,
   buttonLabel,
+  admin,
 }) => {
+  console.log("🚀 ~ file: kanban.jsx ~ line 34 ~ admin", admin, address)
   const classes = useStyles();
   let displayDate = null;
   if (date && date !== '0') displayDate = new Date(date).toISOString().split('.')[0].split('T');
@@ -72,7 +75,13 @@ const Kanban = ({
         ) : null} */}
         {forSale !== undefined ? (
           <Typography variant="body1" component="p">
-            Is for sale ? {forSale ? 'Yes' : 'No'}
+            Is for sale ? {forSale ? 'Yes 🔴' : 'No 🔵'}
+          </Typography>
+        ) : null}
+        {typeof admin === 'string' && typeof wallet === 'string' 
+          && admin.toUpperCase() === wallet.toUpperCase() ? (
+          <Typography className={classes.pos} color="textSecondary">
+            {`Admin 👍`}
           </Typography>
         ) : null}
       </CardContent>

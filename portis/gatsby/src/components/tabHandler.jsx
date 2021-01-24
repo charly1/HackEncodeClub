@@ -8,18 +8,19 @@ import LicensePage from './tabs/license';
 import BuyPage from './tabs/buy';
 
 
-
 class TabProvider extends React.Component {
   constructor(props) {
     super(props);
     this.initStates = this.initStates.bind(this);
     this.loadSoftwares = this.loadSoftwares.bind(this);
     this.getSWinfo = this.getSWinfo.bind(this);
+    this.loadForSale = this.loadForSale.bind(this);
     this.setLiForSale = this.setLiForSale.bind(this);
     this.setNewLiOwner = this.setNewLiOwner.bind(this);
     this.setLiExpiryDate = this.setLiExpiryDate.bind(this);
     this.createLicense = this.createLicense.bind(this);
     this.createSoftware = this.createSoftware.bind(this);
+    this.buyLicense = this.buyLicense.bind(this);
 
     this.state = {
       contractAddress: null,
@@ -28,12 +29,12 @@ class TabProvider extends React.Component {
       allLicenses: [],
       swToShow: [],
       liToShow: [],
+      liForSale: [],
     }
   }
 
   componentDidMount() {
     const { web3 } = this.props;
-    console.log("🚀 ~ file: tabHandler.jsx ~ line 29 ~ TabProvider ~ componentDidMount ~ web3", this.props)
     let contractAddress = process.env.ROPSTEN_CONTRACT_HANDLER;
     if (this.props.network && this.props.network.includes('binance')) contractAddress = process.env.BINANCE_CONTRACT_HANDLER;
     this.setState({
@@ -55,10 +56,10 @@ class TabProvider extends React.Component {
         this.loadSoftwares();
         break;
       case 'license':
-        this.loadSoftwares();
+        this.loadLicenses();
         break;
       case 'buy':
-        this.loadSoftwares();
+        this.loadForSale();
         break;
     }
   }
@@ -106,6 +107,40 @@ class TabProvider extends React.Component {
       });
   }
 
+  loadLicenses() {
+    // func.S_get_license_with_admin()
+    // func.S_get_license_with_owner()
+  }
+
+  loadForSale() {
+    const { contract_sh } = this.state;
+    const { web3 } = this.props;
+    return func.SH_get_licenses_that_are_for_sale(contract_sh)
+      .then(licenses => {
+        return Promise.all(licenses.map((address) => {
+          const contract = new web3.eth.Contract(abi.LICENSE_ABI, address);
+          return func.L_get_informations(contract)
+            .then((item) => ({ contract, ...item }))
+            .catch(() => ({}));
+        }));
+      })
+      .then((allForSale) => {
+        return Promise.all(allForSale.map((license) => {
+          const contract_s = new web3.eth.Contract(abi.SOFTWARE_ABI, license.software_address_linked);
+          return func.S_get_software_info(contract_s)
+            .then((result) => {
+              console.log('GET SW NAME', result)
+              return { ...result, ...license, contract_s }
+            })
+            .catch(() => license);
+        }))
+        .then((forSale) => {
+          this.setState({ liForSale: forSale })
+        });
+      })
+      .catch((err) => console.error(err));
+  }
+
   createSoftware({ date, name, version }) {
     console.log("create new SWOFTWARE", date, version, name)
   }
@@ -126,8 +161,12 @@ class TabProvider extends React.Component {
     console.log("create new LICENSE", software, date)
   }
 
+  buyLicense({ toBuy }) {
+  console.log("🚀 ~ file: tabHandler.jsx ~ line 165 ~ TabProvider ~ buyLicense ~ args", toBuy)
+  }
+
   render() {
-    const { swToShow, liToShow } = this.state;
+    const { swToShow, liToShow, liForSale } = this.state;
     const { type, address } = this.props;
 
     let content = null;
@@ -162,7 +201,8 @@ class TabProvider extends React.Component {
       case 'buy':
         content = (
           <BuyPage
-            licenses={liToShow.filter(li => li.forSale)}
+            licenses={liForSale}
+            buyLicense={this.buyLicense}
             {...this.props}
           />
         );

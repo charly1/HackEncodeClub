@@ -43,11 +43,12 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function searItem({ value, items, searchFor }) {
+function searItem({ value, items, searchField }) {
+  if (!value) return items;
   if (items && items.length) {
     return items.filter(el => {
-      if(el[searchFor]) {
-        return el[searchFor].includes(value);
+      if(el[searchField]) {
+        return el[searchField].includes(value);
       }
       return false;
     });
@@ -55,7 +56,7 @@ function searItem({ value, items, searchFor }) {
   return [];
 }
 
-const Search = ({ items, searchFor, searchResult }) => {
+const Search = ({ items, searchField, handleSearch }) => {
   const classes = useStyles();
   const [value, setValue] = useState('');
   return (
@@ -73,7 +74,7 @@ const Search = ({ items, searchFor, searchResult }) => {
         value={value}
         onChange={(evt) => {
           setValue(evt.target.value)
-          searchResult(searItem({ value, items, searchFor }));
+          handleSearch(searItem({ value: evt.target.value, items, searchField }));
         }}
       />
     </div>

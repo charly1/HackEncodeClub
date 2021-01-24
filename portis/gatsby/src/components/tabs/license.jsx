@@ -1,5 +1,5 @@
 import React from "react"
-import { Button, Paper, Grid, Typography, Dialog } from '@material-ui/core';
+import { Button, Paper, Grid, Dialog } from '@material-ui/core';
 import SearchBar from '../display/searchbar';
 import Kanban from '../display/kanban';
 import CheckBox from '../display/checkFilters';
@@ -10,19 +10,31 @@ import CreateForm from "../modal/createLicense";
 class Licenses extends React.Component {
   constructor(props) {
     super(props);
+    this.handleSearch = this.handleSearch.bind(this);
     this.handleFilter = this.handleFilter.bind(this);
     this.openModal = this.openModal.bind(this);
     this.state = {
-      filters: {},
+      filters: [{ tag: 'offers', state: false, label: 'My offers' }],
       modalOpen: false,
       modalContent: null,
     }
   }
 
-  handleFilter(filters) {
-    this.setState(prevState => ({
-      filters: filters ? { ...prevState.filters, ...filters } : {},
-    }));
+  handleSearch(filtered) {
+    this.setState({
+      toShow: filtered,
+    });
+  }
+
+  handleFilter(filter) {
+    const { licenses, address } =this.props;
+    if (!filter) {
+      return;
+    }
+    this.setState({
+      filters: [{ tag: 'offers', state: !filter.state, label: 'My offers' }],
+      toShow: filter.state ? licenses : licenses.filter(el => el.owner !== address),
+    });
   }
 
   openModal(action, item) {
@@ -61,15 +73,18 @@ class Licenses extends React.Component {
   }
 
   render() {
-    const { licenses, softwares } = this.props;
-    const { modalOpen, modalContent } = this.state;
+    const { licenses, softwares, address } = this.props;
+    const { modalOpen, modalContent, filters } = this.state;
 
 
     return (
       <Paper elevation={0} style={{ backgroundColor: '#bec9e2', width: '100%' }}>
         <Grid>
-          <CheckBox handleFilter={this.handleFilter}/>
-          <SearchBar items={softwares} searchFor="name" />
+          <CheckBox
+            filters={filters}
+            handleFilter={this.handleSearch}
+          />
+          <SearchBar items={softwares} searchField="name" handleSearch={this.handleSearch} />
           <Button
             disabled={!softwares.length}
             variant="contained"
@@ -84,7 +99,9 @@ class Licenses extends React.Component {
           {licenses && licenses.length ? licenses.map(el => (
             <Kanban
               key={el.license_address}
+              wallet={address}
               title={el.name}
+              admin={el.admin}
               address={el.license_address}
               date={el.expiration_timestamp}
               dateLabel="Expiry: "

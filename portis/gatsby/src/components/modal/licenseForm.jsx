@@ -47,16 +47,6 @@ export function LicenseForm({
             {`Purchasing license of: ${name}`}
           </Typography>
         </Grid>
-        <Grid item>
-          <TextField
-            id="filled-read-only-input"
-            label="Software address"
-            defaultValue={software_address_linked}
-            InputProps={{ readOnly: true }}
-            variant="filled"
-            style={inputSizes}
-          />
-        </Grid>
         {version ? (
           <Grid item>
             <TextField
@@ -69,6 +59,16 @@ export function LicenseForm({
             />
           </Grid>
         ) : null}
+        <Grid item>
+          <TextField
+            id="filled-read-only-input"
+            label="Software address"
+            defaultValue={software_address_linked}
+            InputProps={{ readOnly: true }}
+            variant="filled"
+            style={inputSizes}
+          />
+        </Grid>
         <Grid item>
           <TextField
             id="filled-read-only-input"
@@ -112,7 +112,7 @@ export function LicenseForm({
               style={{ marginLeft: '15px' }}
               onClick={(evt) => sellFunction({ license, priceETH: price })}
             >
-              Sale at price
+              Sell at price
             </Button>
           </div>
         </Grid>

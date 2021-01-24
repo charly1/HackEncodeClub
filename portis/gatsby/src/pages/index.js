@@ -10,7 +10,7 @@ const Page = () => {
       <LayoutView 
         primColor="#3f51b5"
         primLight="#757de8"
-        btnColor="#3f51b552"
+        btnColor="#3f51b5"
       />
     </main>
   )

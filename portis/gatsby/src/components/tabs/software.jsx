@@ -1,5 +1,5 @@
 import React from "react"
-import { Button, Paper, Grid, Typography, Dialog } from '@material-ui/core';
+import { Button, Paper, Grid, Dialog } from '@material-ui/core';
 
 import SearchBar from '../display/searchbar';
 import Kanban from '../display/kanban';
@@ -9,38 +9,45 @@ import CreateForm from "../modal/createSoftware";
 class Softwares extends React.Component {
   constructor(props) {
     super(props);
-    this.handleFilter = this.handleFilter.bind(this);
+    this.handleSearch = this.handleSearch.bind(this);
     this.openKanban = this.openKanban.bind(this);
     this.state = {
-      filters: {},
+      modalOpen: false,
+      toShow: [],
     }
   }
 
-  handleFilter(filters) {
-    this.setState(prevState => ({
-      filters: filters ? { ...prevState.filters, ...filters } : {},
-    }));
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.softwares !== this.props.softwares) {
+      this.setState({
+        toShow: this.props.softwares,
+      })
+    }
+  }
+
+  handleSearch(filtered) {
+    this.setState({
+      toShow: filtered,
+    });
   }
 
   openKanban(software) {
     const { getSWinfo } = this.props;
     getSWinfo(software);
-  // console.log("🚀 ~ file: softwares.jsx ~ line 33 ~ softwares ~ openKanban ~ details", software)
-  //   this.setState({
-  //     // modalOpen: true,
-  //     // currentLicense: item,
-  //     // currentContract: contract,
-  //   });
   }
 
   render() {
-    const { currentLicense, filters, modalOpen } = this.state;
-    const { softwares, loadSoftwares, createSoftware } = this.props;
-    console.log("🚀 ~ file: software.jsx ~ line 41 ~ Softwares ~ render ~ softwares", softwares)
+    const { modalOpen, toShow } = this.state;
+    const { softwares, loadSoftwares, createSoftware, address } = this.props;
     return (
       <Paper elevation={0} style={{ backgroundColor: '#bec9e2', width: '100%' }}>
         <Grid>
-          <SearchBar items={softwares} searchFor="name" searchResult={(res) => console.log(res)} />
+          {/* <CheckBox
+            filters={[{ tag: 'mine', state: true, label: 'My softwares' }]}
+            disabled
+            handleFilter={() => null}
+          /> */}
+          <SearchBar items={softwares} searchField="name" handleSearch={this.handleSearch} />
           <Button
             variant="contained"
             color="primary"
@@ -51,10 +58,12 @@ class Softwares extends React.Component {
           </Button>
         </Grid>
         <Grid>
-          {softwares && softwares.length ? softwares.map(el => (
+          {toShow && toShow.length ? toShow.map(el => (
             <Kanban
               key={el.address}
               title={el.name}
+              wallet={address}
+              admin={el.admin}
               address={el.address}
               date={el.license_time_default}
               dateLabel="Expiry: "

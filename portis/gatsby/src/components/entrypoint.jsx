@@ -8,12 +8,12 @@ import Drawer from './display/drawer';
 
 class Layout extends React.Component {
   constructor(props) {
+    console.log("🚀 ~ file: entrypoint.jsx ~ line 11 ~ Layout ~ constructor ~ props", props)
     super(props);
     this.onDrawerClose = this.onDrawerClose.bind(this);
     this.handleClick = this.handleClick.bind(this);
 
     this.state = {
-      content: null,
       type: 'software',
       drawerOpen: false,
     }
@@ -32,12 +32,13 @@ class Layout extends React.Component {
   }
 
   render() { // display tabs buttons
-    const { drawerOpen, type, content } = this.state;
+    const { drawerOpen, type } = this.state;
     const {
       portis, web3, logged, email, address, network, reputation, balance,
       getBalance, handleSubmit, handleLogout, isLoggedIn,
       primColor, primLight, btnColor,
     } = this.props;
+    console.log("🚀 ~ file: entrypoint.jsx ~ line 36 ~ Layout ~ render ~ type", type, btnColor, logged, !!web3)
 
     return (
       <div>
