@@ -1,0 +1,218 @@
+## creating SoftwareHandler...
+Mining transaction...
+https://ropsten.etherscan.io/tx/0x0727062e90f1e0dea574ad33a2943edab1bf0871066b5d6e48d23b9327e71249
+Contract deployed at 0xaAe884485D0a9812B6f7E3212B1e8A63f2d7862d
+successfully created: 0xaAe884485D0a9812B6f7E3212B1e8A63f2d7862d
+
+## creating Software 1...
+successfully created: 0x832bef236e2a0cC973d9DB928d17B0fafa18bD70
+
+## creating Software 2...
+successfully created: 0x706E14Ce8Ada7BAdb1A4a5c60D7876102bC17d17
+
+## creating Software 3...
+successfully created: 0xf2818588f2f7E630209b235508Fe3017fB27649d
+
+## creating Software 4...
+successfully created: 0xe429f4A442D0C3C0d529A3902E42EeE14F01c9BA
+
+## creating Software 5...
+successfully created: 0x057c4E96714ec067b56F7024F366B396f47CFbe2
+
+## creating Software 6...
+successfully created: 0xD29Bbf62885F277D12fe68696177a7A31d10C654
+
+## creating License 1...
+successfully created: 0xe426c6Fa84e2Bae6863b45603859e83743103Fbe
+
+## creating License 2...
+successfully created: 0x18d382B6B48b361A7A873D5046A2F892aC45aFF5
+
+## creating License 3...
+successfully created: 0x6E51ad4536D1B6622E4f92a6721EDd3d403a640d
+
+## creating License 4...
+successfully created: 0x107D52ec9857f5243f296516f0c793581B61Ff6e
+
+## creating License 5...
+successfully created: 0x8A3327DE8BCD6884A701275C759a14A86CD31B29
+
+## creating License 6...
+successfully created: 0x256EDf41C5f3e89145916b8aAfA86d9ABFdf9710
+
+## creating License 7...
+successfully created: 0x73D07aD62Fcb217bcC3758C1cC5F55d3BA277CAb
+
+## creating License 8...
+successfully created: 0x082d2F0a0ab8F8f99504b259AAa3F8b183128515
+
+## creating License 9...
+successfully created: 0x5efB88e182220022A16142b5D1325b2a12a346Ef
+
+## creating License 10...
+successfully created: 0xcD2808AbcBcD52A6Fe1a990E22bD2a1d7D79C93f
+
+## creating License 11...
+successfully created: 0x1486956476B22A3eb050250Cb6bb6C9782f2D063
+
+## creating License 12...
+successfully created: 0x25aa2Db88b9f1A54FF6476EBCdDEa62Aa7abe8DC
+
+## creating License 13...
+successfully created: 0xFf67843A8a8D213DC70a6f3d30EBeBf99e4e90EE
+
+## creating License 14...
+successfully created: 0xf3f22F5B78cc32Ce2082a081D7f0e648Eb30aB37
+
+## creating License 15...
+successfully created: 0x8127C1F282B0AE910bD6ec9754F8686eed4Fc30B
+
+## creating License 16...
+successfully created: 0xB3E4F9f3DB0bAdE4aC76016A8481b7EB2D58D673
+
+## creating License 17...
+successfully created: 0x1E1307B743f69eC9b197Fd2d2ee593B9d2016244
+
+## creating License 18...
+successfully created: 0x33987f73710F7E76a555f3EeEf182FA72AB19ac2
+
+## creating License 19...
+successfully created: 0x3C75CB5eDf2Eb7D9A9209B084558F5B81E517D95
+
+## creating License 20...
+successfully created: 0x3CC60d2f3a23b105689c4DFB089E321Cffea19C8
+
+## creating License 21...
+successfully created: 0xD85332c61F38906BF9dF614167d94bb94E99FE70
+
+## creating License 22...
+successfully created: 0xd872283F04cC147b2A64883D77daF70e8A13600d
+
+## creating License 23...
+successfully created: 0xd5022c5c1D75b3dc66d82e30c7D602Ce96BD4DA5
+
+## creating License 24...
+successfully created: 0x70c10Cb304A953c411C68BF79F26e3826ba54CB6
+
+## creating License 25...
+successfully created: 0xBb2dF4A98b4643f0A6FeDa31bb9836981a277c60
+
+## creating License 26...
+successfully created: 0x374742aC0D99F8C8ebD5ef1783C9F666E5730637
+
+## creating License 27...
+successfully created: 0x33CFDfEA6100922C6aED681D18AabB91D901b99B
+
+## creating License 28...
+successfully created: 0x057d08db225D6BC6d3eFbf6A054fDFfc7E94c034
+
+## creating License 29...
+successfully created: 0xa6B4CdeE46499BCD8821e36853E1c1b3952eAadc
+
+## creating License 30...
+successfully created: 0x29Ee957dEdCc5B20e26D8d214e9e372E1C9B603B
+
+## creating License 31...
+successfully created: 0xd1ce198dba762da03a848304B32fDe10aD763233
+
+## creating License 32...
+successfully created: 0x5842Dd1CB708B27C3FBA7DCf29486d859189bfa1
+
+## creating License 33...
+successfully created: 0x83BddF6fB36Ef71E6e66E2a8C1D614872D0da0C5
+
+## creating License 34...
+successfully created: 0xFFB67E95765C5529414C1E6820142FFd03b16Cc1
+
+## creating License 35...
+successfully created: 0xfA939b52D54af651CCAA6e8d964981E9f30138de
+
+## creating License 36...
+successfully created: 0x4248E2ec61CF3976cA2FcC7E935032da7b3D5Cad
+
+## creating License 37...
+successfully created: 0x3F99c2Ea16E5d5c3345E6bb0FF483e818613939c
+
+## creating License 38...
+successfully created: 0x46dE1069cA72d353Abd0bC31d5005F300C768532
+
+## creating License 39...
+successfully created: 0xE973F550D4F95EBB2765c434A9A9c33d7C51D6C4
+
+## creating License 40...
+successfully created: 0x20996C2E64F636269b11Cacd9915a6063719FB4a
+
+## creating License 41...
+successfully created: 0x650849578CA4Eef7F48C49913B67Fcfc5dbD1191
+
+## creating License 42...
+successfully created: 0xAcef5664619b0Cc26619534B7001f79773e1E985
+
+## creating License 43...
+successfully created: 0x5B4f60632D45066b0f719b2c0E618cF468C0393B
+
+## creating License 44...
+successfully created: 0x6D96E7eD82a671d62d97df70feBdffa7Efe2Fafe
+
+## creating License 45...
+successfully created: 0x28FB66C5a5603A3ef10157b569fF9688ffA450f9
+
+## creating License 46...
+successfully created: 0x23B345348bAc1d27D18AFcc2f09a7a0B575AA5E2
+
+## creating License 47...
+successfully created: 0xcA8499FF211A8F6166EC6DE1485d2b630C97b27E
+
+## setting License 1 for sale
+successfully set for sale !
+## setting License 4 for sale
+successfully set for sale !
+## setting License 6 for sale
+successfully set for sale !
+## setting License 7 for sale
+successfully set for sale !
+## setting License 8 for sale
+successfully set for sale !
+## setting License 9 for sale
+successfully set for sale !
+## setting License 10 for sale
+successfully set for sale !
+## setting License 11 for sale
+successfully set for sale !
+## setting License 12 for sale
+successfully set for sale !
+## setting License 13 for sale
+successfully set for sale !
+## setting License 14 for sale
+successfully set for sale !
+## setting License 20 for sale
+successfully set for sale !
+## setting License 21 for sale
+successfully set for sale !
+## setting License 22 for sale
+successfully set for sale !
+## setting License 23 for sale
+successfully set for sale !
+## setting License 24 for sale
+successfully set for sale !
+## setting License 26 for sale
+successfully set for sale !
+## setting License 28 for sale
+successfully set for sale !
+## setting License 30 for sale
+successfully set for sale !
+## setting License 31 for sale
+successfully set for sale !
+## setting License 32 for sale
+successfully set for sale !
+## setting License 37 for sale
+successfully set for sale !
+## setting License 39 for sale
+successfully set for sale !
+## setting License 40 for sale
+successfully set for sale !
+## setting License 41 for sale
+successfully set for sale !
+## setting License 44 for sale
+successfully set for sale !
+all done...
