@@ -14,7 +14,7 @@ export function typeCheckAddress(address, prefix=true) {
 
 // functions to talk with smart contracts
 
-const gasUseEveryWhere = 10000000;
+const gasUseEveryWhere = 1200000;
 const NULL_ADR = "0x0000000000000000000000000000000000000000"
 const FOR_SALE_NO_FILTER = 2
 
@@ -26,7 +26,7 @@ const eth2wei = (web3, amount) => {
     return parseInt(web3.utils.toWei(String(amount), 'ether'))
 }
 
-function _signTransaction(contract_l, web3, encodedABI, account) {
+async function _signTransaction(contract_l, web3, encodedABI, account) {
     return web3.eth.signTransaction({
         data: encodedABI,
         from: account,
@@ -49,9 +49,7 @@ function _signTransaction(contract_l, web3, encodedABI, account) {
 
 // SH functions
 export function SH_addSoftware(contract_sh, web3, account, name, version, license_time_default, software_admin) {
-  if (!web3 || !account || !name || !version || !license_time_default || !software_admin) 
-    return false;
-
+  if (!web3 || !account || !name || !version || !software_admin) return Promise.resolve(false);
   const encodedABI = contract_sh.methods.addSoftware(name, version, license_time_default, software_admin).encodeABI();
 
   return _signTransaction(contract_sh, web3, encodedABI, account);
@@ -649,4 +647,17 @@ export function L_remove_for_sale(contract_l, web3, account) {
     const encodedABI = query.encodeABI();
 
     return _signTransaction(contract_l, web3, encodedABI, account);
+}
+
+// events
+
+export function subscribe_SH_software_added(contract_sh, callback) {
+    contract_sh.events.softwareAdded({}, (error, res) => {
+        if (error) {
+            console.error(error);
+            return false;
+        }
+        console.log(`a new software was added: ${res.returnValues['0']}`);
+        callback('sw_added', res.returnValues['0']);
+    });
 }

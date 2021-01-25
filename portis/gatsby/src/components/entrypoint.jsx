@@ -1,10 +1,11 @@
 import React from "react"
-import { ButtonGroup, Button, Paper, Grid, Typography, LinearProgress } from '@material-ui/core';
+import { ButtonGroup, Button, Grid, Typography } from '@material-ui/core';
 
 import withPortisProvider from './provider/portis';
 import TabStateProvider from './tabHandler';
 import PortisDisplay from './display/portis';
 import Drawer from './display/drawer';
+import { LoaderBar } from './display/loader';
 
 class Layout extends React.Component {
   constructor(props) {
@@ -80,11 +81,13 @@ class Layout extends React.Component {
           </Grid>
         </Grid>
         <Grid container>
-            {logged && web3 ? (
-              <TabStateProvider type={type} switchTab={this.handleClick} {...this.props} />
-            ) : (
-              <LinearProgress />
-            )}
+          {logged && web3 ? (
+            <TabStateProvider type={type} switchTab={this.handleClick} {...this.props} />
+          ) : (
+            <Grid item style={{ marginTop: '30px', width: '80vw' }}>
+              <LoaderBar />
+            </Grid>
+          )}
         </Grid>
         <Drawer isOpen={drawerOpen} onClose={this.onDrawerClose} >
           {portis ? (

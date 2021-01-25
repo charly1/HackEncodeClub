@@ -3,7 +3,6 @@ import { Button, Paper, Grid, Dialog } from '@material-ui/core';
 
 import SearchBar from '../display/searchbar';
 import Kanban from '../display/kanban';
-import CheckBox from '../display/checkFilters';
 import CreateForm from "../modal/createSoftware";
 
 class Softwares extends React.Component {
@@ -81,10 +80,12 @@ class Softwares extends React.Component {
           onClose={() => this.setState({ modalOpen: false })}
           open={modalOpen}
         >
-          <CreateForm
-            createSoftware={createSoftware}
-            closeFunction={() => this.setState({ modalOpen: false })}
-          />
+          <div style={{ minHeight: '95vh', minWidth: '600px', maxWidth: '100vw' }}>
+            <CreateForm
+              createSoftware={createSoftware}
+              closeFunction={() => this.setState({ modalOpen: false })}
+            />
+          </div>
         </Dialog>
       </Paper>
     );

@@ -58,7 +58,10 @@ export function SoftwareForm({
           variant="contained"
           color="primary"
           style={{ marginBottom: '15px' }}
-          onClick={() => createSoftware({ date, name, version })}
+          onClick={() => {
+            createSoftware({ date: date ? parseInt(new Date(date).getTime()/1000) : 0, name, version });
+            closeFunction();
+          }}
         >
           Create
         </Button>

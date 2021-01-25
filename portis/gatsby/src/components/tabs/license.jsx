@@ -7,6 +7,16 @@ import LicenseForm from "../modal/licenseForm";
 import CreateForm from "../modal/createLicense";
 
 
+function comapreTag(a, b) {
+  if ( a.tag < b.tag ) {
+    return -1;
+  }
+  if ( a.tag > b.tag ) {
+    return 1;
+  }
+  return 0;
+}
+
 class Licenses extends React.Component {
   constructor(props) {
     super(props);
@@ -14,7 +24,11 @@ class Licenses extends React.Component {
     this.handleFilter = this.handleFilter.bind(this);
     this.openModal = this.openModal.bind(this);
     this.state = {
-      filters: [{ tag: 'offers', state: false, label: 'My offers' }],
+      filters: [
+        { tag: 'admin', state: false, label: 'Adminisatrated' },
+        { tag: 'own', state: false, label: 'Owned' },
+        { tag: 'offers', state: false, label: 'My offers' },
+      ].sort(comapreTag),
       modalOpen: false,
       modalContent: null,
     }
@@ -31,9 +45,15 @@ class Licenses extends React.Component {
     if (!filter) {
       return;
     }
-    this.setState({
-      filters: [{ tag: 'offers', state: !filter.state, label: 'My offers' }],
-      toShow: filter.state ? licenses : licenses.filter(el => el.owner !== address),
+    this.setState(prevState => {
+      const update = prevState.filters.find(flt => flt.tag === filter.tag);
+      return {
+        filters: [
+          ...prevState.filters.filter(el => el.tag !== filter.tag),
+          { ...update, state: !filter.state },
+        ].sort(comapreTag),
+        toShow: filter.state ? licenses : licenses.filter(el => el.owner !== address),
+      };
     });
   }
 
@@ -82,7 +102,7 @@ class Licenses extends React.Component {
         <Grid>
           <CheckBox
             filters={filters}
-            handleFilter={this.handleSearch}
+            handleFilter={this.handleFilter}
           />
           <SearchBar items={softwares} searchField="name" handleSearch={this.handleSearch} />
           <Button

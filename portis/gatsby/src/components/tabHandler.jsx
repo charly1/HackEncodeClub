@@ -1,12 +1,12 @@
 import React from "react"
-import { ButtonGroup, Button, Paper, Grid, Typography } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 
 import abi from '../config/abi';
 import * as func from './utils';
 import SoftwarePage from './tabs/software';
 import LicensePage from './tabs/license';
 import BuyPage from './tabs/buy';
-
+import { LoaderBar } from './display/loader';
 
 class TabProvider extends React.Component {
   constructor(props) {
@@ -22,6 +22,8 @@ class TabProvider extends React.Component {
     this.createSoftware = this.createSoftware.bind(this);
     this.buyLicense = this.buyLicense.bind(this);
 
+    this.onEvent = this.onEvent.bind(this);
+
     this.state = {
       contractAddress: null,
       contract_sh: null,
@@ -30,6 +32,8 @@ class TabProvider extends React.Component {
       swToShow: [],
       liToShow: [],
       liForSale: [],
+      refresh: true,
+      loader: false,
     }
   }
 
@@ -37,9 +41,11 @@ class TabProvider extends React.Component {
     const { web3 } = this.props;
     let contractAddress = process.env.ROPSTEN_CONTRACT_HANDLER;
     if (this.props.network && this.props.network.includes('binance')) contractAddress = process.env.BINANCE_CONTRACT_HANDLER;
+    const contract_sh = new web3.eth.Contract(abi.HANDLER_ABI, contractAddress)
+    func.subscribe_SH_software_added(contract_sh, this.onEvent)
     this.setState({
       contractAddress,
-      contract_sh: new web3.eth.Contract(abi.HANDLER_ABI, contractAddress),
+      contract_sh,
     }, this.initStates);
   }
 
@@ -47,6 +53,20 @@ class TabProvider extends React.Component {
     if (prevProps.type !== this.props.type) {
       this.initStates();
     }
+  }
+
+  onEvent(event, args) {
+  console.log("🚀 NEW EVENT! !!bProvider ~ onEvent ~ args", args)
+    let text = '';
+    switch(event) {
+      case 'sw_added':
+        text = `New software added (name: ${args.name}`;
+        break;
+      default:
+        break;
+    }
+    alert(text);
+    window.location.reload();
   }
 
   initStates() {
@@ -62,13 +82,17 @@ class TabProvider extends React.Component {
         this.loadForSale();
         break;
     }
+    this.setState(prevState => ({ refresh: !prevState.refresh }))
   }
 
-  loadSoftwares(forceReload=false) {
-    const { allSW, contract_sh } = this.state;
+  loadSoftwares(forceReload=true) {
+    const { allSW, contract_sh, swToShow } = this.state;
     const { address, web3 } = this.props;
 
-    if (allSW && allSW.length && !forceReload) return;
+    if (allSW && allSW.length && !forceReload) {
+      this.setState(prevState => ({ refresh: !prevState.refresh }));
+      return;
+    }
     func.SH_get_softwares_with_admin(contract_sh, address)
       .then((softwares) => {
         if (softwares) {
@@ -96,7 +120,6 @@ class TabProvider extends React.Component {
       .then((details) => {
         if (details) {
           this.setState((prevState) => {
-            // prevState.allLicenses.filter()
             const newLicenses = details.licenses
               .map((li) => ({ name: software.name, version: software.version, ...li }));
             return { allLicenses: newLicenses, liToShow: newLicenses };
@@ -108,8 +131,28 @@ class TabProvider extends React.Component {
   }
 
   loadLicenses() {
-    // func.S_get_license_with_admin()
-    // func.S_get_license_with_owner()
+    const { address, web3 } = this.props;
+    const { allSW } = this.state;
+    Promise.all(allSW.map((sw) => {
+      const contract_s = new web3.eth.Contract(abi.SOFTWARE_ABI, sw.address);
+      return func.S_get_license_with_admin(contract_s, address)
+        .then((asAdmin) => func.S_get_license_with_owner(contract_s, address)
+          .then((asOwner) => {
+            if (!asOwner && !asAdmin) return [];
+            if (!asOwner) return asAdmin;
+            if (!asAdmin) return asOwner;
+            return [...new Set([...asOwner, ...asAdmin])];
+          }))
+      }))
+        .then(loaded => {
+          if (loaded && loaded.length) {
+            Promise.all(loaded.flat().map((lice) => {
+              const contract_l = new web3.eth.Contract(abi.LICENSE_ABI, lice);
+              return func.L_get_informations(contract_l);
+            }))
+              .then(liWithInfo => this.setState({ liToShow: liWithInfo.flat() }));
+          }
+        });
   }
 
   loadForSale() {
@@ -143,6 +186,12 @@ class TabProvider extends React.Component {
 
   createSoftware({ date, name, version }) {
     console.log("create new SWOFTWARE", date, version, name)
+    const { contract_sh } = this.state;
+    const { web3, address } = this.props;
+    this.setState({ loader: true })
+    func.SH_addSoftware(contract_sh, web3, address, name, version, date, address)
+      .then((res) => (res ? alert('SUCESS creating software!') : null))
+      .finally(() => this.setState({ loader: false }))
   }
 
   setLiForSale({ license, priceETH }) {
@@ -166,7 +215,7 @@ class TabProvider extends React.Component {
   }
 
   render() {
-    const { swToShow, liToShow, liForSale } = this.state;
+    const { allSW, swToShow, liToShow, liForSale, refresh, loader } = this.state;
     const { type, address } = this.props;
 
     let content = null;
@@ -174,8 +223,8 @@ class TabProvider extends React.Component {
       case 'software':
         content = (
           <SoftwarePage
-            // softwares={swToShow}
-            softwares={swToShow}
+            key={`key${String(refresh)}`}
+            softwares={allSW}
             loadSoftwares={this.loadSoftwares}
             getSWinfo={(args) => {
               this.getSWinfo(args)
@@ -188,6 +237,7 @@ class TabProvider extends React.Component {
       case 'license':
         content = (
           <LicensePage
+            key={`key${String(refresh)}`}
             licenses={liToShow}
             softwares={swToShow.filter(sw => sw.admin === address)}
             setForSale={this.setLiForSale}
@@ -201,6 +251,7 @@ class TabProvider extends React.Component {
       case 'buy':
         content = (
           <BuyPage
+            key={`key${String(refresh)}`}
             licenses={liForSale}
             buyLicense={this.buyLicense}
             {...this.props}
@@ -210,10 +261,16 @@ class TabProvider extends React.Component {
       default:
         break;
     }
+    console.log("🚀 ~ file: tabHandler.jsx ~ line 224 ~ TabProvider ~ render ~ content", content)
 
     return (
       <Grid>
         {content}
+        {loader ? (
+          <Grid item style={{ marginTop: '20px', width: '60vw' }}>
+            <LoaderBar />
+          </Grid>
+        ) : null}
       </Grid>
     );
   }
