@@ -26,11 +26,11 @@ const eth2wei = (web3, amount) => {
     return parseInt(web3.utils.toWei(String(amount), 'ether'))
 }
 
-async function _signTransaction(contract_l, web3, encodedABI, account) {
+async function _signTransaction(contract_l, web3, encodedABI, account, gas=gasUseEveryWhere) {
     return web3.eth.signTransaction({
         data: encodedABI,
         from: account,
-        gas: gasUseEveryWhere,
+        gas: gas,
         to: contract_l.options.address,
     })
       .then(signedTx => {
@@ -50,9 +50,19 @@ async function _signTransaction(contract_l, web3, encodedABI, account) {
 // SH functions
 export function SH_addSoftware(contract_sh, web3, account, name, version, license_time_default, software_admin) {
   if (!web3 || !account || !name || !version || !software_admin) return Promise.resolve(false);
-  const encodedABI = contract_sh.methods.addSoftware(name, version, license_time_default, software_admin).encodeABI();
 
-  return _signTransaction(contract_sh, web3, encodedABI, account);
+  const tx_call = contract_sh.methods.addSoftware(name, version, license_time_default, software_admin)
+
+  return tx_call.estimateGas()
+    .then(gas => {
+      console.log("Gaz needed:", gas)
+      const encodedABI = tx_call.encodeABI();
+      return _signTransaction(contract_sh, web3, encodedABI, account, gas);
+    })
+    .catch(err => {
+        console.error("An error occured while calling the func:", err);
+        return false;
+    });
 }
 
 export function SH_get_softwares_from_index(contract_sh, index) {
