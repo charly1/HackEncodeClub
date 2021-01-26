@@ -277,7 +277,7 @@ async function main_full_tree () {
 	console.log("successfully created: " + software_adr[software_adr.length-1] + "\n");
 
 	console.log("## creating Software " + (++c) + "...");
-	software_adr.push(await create_software(software_handler_adr, "Borderland 4", "1.5.2", 0, address_account_1));
+	software_adr.push(await create_software(software_handler_adr, "Borderlands 4", "4.5.2", 0, address_account_1));
 	console.log("successfully created: " + software_adr[software_adr.length-1] + "\n");
 
 	console.log("## creating Software " + (++c) + "...");

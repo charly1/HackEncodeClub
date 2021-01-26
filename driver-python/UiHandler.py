@@ -1,8 +1,10 @@
 import threading
 import tkinter as tk
 import tkinter.ttk as ttk
+# from calculator import CALC_start_thread, CALC_start, CALC_set_exit_cb, CALC_stop
+# from calculator2 import App
 
-global_data = { 'ready': False, 'exit_cb': None }
+global_data = { 'ready': False, 'exit_cb': None, 'start_calculator': False}
 
 class Ui:
     def __init__(self, master=None):
@@ -46,6 +48,10 @@ def start_ui_thread(data):
     data['ready'] = True
     data['UI_app'].run()
 
+    # if data['start_calculator']:
+    #     # CALC_start()
+    #     App().start()
+
     if data['exit_cb']:
         data['exit_cb']()
 
@@ -54,6 +60,12 @@ def start_ui_thread(data):
 def UI_start():
     ui_thread = threading.Thread(target=start_ui_thread, args=(global_data,))
     ui_thread.start()
+
+def UI_show():
+    global_data['UI_root'].deiconify()
+
+def UI_hide():
+    global_data['UI_root'].withdraw()
 
 def UI_set_btn_callback(cb):
     while not global_data['ready']: pass
@@ -74,8 +86,10 @@ def UI_stop():
     except:
         pass # goes here if already destroyed gui
 
-    print("gui was stopped")
+    print("license gui was stopped")
 
+def UI_start_calculator():
+    global_data['start_calculator'] = True
 
 
 

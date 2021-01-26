@@ -13,7 +13,7 @@ use_separate_gui_for_website = False
 ### import :
 
 # ui
-from UiHandler import UI_start, UI_set_btn_callback, UI_set_gui_exit_callback, UI_set_label_text, UI_stop
+from UiHandler import UI_start, UI_set_btn_callback, UI_set_gui_exit_callback, UI_set_label_text, UI_stop, UI_hide, UI_show, UI_start_calculator
 
 # web server
 from WebServer import WEBSERVER_start, WEBSERVER_set_post_callback, WEBSERBER_set_rand, WEBSERVER_stop
@@ -21,11 +21,14 @@ from WebServer import WEBSERVER_start, WEBSERVER_set_post_callback, WEBSERBER_se
 # default browser url opener
 from webbrowser import open as open_webpage 
 
+# calculator
+from calculator import CALC_start_thread, CALC_start, CALC_set_exit_cb, CALC_stop
+
 # custom web browser url opener
 # from WebViewer.wxViewer import WEBVIEWER_open, WEBVIEWER_stop
 # from WebViewer.chromeSelenium import WEBVIEWER_open, WEBVIEWER_stop
 
-import random
+import random, sys
 
 ### consts
 
@@ -51,6 +54,16 @@ def cb_license_was_checked(valid):
         print("successfully verified the authencity of the license")
         UI_set_label_text("license is valid")
         UI_set_label_text("License status: valid !")
+
+        CALC_start_thread()
+        # UI_start_calculator()
+        UI_hide()
+        UI_stop()
+        # try:
+        #     stop_all()
+        # except:
+        #     pass
+        # CALC_start()
     else:
         print("failed to verify license authencity: invalid license")
         UI_set_label_text("license is invalid")
@@ -70,6 +83,7 @@ def start_license_check():
 def stop_all():
     UI_stop()
     WEBSERVER_stop()
+    # CALC_stop()
 
     if use_separate_gui_for_website:
         WEBVIEWER_stop()
@@ -87,3 +101,6 @@ if __name__ == "__main__":
     WEBSERVER_set_post_callback(cb_license_was_checked)
     WEBSERBER_set_rand(rand_added)
 
+    # calculator setup
+    CALC_set_exit_cb(stop_all)
+    # CALC_start_thread()
