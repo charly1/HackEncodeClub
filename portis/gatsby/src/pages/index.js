@@ -4,7 +4,7 @@ import LayoutView from "../components/entrypoint";
 const Page = () => {
   return (
     <main>
-      <title>Dapp Web UI</title>
+      <title>Zucchini Web UI</title>
       <meta charSet="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <LayoutView 

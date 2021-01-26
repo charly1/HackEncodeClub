@@ -110,7 +110,9 @@ export function LicenseForm({
               variant="contained"
               color="primary"
               style={{ marginLeft: '15px' }}
-              onClick={(evt) => sellFunction({ license, priceETH: price })}
+              onClick={() => {
+                if (window.confirm('Do you want to set this license for sale ?')) sellFunction({ license, priceETH: price })
+              }}
             >
               Sell at price
             </Button>
@@ -131,7 +133,10 @@ export function LicenseForm({
               variant="contained"
               color="primary"
               style={{ marginLeft: '15px' }}
-              onClick={(evt) => changeOwner({ license, newOwner: currentOwner })}
+              onClick={(evt) => {
+                if (window.confirm('Do you want to give license to this owner ?'))
+                  changeOwner({ license, newOwner: currentOwner })
+              }}
             >
               Change owner
             </Button>
@@ -140,6 +145,7 @@ export function LicenseForm({
         <Grid style={{ display: 'flex', alignItems: 'center', marginTop: '15px', marginBottom: '30px' }}>
           <div>
             <TextField
+              disabled
               label={date ? "Expiry date" : ""}
               type="datetime-local"
               defaultValue={date ? date.toISOString().split('.')[0] : 0}
@@ -149,6 +155,7 @@ export function LicenseForm({
           </div>
           <div>
             <Button
+              disabled
               variant="contained"
               color="primary"
               style={{ marginLeft: '15px' }}

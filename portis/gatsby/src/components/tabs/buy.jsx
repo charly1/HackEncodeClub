@@ -52,7 +52,12 @@ class Buy extends React.Component {
       modalContent: (
         <BuyForm
           license={item}
-          buyFunction={() => buyLicense({ toBuy: item })}
+          buyFunction={() => {
+            if (window.confirm('Do you want to buy this license ?')) {
+              this.setState({ modalOpen: false })
+              buyLicense({ toBuy: item })
+            }
+          }}
           closeFunction={() => this.setState({ modalOpen: false })}
         />
       ),

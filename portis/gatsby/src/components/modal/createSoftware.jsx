@@ -9,7 +9,7 @@ export function SoftwareForm({
 }) {
   const [name, setName] = useState('');
   const [version, setVersion] = useState('');
-  const [date, setDate] = useState(0);
+  // const [date, setDate] = useState(0);
 
   const inputSizes = { minWidth: '400px', maxWidth: '70vw' };
   return (
@@ -43,7 +43,7 @@ export function SoftwareForm({
           style={inputSizes}
         />
       </Grid>
-      <Grid style={{ display: 'flex', alignItems: 'center', marginTop: '15px', marginBottom: '30px' }}>
+      {/* <Grid style={{ display: 'flex', alignItems: 'center', marginTop: '15px', marginBottom: '30px' }}>
         <TextField
           label={date ? "Expiry date" : ""}
           type="datetime-local"
@@ -51,7 +51,7 @@ export function SoftwareForm({
           onChange={(evt) => setDate(new Date(evt.target.value))}
           variant="outlined"
         />
-      </Grid>
+      </Grid> */}
       <Grid item>
         <Button
           disabled={!name || !version}
@@ -59,7 +59,7 @@ export function SoftwareForm({
           color="primary"
           style={{ marginBottom: '15px' }}
           onClick={() => {
-            createSoftware({ date: date ? parseInt(new Date(date).getTime()/1000) : 0, name, version });
+            createSoftware({ date: 0, name, version });
             closeFunction();
           }}
         >

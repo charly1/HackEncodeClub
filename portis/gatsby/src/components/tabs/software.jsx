@@ -64,8 +64,8 @@ class Softwares extends React.Component {
               wallet={address}
               admin={el.admin}
               address={el.address}
-              date={el.license_time_default}
-              dateLabel="Expiry: "
+              // date={el.license_time_default}
+              // dateLabel="Expiry: "
               total={el.nb_license}
               totalLabel="Number of licenses "
               version={el.version}

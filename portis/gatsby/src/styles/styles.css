@@ -43,7 +43,7 @@ label, input {
   padding: 5px;
   margin: 5px;
 }
-
+/* 
 .btn-menu {
   color: #ffffff;
   padding: 12px;
@@ -82,24 +82,4 @@ label, input {
   .flex-container {
     flex-direction: column;
   }
-}
-
-.block-menu {
-  padding: 4px;
-  /* background-color: #fcda8d; */
-  margin-top: 5px;
-  margin-bottom: 5px;
-}
-
-.block-main {
-  padding: 10px;
-  margin-top: 5px;
-  background-color: #7992e6;
-}
-
-.block-sub {
-  padding: 4px;
-  margin: 5px;
-  background-color: #a1afdb;
-  border-radius: 4px;
 }

@@ -9,7 +9,6 @@ import { LoaderBar } from './display/loader';
 
 class Layout extends React.Component {
   constructor(props) {
-    console.log("🚀 ~ file: entrypoint.jsx ~ line 11 ~ Layout ~ constructor ~ props", props)
     super(props);
     this.onDrawerClose = this.onDrawerClose.bind(this);
     this.handleClick = this.handleClick.bind(this);
@@ -21,6 +20,8 @@ class Layout extends React.Component {
   }
 
   openDrawer() {
+    const { portis } = this.props;
+    portis.showPortis()
     this.setState({ drawerOpen: true });
   }
 
@@ -39,7 +40,7 @@ class Layout extends React.Component {
       getBalance, handleSubmit, handleLogout, isLoggedIn,
       primColor, primLight, btnColor,
     } = this.props;
-    console.log("🚀 ~ file: entrypoint.jsx ~ line 36 ~ Layout ~ render ~ type", type, btnColor, logged, !!web3)
+    console.log("🚀 ~ file: entrypoint.jsx ~ line 36 ~ Layout ~ render ~ type", network, type, btnColor, logged, !!web3)
 
     return (
       <div>
@@ -80,7 +81,7 @@ class Layout extends React.Component {
             </ButtonGroup>
           </Grid>
         </Grid>
-        <Grid container>
+        <Grid container justify="center">
           {logged && web3 ? (
             <TabStateProvider type={type} switchTab={this.handleClick} {...this.props} />
           ) : (
@@ -92,21 +93,21 @@ class Layout extends React.Component {
         <Drawer isOpen={drawerOpen} onClose={this.onDrawerClose} >
           {portis ? (
             <PortisDisplay
-            email={email}
-            network={network}
-            address={address}
-            logged={logged}
-            balance={balance}
-            reputation={reputation}
-            getBalance={getBalance}
-            handleSubmit={handleSubmit}
-            handleLogout={handleLogout}
-            isLoggedIn={isLoggedIn}
-            showPortis={() => portis.showPortis()}
-            title="Portis"
-            mainBgColor={primColor}
-            bgColor={primLight}
-          />
+              email={email}
+              network={network}
+              address={address}
+              logged={logged}
+              balance={balance}
+              reputation={reputation}
+              getBalance={getBalance}
+              handleSubmit={handleSubmit}
+              handleLogout={handleLogout}
+              isLoggedIn={isLoggedIn}
+              showPortis={() => portis.showPortis()}
+              title="Portis"
+              mainBgColor={primColor}
+              bgColor={primLight}
+            />
           ) : (
             <>
               <Typography variant="h6" component="h1">

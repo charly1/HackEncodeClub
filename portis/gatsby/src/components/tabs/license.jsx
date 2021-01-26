@@ -78,7 +78,10 @@ class Licenses extends React.Component {
         modalContent = (
           <CreateForm
             softwares={softwares}
-            createLicense={createLicense}
+            createLicense={(args) => {
+              this.setState({ modalOpen: false })
+              createLicense(args)
+            }}
             closeFunction={() => this.setState({ modalOpen: false })}
           />
         );
@@ -95,7 +98,6 @@ class Licenses extends React.Component {
   render() {
     const { licenses, softwares, address } = this.props;
     const { modalOpen, modalContent, filters } = this.state;
-
 
     return (
       <Paper elevation={0} style={{ backgroundColor: '#bec9e2', width: '100%' }}>

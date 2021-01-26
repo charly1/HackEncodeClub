@@ -14,7 +14,7 @@ export function typeCheckAddress(address, prefix=true) {
 
 // functions to talk with smart contracts
 
-const gasUseEveryWhere = 1200000;
+const gasUseEveryWhere = 5200000;
 const NULL_ADR = "0x0000000000000000000000000000000000000000"
 const FOR_SALE_NO_FILTER = 2
 
@@ -26,15 +26,18 @@ const eth2wei = (web3, amount) => {
     return parseInt(web3.utils.toWei(String(amount), 'ether'))
 }
 
-async function _signTransaction(contract_l, web3, tx_call, account) {
+function _signTransaction(contract, web3, tx_call, account) {
     return tx_call.estimateGas()
-      .then(gas =>{
-        return web3.eth.signTransaction({
+      .then(gas => {
+        const tx_data = {
             data: tx_call.encodeABI(),
             from: account,
-            gas: gas,
-            to: contract_l.options.address,
-        })
+            gas: gas || gasUseEveryWhere,
+            // gasPrice: gasUseEveryWhere,
+            to: contract.options.address,
+        };
+
+        return web3.eth.signTransaction(tx_data)
       })
       .then(signedTx => {
           showLogs({ type: '[INFO]:', msg: "signed transaction" + signedTx });
@@ -50,8 +53,14 @@ async function _signTransaction(contract_l, web3, tx_call, account) {
       });
 }
 
+export function SC_buy_license(new_owner, li_contract, price, web3) {
+    return web3.eth.sendTransaction({from: new_owner, to: li_contract, value: web3.utils.toWei(price, "ether")})
+}
+
+
 // SH functions
 export function SH_addSoftware(contract_sh, web3, account, name, version, license_time_default, software_admin) {
+  console.log("🚀 ~ file: utils.js ~ line 55 ~ SH_addSoftware ~ account", account, software_admin)
   if (!web3 || !account || !name || !version || !software_admin) return Promise.resolve(false);
 
   const tx_call = contract_sh.methods.addSoftware(name, version, license_time_default, software_admin)
@@ -329,10 +338,10 @@ export function S_add_license_default_expiration(contract_s, web3, account, admi
 // using this function will create a license that has the expiration_timestamp NOT determined by the parameter license_time_default
 // expiration_timestamp means the license has no expiration date
 export function S_add_license(contract_s, web3, account, admin, owner, expiration_timestamp=0) {
-  if (!web3 || !account || !admin || !owner) 
+  if (!web3 || !account || !admin || !owner)
     return false;
 
-  const tx_call = contract_s.methods.add_license(admin, owner, expiration_timestamp);
+  const tx_call = contract_s.methods.add_license(admin, owner, 0);
   return _signTransaction(contract_s, web3, tx_call, account);
 }
 

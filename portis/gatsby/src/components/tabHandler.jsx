@@ -53,20 +53,31 @@ class TabProvider extends React.Component {
     if (prevProps.type !== this.props.type) {
       this.initStates();
     }
+    if (prevProps.network !== this.props.network) {
+      const { web3 } = this.props;
+      let contractAddress = process.env.ROPSTEN_CONTRACT_HANDLER;
+      console.log("🚀 ~ file: tabHandler.jsx ~ line 44 ~ TabProvider ~ componentDidMount ~ this.props.network", this.props.network)
+      if (this.props.network && this.props.network.includes('binance')) contractAddress = process.env.BINANCE_CONTRACT_HANDLER;
+      const contract_sh = new web3.eth.Contract(abi.HANDLER_ABI, contractAddress)
+      this.setState({
+        contractAddress,
+        contract_sh,
+      }, this.initStates);
+    }
   }
 
   onEvent(event, args) {
-  console.log("🚀 NEW EVENT! !!bProvider ~ onEvent ~ args", args)
+  console.log("🚀 NEW EVENT! !!bProvider ~ onEvent ~ args", event, args)
     let text = '';
     switch(event) {
       case 'sw_added':
-        text = `New software added (name: ${args.name}`;
+        alert('Congrats ! New software created !');
+        this.loadSoftwares();
         break;
       default:
         break;
     }
-    alert(text);
-    window.location.reload();
+    // window.location.reload();
   }
 
   initStates() {
@@ -185,21 +196,26 @@ class TabProvider extends React.Component {
   }
 
   createSoftware({ date, name, version }) {
-    console.log("create new SWOFTWARE", date, version, name)
     const { contract_sh } = this.state;
     const { web3, address } = this.props;
     this.setState({ loader: true })
     func.SH_addSoftware(contract_sh, web3, address, name, version, date, address)
-      .then((res) => (res ? alert('SUCESS creating software!') : null))
+      .then((res) => (res ? null : alert('! Software creation failed...')))
       .finally(() => this.setState({ loader: false }))
   }
 
   setLiForSale({ license, priceETH }) {
-    console.log("sell LICENSE", license, priceETH)
+    console.log("🚀 ~ file: tabHandler.jsx ~ line 209 ~ TabProvider ~ setLiForSale ~ license", license)
+    const { web3, address } = this.props;
+    func.L_set_for_sale(license.contract, web3, address, priceETH)
+      .then(res => (res ? alert('License is for sale !', res) : alert('! License set for sale failed...')))
   }
 
   setNewLiOwner({ license, newOwner }) {
     console.log("set new owner LICENSE", license, newOwner)
+    const { web3, address } = this.props;
+    func.L_set_owner(license.contract, web3, address, newOwner)
+      .then(res => (res ? alert('License owner changed !', res) : alert('! License owner change faild...')))
   }
 
   setLiExpiryDate({ license, newDate }) {
@@ -207,11 +223,31 @@ class TabProvider extends React.Component {
   }
 
   createLicense({ price, date, software }) {
-    console.log("create new LICENSE", software, date)
+    console.log("create new LICENSE", software, date, price)
+    const { web3, address } = this.props;
+    func.S_add_license(software.contract, web3, address, address, address, date)
+      .then((res) => {
+        console.log("🚀 ~ file: tabHandler.jsx ~ line 230 ~ TabProvider ~ .then ~ res", res)
+        if (res) {
+          alert('New license created !');
+          this.loadLicenses();
+        } else {
+          alert('! License creation failed...');
+        }
+      });
   }
 
   buyLicense({ toBuy }) {
-  console.log("🚀 ~ file: tabHandler.jsx ~ line 165 ~ TabProvider ~ buyLicense ~ args", toBuy)
+    const { web3, address } = this.props;
+    this.setState({ loader: true })
+    func.SC_buy_license(address, toBuy.license_address, toBuy.selling_price_ETH, web3)
+      .then(res => {
+        if(res) {
+          alert('New license aquired !');
+          this.loadForSale();
+        }
+      })
+      .finally(() => this.setState({ loader: false }))
   }
 
   render() {
@@ -239,7 +275,7 @@ class TabProvider extends React.Component {
           <LicensePage
             key={`key${String(refresh)}`}
             licenses={liToShow}
-            softwares={swToShow.filter(sw => sw.admin === address)}
+            softwares={swToShow.filter(sw => sw.admin.toUpperCase() === address.toUpperCase())}
             setForSale={this.setLiForSale}
             setNewOwner={this.setNewLiOwner}
             setExpiryDate={this.setLiExpiryDate}
@@ -261,10 +297,9 @@ class TabProvider extends React.Component {
       default:
         break;
     }
-    console.log("🚀 ~ file: tabHandler.jsx ~ line 224 ~ TabProvider ~ render ~ content", content)
 
     return (
-      <Grid>
+      <Grid style={{ minWidth: '70vw' }}>
         {content}
         {loader ? (
           <Grid item style={{ marginTop: '20px', width: '60vw' }}>

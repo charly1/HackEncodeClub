@@ -48,7 +48,7 @@ function searItem({ value, items, searchField }) {
   if (items && items.length) {
     return items.filter(el => {
       if(el[searchField]) {
-        return el[searchField].includes(value);
+        return el[searchField].toUpperCase().includes(value.toUpperCase());
       }
       return false;
     });

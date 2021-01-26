@@ -48,9 +48,9 @@ export function PortisDisplay(props) {
                 <span className="description">Network: 
                 <select name="f_network" onBlur={(evt) => setTextSelector(evt.target.value)}>
                   <option value="ropsten">Ethereum Test-net (Ropsten)</option>
-                  <option value="mainnet">Ethereum Main-net</option>
+                  {/* <option value="mainnet">Ethereum Main-net</option> */}
                   <option value="binance-test">Binance Test-net</option>
-                  <option value="binance-main">Binance Main-net</option>
+                  {/* <option value="binance-main">Binance Main-net</option> */}
                 </select>
                 </span>
               </label>

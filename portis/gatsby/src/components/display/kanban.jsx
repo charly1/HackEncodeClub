@@ -32,7 +32,6 @@ const Kanban = ({
   buttonLabel,
   admin,
 }) => {
-  console.log("🚀 ~ file: kanban.jsx ~ line 34 ~ admin", admin, address)
   const classes = useStyles();
   let displayDate = null;
   if (date && date !== '0') displayDate = new Date(date).toISOString().split('.')[0].split('T');

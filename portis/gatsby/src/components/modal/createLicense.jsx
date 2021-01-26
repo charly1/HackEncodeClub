@@ -22,8 +22,8 @@ export function LicenseForm({
   closeFunction,
 }) {
   const classes = useStyles();
-  const [isForSale, setForSale] = useState(false);
-  const [price, setPrice] = useState(parseFloat(0));
+  // const [isForSale, setForSale] = useState(false);
+  // const [price, setPrice] = useState(parseFloat(0));
   const [date, setDate] = useState(0);
   const [software, setSoftware] = useState('');
 
@@ -43,7 +43,7 @@ export function LicenseForm({
       </Grid>
       <Grid style={{ display: 'flex', alignItems: 'center' }}>
         <FormControl className={classes.formControl}>
-          <InputLabel>Software</InputLabel>
+          <InputLabel>From software</InputLabel>
           <Select
             value={software}
             onChange={(evt) => setSoftware(evt.target.value)}
@@ -54,7 +54,7 @@ export function LicenseForm({
           </Select>
         </FormControl>
       </Grid>
-      <Grid item style={{ margin: '0px' }}>
+      {/* <Grid item style={{ margin: '0px' }}>
         <FormControlLabel
           label="Set for sale ?"
           control={
@@ -77,10 +77,13 @@ export function LicenseForm({
             variant={isForSale ? "outlined" : "filled"}
             onChange={(evt) => setPrice(evt.target.value)}
           />
-      </Grid>
+      </Grid> */}
       <Grid style={{ display: 'flex', alignItems: 'center', marginTop: '15px', marginBottom: '30px' }}>
           <TextField
-            label={date ? "Expiry date" : ""}
+            label="Expiry date"
+            InputLabelProps={{
+              shrink: true,
+            }}
             type="datetime-local"
             defaultValue={date ? date.toISOString().split('.')[0] : 0}
             onChange={(evt) => setDate(new Date(evt.target.value))}
@@ -93,7 +96,10 @@ export function LicenseForm({
           variant="contained"
           color="primary"
           style={{ marginBottom: '15px' }}
-          onClick={() => createLicense({ price, date, software })}
+          onClick={() => {
+            if (window.confirm(`Do you want to create a new license of this software: ${software.name} ?`))
+              createLicense({ price: 0, date: date ? parseInt(new Date(date).getTime()/1000) : 0, software })
+          }}
         >
           Create
         </Button>

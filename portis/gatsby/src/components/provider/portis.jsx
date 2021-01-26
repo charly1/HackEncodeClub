@@ -106,9 +106,11 @@ function portisWrapper(WrappedComponent) {
           if (value === 'binance-test') {
             option = { name: 'binance testnet', nodeUrl: process.env.BINANCE_NODE, chainId: 97 };
           } else if (value === 'binance-main') {
-            option = { name: 'binance mainnet', nodeUrl: process.env.BINANCE_NODE, chainId: 97 };
+            option = { name: 'binance mainnet', nodeUrl: process.env.BINANCE_MAINNET, chainId: 56 };
           }
+          console.log("🚀 ~ value", option, value)
           portis.changeNetwork(option || value);
+          this.setState({ network: option ? option.name : value });
           break;
         case 'address':
           // check address validity
