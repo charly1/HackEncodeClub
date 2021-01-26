@@ -26,13 +26,16 @@ const eth2wei = (web3, amount) => {
     return parseInt(web3.utils.toWei(String(amount), 'ether'))
 }
 
-async function _signTransaction(contract_l, web3, encodedABI, account, gas=gasUseEveryWhere) {
-    return web3.eth.signTransaction({
-        data: encodedABI,
-        from: account,
-        gas: gas,
-        to: contract_l.options.address,
-    })
+async function _signTransaction(contract_l, web3, tx_call, account) {
+    return tx_call.estimateGas()
+      .then(gas =>{
+        return web3.eth.signTransaction({
+            data: tx_call.encodeABI(),
+            from: account,
+            gas: gas,
+            to: contract_l.options.address,
+        })
+      })
       .then(signedTx => {
           showLogs({ type: '[INFO]:', msg: "signed transaction" + signedTx });
           return web3.eth.sendSignedTransaction(signedTx.raw);
@@ -52,17 +55,7 @@ export function SH_addSoftware(contract_sh, web3, account, name, version, licens
   if (!web3 || !account || !name || !version || !software_admin) return Promise.resolve(false);
 
   const tx_call = contract_sh.methods.addSoftware(name, version, license_time_default, software_admin)
-
-  return tx_call.estimateGas()
-    .then(gas => {
-      console.log("Gaz needed:", gas)
-      const encodedABI = tx_call.encodeABI();
-      return _signTransaction(contract_sh, web3, encodedABI, account, gas);
-    })
-    .catch(err => {
-        console.error("An error occured while calling the func:", err);
-        return false;
-    });
+  return _signTransaction(contract_sh, web3, tx_call, account);
 }
 
 export function SH_get_softwares_from_index(contract_sh, index) {
@@ -106,18 +99,16 @@ export function SH_remove_software_from_index (contract_sh, web3, account, index
   if (!web3 || !account) 
     return false;
 
-  const encodedABI = contract_sh.methods.removeSoftware(index).encodeABI();
-
-  return _signTransaction(contract_sh, web3, encodedABI, account);
+  const tx_call = contract_sh.methods.removeSoftware(index);
+  return _signTransaction(contract_sh, web3, tx_call, account);
 }
 
 export function SH_remove_software (contract_sh, web3, account, address) {
   if (!web3 || !account || !address) 
     return false;
 
-  const encodedABI = contract_sh.methods.removeSoftware(address).encodeABI();
-
-  return _signTransaction(contract_sh, web3, encodedABI, account);
+  const tx_call = contract_sh.methods.removeSoftware(address);
+  return _signTransaction(contract_sh, web3, tx_call, account);
 }
 
 export function SH_get_softwares_with_admin(contract_sh, admin) {
@@ -219,36 +210,32 @@ export function S_set_admin (contract_s, web3, account, admin_address) {
   if (!web3 || !account || !admin_address) 
     return false;
 
-  const encodedABI = contract_s.methods.set_admin(admin_address).encodeABI();
-
-  return _signTransaction(contract_s, web3, encodedABI, account);
+  const tx_call = contract_s.methods.set_admin(admin_address);
+  return _signTransaction(contract_s, web3, tx_call, account);
 }
 
 export function S_set_name (contract_s, web3, account, name) {
   if (!web3 || !account || !name) 
     return false;
 
-  const encodedABI = contract_s.methods.set_name(name).encodeABI();
-
-  return _signTransaction(contract_s, web3, encodedABI, account);
+  const tx_call = contract_s.methods.set_name(name);
+  return _signTransaction(contract_s, web3, tx_call, account);
 }
 
 export function S_set_version (contract_s, web3, account, version) {
   if (!web3 || !account || !version) 
     return false;
 
-  const encodedABI = contract_s.methods.set_version(version).encodeABI();
-
-  return _signTransaction(contract_s, web3, encodedABI, account);
+  const tx_call = contract_s.methods.set_version(version);
+  return _signTransaction(contract_s, web3, tx_call, account);
 }
 
 export function S_set_license_time_default (contract_s, web3, account, license_time_default) {
   if (!web3 || !account || !license_time_default) 
     return false;
 
-  const encodedABI = contract_s.methods.set_license_time_default(license_time_default).encodeABI();
-
-  return _signTransaction(contract_s, web3, encodedABI, account);
+  const tx_call = contract_s.methods.set_license_time_default(license_time_default);
+  return _signTransaction(contract_s, web3, tx_call, account);
 }
 
 export function S_get_licenses_from_index(contract_s, index) {
@@ -335,9 +322,8 @@ export function S_add_license_default_expiration(contract_s, web3, account, admi
   if (!web3 || !account || !admin || !owner) 
     return false;
 
-  const encodedABI = contract_s.methods.add_license(admin, owner).encodeABI();
-
-  return _signTransaction(contract_s, web3, encodedABI, account);
+  const tx_call = contract_s.methods.add_license(admin, owner);
+  return _signTransaction(contract_s, web3, tx_call, account);
 }
 
 // using this function will create a license that has the expiration_timestamp NOT determined by the parameter license_time_default
@@ -346,9 +332,8 @@ export function S_add_license(contract_s, web3, account, admin, owner, expiratio
   if (!web3 || !account || !admin || !owner) 
     return false;
 
-  const encodedABI = contract_s.methods.add_license(admin, owner, expiration_timestamp).encodeABI();
-
-  return _signTransaction(contract_s, web3, encodedABI, account);
+  const tx_call = contract_s.methods.add_license(admin, owner, expiration_timestamp);
+  return _signTransaction(contract_s, web3, tx_call, account);
 }
 
 export function S_get_nb_license(contract_s) {
@@ -406,18 +391,16 @@ export function S_remove_license_with_index(contract_s, web3, account, index) {
   if (!web3 || !account) 
     return false;
 
-  const encodedABI = contract_s.methods.removeLicense(index).encodeABI();
-
-  return _signTransaction(contract_s, web3, encodedABI, account);
+  const tx_call = contract_s.methods.removeLicense(index);
+  return _signTransaction(contract_s, web3, tx_call, account);
 }
 
 export function S_remove_license_with_address(contract_s, web3, account, adr) {
   if (!web3 || !account || !adr) 
     return false;
 
-  const encodedABI = contract_s.methods.removeLicense(adr).encodeABI();
-
-  return _signTransaction(contract_s, web3, encodedABI, account);
+  const tx_call = contract_s.methods.removeLicense(adr);
+  return _signTransaction(contract_s, web3, tx_call, account);
 }
 
 export function S_get_info_software_and_all_licenses(contract_s) {
@@ -563,10 +546,9 @@ export function L_get_owner(contract_l) {
 
 export function L_set_owner(contract_l, web3, account, owner) {
   if (!web3 || !account) return false;
-  const query = contract_l.methods.set_owner(owner);
-  const encodedABI = query.encodeABI();
 
-  return _signTransaction(contract_l, web3, encodedABI, account);
+  const tx_call = contract_l.methods.set_owner(owner);
+  return _signTransaction(contract_l, web3, tx_call, account);
 }
 
 export function L_get_admin(contract_l) {
@@ -583,10 +565,9 @@ export function L_get_admin(contract_l) {
 
 export function L_set_admin(contract_l, web3, account, admin) {
   if (!web3 || !account) return false;
-  const query = contract_l.methods.set_admin(admin);
-  const encodedABI = query.encodeABI();
 
-  return _signTransaction(contract_l, web3, encodedABI, account);
+  const tx_call = contract_l.methods.set_admin(admin);
+  return _signTransaction(contract_l, web3, tx_call, account);
 }
 
 export function L_get_expiration_timestamp(contract_l) {
@@ -603,18 +584,16 @@ export function L_get_expiration_timestamp(contract_l) {
 
 export function L_set_expiration_timestamp(contract_l, web3, account, timestamp=0) {
   if (!web3 || !account) return false;
-  const query = contract_l.methods.set_expiration_timestamp(timestamp);
-  const encodedABI = query.encodeABI();
 
-  return _signTransaction(contract_l, web3, encodedABI, account);
+  const tx_call = contract_l.methods.set_expiration_timestamp(timestamp);
+  return _signTransaction(contract_l, web3, tx_call, account);
 }
 
 export function L_remove_expiration_timestamp(contract_l, web3, account) {
     if (!web3 || !account) return false;
-    const query = contract_l.methods.remove_expiration_timestamp();
-    const encodedABI = query.encodeABI();
-  
-    return _signTransaction(contract_l, web3, encodedABI, account);
+
+    const tx_call = contract_l.methods.remove_expiration_timestamp();
+    return _signTransaction(contract_l, web3, tx_call, account);
 }
 
 export function L_get_is_for_sale(contract_l) {
@@ -645,18 +624,15 @@ export function L_get_selling_price(contract_l) {
 export function L_set_for_sale(contract_l, web3, account, price=10) {
   if (!web3 || !account) return false;
 
-  const query = contract_l.methods.set_for_sale(String(price));
-  const encodedABI = query.encodeABI();
-
-  return _signTransaction(contract_l, web3, encodedABI, account);
+  const tx_call = contract_l.methods.set_for_sale(String(price));
+  return _signTransaction(contract_l, web3, tx_call, account);
 }
 
 export function L_remove_for_sale(contract_l, web3, account) {
     if (!web3 || !account) return false;
-    const query = contract_l.methods.remove_for_sale();
-    const encodedABI = query.encodeABI();
 
-    return _signTransaction(contract_l, web3, encodedABI, account);
+    const tx_call = contract_l.methods.remove_for_sale();
+    return _signTransaction(contract_l, web3, tx_call, account);
 }
 
 // events
