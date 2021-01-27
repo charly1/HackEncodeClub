@@ -2,7 +2,7 @@
 hostName = "localhost"
 serverPort = 3000
 
-use_binance = True # binance test or ropsten
+use_binance = False # binance test or ropsten
 use_working_contract = True
 
 use_separate_gui_for_website = False

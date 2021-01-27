@@ -8,18 +8,21 @@ function set_status(text=null, icon="loading", text_debug=null) {
             document.getElementById('loading_gif').style.display = "";
             document.getElementById('valid_img').style.display = "none";
             document.getElementById('invalid_img').style.display = "none";
+            document.getElementById('link_buy').style.display = "none";
         break;
 
         case 'valid':
             document.getElementById('loading_gif').style.display = "none";
             document.getElementById('valid_img').style.display = "";
             document.getElementById('invalid_img').style.display = "none";
+            document.getElementById('link_buy').style.display = "none";
         break;
 
         case 'invalid':
             document.getElementById('loading_gif').style.display = "none";
             document.getElementById('valid_img').style.display = "none";
             document.getElementById('invalid_img').style.display = "";
+            document.getElementById('link_buy').style.display = "";
         break;
     }
 
@@ -104,7 +107,7 @@ portis.onLogin((walletAddress, email, reputation) => {
                 }
             }
             else {
-                set_status("Invalid key. You have no right to use this software with this license.", "invalid", "You can close this window.");
+                set_status("Invalid key. You have no right to use this software with this license.", "invalid", "");
                 post(window.location.pathname + '/check_owner', {contr_adr: software_contract, is_valid: false});
             }
         })
