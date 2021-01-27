@@ -27,9 +27,16 @@ const eth2wei = (web3, amount) => {
 }
 
 function _signTransaction(contract, web3, tx_call, account) {
-    return tx_call.estimateGas()
+  var nonce = null;
+  
+    return web3.eth.getTransactionCount(account)
+      .then(tx_count => {
+        nonce = '0x' + (tx_count + 1).toString(16);
+        return tx_call.estimateGas();
+      })
       .then(gas => {
         const tx_data = {
+            nonce: nonce,
             data: tx_call.encodeABI(),
             from: account,
             gas: gas || gasUseEveryWhere,
