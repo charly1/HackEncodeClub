@@ -59,8 +59,10 @@ export function SoftwareForm({
           color="primary"
           style={{ marginBottom: '15px' }}
           onClick={() => {
-            createSoftware({ date: 0, name, version });
-            closeFunction();
+            if (window.confirm('Do you want to create a new software ?')) {
+              createSoftware({ date: 0, name, version });
+              closeFunction();
+            }
           }}
         >
           Create

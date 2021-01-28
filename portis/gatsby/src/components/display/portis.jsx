@@ -1,4 +1,19 @@
 import React, { useState, useEffect } from "react"
+import { makeStyles } from '@material-ui/core/styles';
+import {
+  Grid, Button, Typography, TextField,
+  InputLabel, FormControl, Select, MenuItem,
+} from '@material-ui/core';
+
+const useStyles = makeStyles((theme) => ({
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
+}));
 
 export function PortisDisplay(props) {
   const {
@@ -6,111 +21,146 @@ export function PortisDisplay(props) {
     network,
     balance,
     reputation,
-    email,
     address,
     isLoggedIn,
     handleLogout,
     handleSubmit,
-    getBalance,
     showPortis,
     title,
-    mainBgColor,
-    bgColor,
   } = props;
 
+  const classes = useStyles();
   const [wallet, setTextWallet] = useState(address);
   const [selection, setTextSelector] = useState(network);
   useEffect(() => { setTextWallet(address)}, [address] );
   useEffect(() => { setTextSelector(network)}, [network] );
+  const inputSizes = { minWidth: '400px', maxWidth: '70vw' };
 
   return (
-    <div className="block-main">
-      <h2>{title || 'Hackathon challenge !'}</h2>
-      <div className="block-sub">
-        <button onClick={() => showPortis()}>Show Portis</button>
-        <button onClick={() => isLoggedIn()}>Logged: {logged ? '🔵' : '🔴'}</button>
-        <button onClick={() => handleLogout()}>Logout</button>
-      </div>
-      {logged ? (
-        <>
-          {/*<div className="block-sub">
-            <form name="s_email" onSubmit={handleSubmit}>
-              <label>
-                <span className="description">Email:</span>
-                <input type="text" value={email} name="f_email" onChange={handleChange} size="40"/>
-              </label>
-              <input type="submit" value="Set email" />
-            </form>
-          </div>*/}
-          <div className="block-sub">
-            <form onSubmit={(evt) => handleSubmit(evt, 'network', selection)}>
-              <label>
-                <span className="description">Network: 
-                <select name="f_network" onBlur={(evt) => setTextSelector(evt.target.value)}>
-                  <option value="ropsten">Ethereum Test-net (Ropsten)</option>
-                  {/* <option value="mainnet">Ethereum Main-net</option> */}
-                  <option value="binance-test">Binance Test-net</option>
-                  {/* <option value="binance-main">Binance Main-net</option> */}
-                </select>
-                </span>
-              </label>
-              <input type="submit" value="Switch network" />
-            </form>
+    <>
+      <Grid
+        container
+        spacing={2}
+        direction="column"
+        alignItems="center"
+        justify="center"
+      >
+        <Grid item style={{ marginTop: '25px', marginBottom: '30px' }}>
+          <Typography variant="h4" component="h1" style={{ maxWidth: '95vw',  overflowWrap: 'break-word' }}>
+            {title || 'Zucchini Dapp'}
+          </Typography>
+        </Grid>
+        <Grid item>
+          <div>
+          <Button
+            variant="outlined"
+            color="primary"
+            style={{ margin: '3px', width: '160px' }}
+            onClick={() => showPortis()}
+          >
+            Show Portis
+          </Button>
+          <Button
+            variant="outlined"
+            color="primary"
+            style={{ margin: '3px', width: '140px' }}
+            onClick={() => isLoggedIn()}
+          >
+            {`Logged ? ${logged ? '🔵' : '🔴'}`}
+          </Button>
+          <Button
+            variant="outlined"
+            color="primary"
+            style={{ margin: '3px'}}
+            onClick={() => handleLogout()}
+          >
+            Logout
+          </Button>
           </div>
-          {/* <div className="block-sub">
-            <button onClick={() => portis.showBitcoinWallet()}>Bitcoin Wallet</button>
-          </div> */}
-          <div className="block-sub">
-            <form onSubmit={(evt) => handleSubmit(evt, 'address', wallet)}>
-              <label>
-                <span className="description">Wallet:</span>
-                <input
-                  type="text"
-                  value={wallet}
-                  onChange={(evt) => setTextWallet(evt.target.value)}
-                  size="50"
-                />
-              </label>
-              <input type="submit" value="Change wallet" />
-            </form>
-          </div>
-          {/* <div className="block-sub">
-            <button onClick={() => portis.getExtendedPublicKey()}>Get PKey</button>
-            {pkey ? <span className="description">{pkey}</span> : null}
-          </div>
-          <div className="block-sub">
-            <form name="s_tosign" onSubmit={handleSubmit}>
-              <label>
-                <span className="description">Message to sign:</span>
-                <input type="text" value={tosign} name="f_tosign" onChange={handleChange} size="50" />
-              </label>
-              <input type="submit" value="Sign message" />
-            </form>
-            {signed
-              ? (
-              <div className="block-sub">
-                <span className="description">Signature: {signed}</span>
-              </div>
-              )
+        </Grid>
+      </Grid>
+      <Grid
+        container
+        spacing={2}
+        direction="column"
+        alignItems="center"
+        justify="center"
+        style={{ margin: '6px' }}
+      >
+        {logged ? (
+          <div style={{ margin: '15px' }}>
+            <Grid style={{ display: 'flex', alignItems: 'center', minWidth: '180px' }}>
+              <FormControl className={classes.formControl}>
+                <InputLabel>Network</InputLabel>
+                <Select
+                  style={{ width: '250px' }}
+                  value={selection}
+                  onChange={(evt) => setTextSelector(evt.target.value)}
+                >
+                  <MenuItem key="ropsten" value="ropsten">Ethereum Test-net (Ropsten)</MenuItem>
+                  <MenuItem key="binance-test" value="binance-test">Binance Test-net</MenuItem>
+                  {/* <MenuItem key="mainnet" value="mainnet">Ethereum Main-net</MenuItem>
+                  <MenuItem key="binance-main" value="binance-main">Binance Main-net</MenuItem> */}
+                </Select>
+              </FormControl>
+              <Button
+                disabled={!selection}
+                variant="contained"
+                color="primary"
+                style={{ margin: '15px' }}
+                onClick={(evt) => handleSubmit(evt, 'network', selection)}
+              >
+                Switch Network
+              </Button>
+            </Grid>
+            <Grid item>
+              <TextField
+                label="Wallet address"
+                defaultValue={wallet}
+                InputLabelProps={{ shrink: true }}
+                variant="outlined"
+                style={{...inputSizes, marginTop: '2px' }}
+                onChange={(evt) => setTextWallet(evt.target.value)}
+              />
+              <Button
+                variant="contained"
+                color="primary"
+                style={{ marginLeft: '12px' }}
+                onClick={(evt) => handleSubmit(evt, 'address', wallet)}
+              >
+                Change Wallet
+              </Button>
+            </Grid>
+            <Grid item>
+            {!Number.isNaN(balance)
+                ? (
+                  <TextField
+                    label="Balance ETH"
+                    value={balance}
+                    InputLabelProps={{ shrink: true }}
+                    InputProps={{ readOnly: true }}
+                    variant="filled"
+                    style={inputSizes}
+                  />
+                )
+                : null}
+              {reputation
+                ? (
+                  <TextField
+                    label="Reputation"
+                    value={reputation}
+                    InputLabelProps={{ shrink: true }}
+                    InputProps={{ readOnly: true }}
+                    variant="filled"
+                    style={inputSizes}
+                  />
+                )
               : null}
-          </div> */}
-          {!Number.isNaN(balance)
-            ? (
-            <div className="block-sub">
-              <span className="description">Balance: {balance}</span>
-            </div>
-            )
-            : null}
-          {reputation
-            ? (
-            <div className="block-sub">
-              <span className="description">Reputation: {reputation}</span>
-            </div>
-            )
-          : null}
-        </>
-      ) : null}
-    </div>
+            </Grid>
+          </div>
+        ) : null}
+      </Grid>
+    </>
   )
 }
 

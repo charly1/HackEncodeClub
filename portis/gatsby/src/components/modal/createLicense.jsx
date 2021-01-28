@@ -1,8 +1,8 @@
 import React, { useState } from "react"
 import { makeStyles } from '@material-ui/core/styles';
 import {
-  Grid, Button, Typography, TextField, FormControlLabel,
-  InputLabel, Checkbox, FormControl, Select, MenuItem,
+  Grid, Button, Typography, TextField,
+  InputLabel, FormControl, Select, MenuItem,
 } from '@material-ui/core';
 
 
@@ -27,7 +27,6 @@ export function LicenseForm({
   const [date, setDate] = useState(0);
   const [software, setSoftware] = useState('');
 
-  const inputSizes = { minWidth: '400px', maxWidth: '70vw' };
   return (
     <Grid
       container
@@ -45,6 +44,7 @@ export function LicenseForm({
         <FormControl className={classes.formControl}>
           <InputLabel>From software</InputLabel>
           <Select
+            style={{ width: '250px' }}
             value={software}
             onChange={(evt) => setSoftware(evt.target.value)}
           >

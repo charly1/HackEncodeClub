@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { fade, makeStyles } from '@material-ui/core/styles';
-import { Button, Paper, InputBase } from '@material-ui/core';
+import { InputBase } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 
 const useStyles = makeStyles(theme => ({

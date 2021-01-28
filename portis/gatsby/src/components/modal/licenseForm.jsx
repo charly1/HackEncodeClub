@@ -44,7 +44,7 @@ export function LicenseForm({
       >
         <Grid item style={{ marginTop: '25px', marginBottom: '30px' }}>
           <Typography variant="h5" component="h1" style={{ maxWidth: '95vw',  overflowWrap: 'break-word' }}>
-            {`Purchasing license of: ${name}`}
+            {`Details license of: ${name}`}
           </Typography>
         </Grid>
         {version ? (

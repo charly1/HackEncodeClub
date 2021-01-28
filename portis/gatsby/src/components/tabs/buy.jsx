@@ -13,7 +13,9 @@ class Buy extends React.Component {
     this.handleFilter = this.handleFilter.bind(this);
     this.openModal = this.openModal.bind(this);
     this.state = {
-      filters: [{ tag: 'offers', state: false, label: 'Exclude mine' }],
+      filters: {
+        offers: { tag: 'offers', state: false, label: 'Exclude owned' }
+      },
       modalContent: null,
       modalOpen: false,
       toShow: [],
@@ -39,10 +41,13 @@ class Buy extends React.Component {
     if (!filter) {
       return;
     }
-    this.setState({
-      filters: [{ tag: 'offers', state: !filter.state, label: 'Exclude mine' }],
+    this.setState(prevState => ({
+      filters: {
+        ...prevState.filters,
+        [filter.tag]: { ...filter, state: !filter.state },
+      },
       toShow: filter.state ? licenses : licenses.filter(el => el.owner.toUpperCase() !== address.toUpperCase()),
-    });
+    }));
   }
 
   openModal(item) {
@@ -85,9 +90,12 @@ class Buy extends React.Component {
               admin={el.admin}
               address={el.license_address}
               date={el.expiration_timestamp}
+              price={el.selling_price_ETH}
               dateLabel="Expiry: "
               version={el.version}
               owner={el.owner}
+              disableButton={el.owner.toUpperCase() === address.toUpperCase()
+                || el.admin.toUpperCase() === address.toUpperCase()}
               openKanban={() => this.openModal(el)}
               buttonLabel="Buy details"
             />

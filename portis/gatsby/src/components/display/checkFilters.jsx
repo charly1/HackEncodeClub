@@ -4,10 +4,20 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 
 
+function comapreTag(a, b) {
+  if ( a.tag < b.tag ) {
+    return -1;
+  }
+  if ( a.tag > b.tag ) {
+    return 1;
+  }
+  return 0;
+}
+
 const CheckboxLabels = ({ filters, handleFilter, disabled=false }) => {
   return (
     <FormGroup row>
-      {filters.map((filter) => (
+      {Object.values(filters).sort(comapreTag).map((filter) => (
           <FormControlLabel
             key={filter.tag}
             disabled={disabled}

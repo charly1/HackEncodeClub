@@ -1,8 +1,8 @@
 
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Grid, Card, CardActions, CardContent, Button, Typography }  from '@material-ui/core';
-
+import { Card, CardActions, CardContent, Button, Typography }  from '@material-ui/core';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 const useStyles = makeStyles({
   root: {
@@ -12,6 +12,11 @@ const useStyles = makeStyles({
     margin: '6px',
   },
   pos: {
+    marginBottom: 12,
+  },
+  price: {
+    fontSize: 'larger',
+    textDecorationLine: 'underline',
     marginBottom: 12,
   },
 });
@@ -29,8 +34,10 @@ const Kanban = ({
   version,
   forSale,
   openKanban,
+  actionRemove,
   buttonLabel,
   admin,
+  disableButton,
 }) => {
   const classes = useStyles();
   let displayDate = null;
@@ -50,11 +57,6 @@ const Kanban = ({
         {version ? (
           <Typography variant="body1" component="p" style={{ marginBottom: '5px' }}>
             {`version: ${version}`}
-          </Typography>
-        ) : null}
-        {price ? (
-          <Typography variant="body2" component="p">
-            {`Price: ${price} ETH`}
           </Typography>
         ) : null}
         {date ? (
@@ -83,9 +85,30 @@ const Kanban = ({
             {`Admin 👍`}
           </Typography>
         ) : null}
+        {price ? (
+          <Typography className={classes.price}>
+            {`Price: ${price} ETH`}
+          </Typography>
+        ) : null}
       </CardContent>
       <CardActions>
-        <Button size="small" variant="outlined" onClick={openKanban}>{buttonLabel || 'View more'}</Button>
+        <Button
+          size="small"
+          variant="outlined"
+          disabled={disableButton}
+          onClick={openKanban}>{buttonLabel || 'View more'}
+        </Button>
+        {actionRemove && admin.toUpperCase() === wallet.toUpperCase() ? (
+          <Button
+            size="small"
+            variant="outlined"
+            color="secondary"
+            onClick={actionRemove}
+            startIcon={<DeleteIcon />}
+          >
+            Destroy
+          </Button>
+        ) : null}
       </CardActions>
     </Card>
   );

@@ -9,6 +9,7 @@ function portisWrapper(WrappedComponent) {
       super(props);
       this.handleChange = this.handleChange.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
+      this.isLoggedIn = this.isLoggedIn.bind(this);
       this.onError = this.onError.bind(this);
       this.onLogin = this.onLogin.bind(this);
       this.onLogout = this.onLogout.bind(this);
@@ -51,13 +52,13 @@ function portisWrapper(WrappedComponent) {
     }
 
     onLogin({ address, email, reputation, show }) {
-      const { portis } = this.state;
+      const { portis, web3 } = this.state;
       showLogs({ type: '[PORTIS] LOGGED IN:', msg: `email ${email}, address ${address}, reputation ${reputation}` });
       if (show) portis.showPortis();
       this.setState({
           logged: true,
           email: email || '',
-          address: address || '',
+          address: web3.utils.toChecksumAddress(address) || '',
           reputation: reputation && Object.keys(reputation).length ? String(reputation.reputation) + '%' : '',
         });
       this.getBalance();
@@ -104,11 +105,10 @@ function portisWrapper(WrappedComponent) {
           break;
         case 'network':
           if (value === 'binance-test') {
-            option = { name: 'binance testnet', nodeUrl: process.env.BINANCE_NODE, chainId: 97 };
+            option = { name: 'binance-test', nodeUrl: process.env.BINANCE_NODE, chainId: 97 };
           } else if (value === 'binance-main') {
-            option = { name: 'binance mainnet', nodeUrl: process.env.BINANCE_MAINNET, chainId: 56 };
+            option = { name: 'binance-main', nodeUrl: process.env.BINANCE_MAINNET, chainId: 56 };
           }
-          console.log("🚀 ~ value", option, value)
           portis.changeNetwork(option || value);
           this.setState({ network: option ? option.name : value });
           break;
@@ -119,7 +119,7 @@ function portisWrapper(WrappedComponent) {
             break;
           }
           portis.importWallet(value);
-          this.setState({ address: value })
+          this.setState({ address: web3.utils.toChecksumAddress(value) })
           break;
         case 'tosign':
           // check address validity
@@ -147,7 +147,11 @@ function portisWrapper(WrappedComponent) {
     isLoggedIn() {
       const { portis } = this.state;
       portis.isLoggedIn().then(({ error, result }) => {
-        if (error) console.error('[LOGIN] ', error)
+        if (error) {
+          console.error('[LOGIN] ', error);
+          return;
+        }
+        alert(`You are ${result ? '' : 'not '}logged on Portis`);
         this.setState({ logged: !!result });
       })
     }

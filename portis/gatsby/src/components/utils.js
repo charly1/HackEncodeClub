@@ -1,7 +1,7 @@
 // general functions
 
 export function showLogs({ msg = '', type = '[ERROR]' }) {
-  if (process.env.NODE_ENV === "development" && process.env.DEBUG) console.log(type + msg);
+  if (process.env.NODE_ENV === "development" && process.env.DEBUG === true) console.log(type + msg);
 }
 
 export function typeCheckAddress(address, prefix=true) {
@@ -23,20 +23,24 @@ const wei2eth = (amount) => {
 }
 
 const eth2wei = (web3, amount) => {
-    return parseInt(web3.utils.toWei(String(amount), 'ether'))
+    return parseInt(web3.utils.toWei(parseFloat(amount).toFixed(18), 'ether'))
 }
 
-function _signTransaction(contract, web3, tx_call, account) {
-  var nonce = null;
-  
+function _signTransaction(contract, web3, tx_call, acc) {
+  const account = web3.utils.toChecksumAddress(acc);
+  console.log("AAAAAA s.js ~ line 30 ~ _signTransaction ~ account", account)
+  console.log("BBBBB ne 30 ~ _signTransaction ~ tx_call", tx_call)
+  var nonce = null;  
     return web3.eth.getTransactionCount(account)
       .then(tx_count => {
+      console.log("CCCCCCC ine 34 ~ _signTransaction ~ tx_count", tx_count)
         nonce = '0x' + (tx_count + 1).toString(16);
-        return tx_call.estimateGas();
+        return tx_call.estimateGas().then(r => (r)).catch(() => null);
       })
       .then(gas => {
+      console.log("DDDDD ~ line 38 ~ _signTransaction ~ gas", gas)
         const tx_data = {
-            nonce: nonce,
+            // nonce: nonce,
             data: tx_call.encodeABI(),
             from: account,
             gas: gas || gasUseEveryWhere,
@@ -47,10 +51,12 @@ function _signTransaction(contract, web3, tx_call, account) {
         return web3.eth.signTransaction(tx_data)
       })
       .then(signedTx => {
+      console.log("EEEEE s.js ~ line 52 ~ _signTransaction ~ signedTx", signedTx)
           showLogs({ type: '[INFO]:', msg: "signed transaction" + signedTx });
           return web3.eth.sendSignedTransaction(signedTx.raw);
       })
       .then(res => {
+      console.log("FFFFFFF ~ line 57 ~ _signTransaction ~ res", res)
           showLogs({ type: '[INFO]:', msg: "successfully sent signed transaction\n" + res });
           return res;
       })
@@ -61,13 +67,12 @@ function _signTransaction(contract, web3, tx_call, account) {
 }
 
 export function SC_buy_license(new_owner, li_contract, price, web3) {
-    return web3.eth.sendTransaction({from: new_owner, to: li_contract, value: web3.utils.toWei(price, "ether")})
+    return web3.eth.sendTransaction({from: new_owner, to: li_contract, value: eth2wei(web3, price)})
 }
 
 
 // SH functions
 export function SH_addSoftware(contract_sh, web3, account, name, version, license_time_default, software_admin) {
-  console.log("🚀 ~ file: utils.js ~ line 55 ~ SH_addSoftware ~ account", account, software_admin)
   if (!web3 || !account || !name || !version || !software_admin) return Promise.resolve(false);
 
   const tx_call = contract_sh.methods.addSoftware(name, version, license_time_default, software_admin)
@@ -119,7 +124,7 @@ export function SH_remove_software_from_index (contract_sh, web3, account, index
   return _signTransaction(contract_sh, web3, tx_call, account);
 }
 
-export function SH_remove_software (contract_sh, web3, account, address) {
+export function SH_remove_software(contract_sh, web3, account, address) {
   if (!web3 || !account || !address) 
     return false;
 
@@ -345,11 +350,17 @@ export function S_add_license_default_expiration(contract_s, web3, account, admi
 // using this function will create a license that has the expiration_timestamp NOT determined by the parameter license_time_default
 // expiration_timestamp means the license has no expiration date
 export function S_add_license(contract_s, web3, account, admin, owner, expiration_timestamp=0) {
+  console.log("1111111 .js ~ line 349 ~ S_add_license ~ web3", web3)
   if (!web3 || !account || !admin || !owner)
     return false;
+    console.log("2222222222 ~ S_add_license ~ admin, owner", admin, owner)
 
-  const tx_call = contract_s.methods.add_license(admin, owner, 0);
-  return _signTransaction(contract_s, web3, tx_call, account);
+    const adminChk = web3.utils.toChecksumAddress(admin)
+    const ownerChk = web3.utils.toChecksumAddress(owner)
+    const accountChk = web3.utils.toChecksumAddress(account)
+    console.log("3333333333 adminChk ~ ownerChk", adminChk, ownerChk)
+  const tx_call = contract_s.methods.add_license(adminChk, ownerChk, 0);
+  return _signTransaction(contract_s, web3, tx_call, accountChk);
 }
 
 export function S_get_nb_license(contract_s) {
@@ -638,6 +649,7 @@ export function L_get_selling_price(contract_l) {
 }
 
 export function L_set_for_sale(contract_l, web3, account, price=10) {
+  console.log("🚀 ~ file: utils.js ~ line 652 ~ L_set_for_sale ~ contract_l", contract_l)
   if (!web3 || !account) return false;
 
   const tx_call = contract_l.methods.set_for_sale(String(price));
@@ -659,7 +671,7 @@ export function subscribe_SH_software_added(contract_sh, callback) {
             console.error(error);
             return false;
         }
-        console.log(`a new software was added: ${res.returnValues['0']}`);
+        showLogs({ type: '[INFO]:', msg: `a new software was added: ${res.returnValues['0']}` });
         callback('sw_added', res.returnValues['0']);
     });
 }

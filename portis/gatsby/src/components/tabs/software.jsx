@@ -37,7 +37,7 @@ class Softwares extends React.Component {
 
   render() {
     const { modalOpen, toShow } = this.state;
-    const { softwares, loadSoftwares, createSoftware, address } = this.props;
+    const { softwares, createSoftware, address, removeSoftware } = this.props;
     return (
       <Paper elevation={0} style={{ backgroundColor: '#bec9e2', width: '100%' }}>
         <Grid>
@@ -69,7 +69,13 @@ class Softwares extends React.Component {
               total={el.nb_license}
               totalLabel="Number of licenses "
               version={el.version}
+              disableButton={!parseInt(el.nb_license)}
               openKanban={() => this.openKanban(el)}
+              actionRemove={null}
+                // () => {
+                //   if (window.confirm('Do you want to remove this software with all of its licenses ?'))
+                //     removeSoftware(el)
+                // }}
               buttonLabel="View Licenses"
             />
           )) : null}

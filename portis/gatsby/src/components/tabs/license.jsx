@@ -6,17 +6,6 @@ import CheckBox from '../display/checkFilters';
 import LicenseForm from "../modal/licenseForm";
 import CreateForm from "../modal/createLicense";
 
-
-function comapreTag(a, b) {
-  if ( a.tag < b.tag ) {
-    return -1;
-  }
-  if ( a.tag > b.tag ) {
-    return 1;
-  }
-  return 0;
-}
-
 class Licenses extends React.Component {
   constructor(props) {
     super(props);
@@ -24,11 +13,6 @@ class Licenses extends React.Component {
     this.handleFilter = this.handleFilter.bind(this);
     this.openModal = this.openModal.bind(this);
     this.state = {
-      filters: [
-        { tag: 'admin', state: false, label: 'Adminisatrated' },
-        { tag: 'own', state: false, label: 'Owned' },
-        { tag: 'offers', state: false, label: 'My offers' },
-      ].sort(comapreTag),
       modalOpen: false,
       modalContent: null,
     }
@@ -41,20 +25,11 @@ class Licenses extends React.Component {
   }
 
   handleFilter(filter) {
-    const { licenses, address } =this.props;
+    const { handleFilter } =this.props;
     if (!filter) {
       return;
     }
-    this.setState(prevState => {
-      const update = prevState.filters.find(flt => flt.tag === filter.tag);
-      return {
-        filters: [
-          ...prevState.filters.filter(el => el.tag !== filter.tag),
-          { ...update, state: !filter.state },
-        ].sort(comapreTag),
-        toShow: filter.state ? licenses : licenses.filter(el => el.owner !== address),
-      };
-    });
+    handleFilter('li', filter);
   }
 
   openModal(action, item) {
@@ -79,8 +54,8 @@ class Licenses extends React.Component {
           <CreateForm
             softwares={softwares}
             createLicense={(args) => {
-              this.setState({ modalOpen: false })
               createLicense(args)
+              this.setState({ modalOpen: false })
             }}
             closeFunction={() => this.setState({ modalOpen: false })}
           />
@@ -96,8 +71,8 @@ class Licenses extends React.Component {
   }
 
   render() {
-    const { licenses, softwares, address } = this.props;
-    const { modalOpen, modalContent, filters } = this.state;
+    const { licenses, softwares, address, filters } = this.props;
+    const { modalOpen, modalContent } = this.state;
 
     return (
       <Paper elevation={0} style={{ backgroundColor: '#bec9e2', width: '100%' }}>
