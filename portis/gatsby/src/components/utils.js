@@ -14,7 +14,7 @@ export function typeCheckAddress(address, prefix=true) {
 
 // functions to talk with smart contracts
 
-const gasUseEveryWhere = 5200000;
+const gasUseEveryWhere = 6200000;
 const NULL_ADR = "0x0000000000000000000000000000000000000000"
 const FOR_SALE_NO_FILTER = 2
 
@@ -35,12 +35,13 @@ function _signTransaction(contract, web3, tx_call, acc) {
       .then(tx_count => {
       console.log("CCCCCCC ine 34 ~ _signTransaction ~ tx_count", tx_count)
         nonce = '0x' + (tx_count + 1).toString(16);
+        console.log("GGGGGGG ine 34 ~ _signTransaction ~ nonce", nonce)
         return tx_call.estimateGas().then(r => (r)).catch(() => null);
       })
       .then(gas => {
       console.log("DDDDD ~ line 38 ~ _signTransaction ~ gas", gas)
         const tx_data = {
-            // nonce: nonce,
+            nonce: nonce,
             data: tx_call.encodeABI(),
             from: account,
             gas: gas || gasUseEveryWhere,
@@ -353,14 +354,9 @@ export function S_add_license(contract_s, web3, account, admin, owner, expiratio
   console.log("1111111 .js ~ line 349 ~ S_add_license ~ web3", web3)
   if (!web3 || !account || !admin || !owner)
     return false;
-    console.log("2222222222 ~ S_add_license ~ admin, owner", admin, owner)
-
-    const adminChk = web3.utils.toChecksumAddress(admin)
-    const ownerChk = web3.utils.toChecksumAddress(owner)
-    const accountChk = web3.utils.toChecksumAddress(account)
-    console.log("3333333333 adminChk ~ ownerChk", adminChk, ownerChk)
-  const tx_call = contract_s.methods.add_license(adminChk, ownerChk, 0);
-  return _signTransaction(contract_s, web3, tx_call, accountChk);
+    console.log("2222222222 ~ S_add_license ~ admin, owner", account, admin, owner)
+  const tx_call = contract_s.methods.add_license(admin, owner, 0);
+  return _signTransaction(contract_s, web3, tx_call, account);
 }
 
 export function S_get_nb_license(contract_s) {

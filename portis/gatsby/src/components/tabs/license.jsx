@@ -107,6 +107,7 @@ class Licenses extends React.Component {
               owner={el.owner}
               openKanban={() => this.openModal('edit', el)}
               buttonLabel="View details"
+              disableButton={el.admin.toUpperCase() !== address.toUpperCase()}
             />
           )) : null}
         </Grid>

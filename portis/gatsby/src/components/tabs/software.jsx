@@ -71,7 +71,8 @@ class Softwares extends React.Component {
               version={el.version}
               disableButton={!parseInt(el.nb_license)}
               openKanban={() => this.openKanban(el)}
-              actionRemove={null}
+              actionRemove={
+                null}
                 // () => {
                 //   if (window.confirm('Do you want to remove this software with all of its licenses ?'))
                 //     removeSoftware(el)

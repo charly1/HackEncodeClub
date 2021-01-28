@@ -168,26 +168,30 @@ class TabProvider extends React.Component {
       return func.S_get_license_with_admin(contract_s, address)
         .then((asAdmin) => func.S_get_license_with_owner(contract_s, address)
           .then((asOwner) => {
-            if (!asOwner && !asAdmin) return [];
-            if (!asOwner) return asAdmin;
-            if (!asAdmin) return asOwner;
+            if ((!asOwner || !asOwner.length) && (!asAdmin || !asAdmin.length)) return {};
+            if (!asOwner || !asOwner.length) return { software: sw, liAddress: asAdmin };
+            if (!asAdmin || !asAdmin.length) return { software: sw, liAddress: asOwner };
             return { software: sw, liAddress: [...new Set([...asOwner, ...asAdmin])] };
           }))
       }))
         .then(loaded => {
           if (loaded && loaded.length) {
-            Promise.all(...loaded.map((batch) => batch.liAddress.map((addr) => {
+            Promise.all(loaded.map((batch) => {
+              if (!batch.liAddress) return [];
+              const bunch = batch.liAddress.map((addr) => {
                 const contract_l = new web3.eth.Contract(abi.LICENSE_ABI, addr);
                 return func.L_get_informations(contract_l)
                   .then((liInfo) => (liInfo ? {
                     ...liInfo,
+                    contract_l,
                     name: batch.software.name,
                     version: batch.software.version,
                     admin_s: batch.software.admin,
                     contract_s: batch.software.contract,
                   } : null));
-              })
-            ))
+                });
+              return Promise.all(bunch);
+            }))
               .then(liWithInfo => {
                 this.setState(prevState => ({
                   allLicenses: liWithInfo.flat(),
@@ -205,8 +209,10 @@ class TabProvider extends React.Component {
   loadForSale() {
     const { contract_sh } = this.state;
     const { web3 } = this.props;
+    console.log("🚀 ~ file: tabHandler.jsx ~ line 212 ~ TabProvider ~ loadForSale ~ web3")
     return func.SH_get_licenses_that_are_for_sale(contract_sh)
       .then(licenses => {
+      console.log("🚀 ~ file: tabHandler.jsx ~ line 214 ~ TabProvider ~ loadForSale ~ licenses", licenses)
         return Promise.all(licenses.map((address) => {
           const contract = new web3.eth.Contract(abi.LICENSE_ABI, address);
           return func.L_get_informations(contract)
@@ -215,6 +221,7 @@ class TabProvider extends React.Component {
         }));
       })
       .then((allForSale) => {
+        console.log("🚀 ~ file: tabHandler.jsx ~ line 224 ~ TabProvider ~ .then ~ allForSale", allForSale)
         return Promise.all(allForSale.map((license) => {
           const contract_s = new web3.eth.Contract(abi.SOFTWARE_ABI, license.software_address_linked);
           return func.S_get_software_info(contract_s)
@@ -242,13 +249,14 @@ class TabProvider extends React.Component {
   removeSoftware(software) {
     const { contract_sh } = this.state;
     const { web3, address } = this.props;
+    this.setState({ loader: true })
     func.SH_remove_software(contract_sh, web3, address, software.address)
       .then((res) => {
-        console.log("🚀 ~ file: tabHandler.jsx ~ line 248 ~ TabProvider ~ removeSoftware ~ res", res)
         if (res) {
           alert('Software removed !')
         }
-      });
+      })
+      .finally(() => this.setState({ loader: false }))
   }
 
   setLAdmin({ license, admin }) {
@@ -257,7 +265,6 @@ class TabProvider extends React.Component {
       return;
     }
     const { web3, address } = this.props;
-
     func.L_set_owner(license.contract, web3, address, admin)
       .then((res) => {
         if (res) alert('License successfuly changed owner !');
@@ -266,21 +273,21 @@ class TabProvider extends React.Component {
   }
 
   setLiForSale({ license, priceETH }) {
-    console.log("🚀 ~ file: tabHandler.jsx ~ line 209 ~ TabProvider ~ setLiForSale ~ license", license)
     const { web3, address } = this.props;
-    func.L_set_for_sale(license.contract, web3, address, priceETH)
+    func.L_set_for_sale(license.contract_l, web3, address, priceETH)
       .then(res => (res ? alert('License is for sale !', res) : alert('! License set for sale failed...')))
   }
 
   setNewLiOwner({ license, newOwner }) {
-    console.log("set new owner LICENSE", license, newOwner)
     if (!func.typeCheckAddress(newOwner)) {
       alert('WARNING: New owner address invalid characters !');
       return;
     }
     const { web3, address } = this.props;
-    func.L_set_owner(license.contract, web3, address, newOwner)
+    this.setState({ loader: true })
+    func.L_set_owner(license.contract_l, web3, address, newOwner)
       .then(res => (res ? alert('License owner changed !', res) : alert('! License owner change faild...')))
+      .finally(() => this.setState({ loader: false }))
   }
 
   setLiExpiryDate({ license, newDate }) {
@@ -288,22 +295,22 @@ class TabProvider extends React.Component {
   }
 
   createLicense({ date, software }) {
-    console.log(" 1111 create new LICENSE", software, date)
     const { web3, address } = this.props;
     if (address.toUpperCase() !== software.admin.toUpperCase()) {
       alert('! You are not admin of this software !');
       return;
     }
+    this.setState({ loader: true })
     func.S_add_license(software.contract, web3, address, software.admin, address, date)
       .then((res) => {
-        console.log("XXXXx  .then ~ res", res)
         if (res) {
           alert('New license created !');
           this.loadLicenses();
         } else {
           alert('! License creation failed...');
         }
-      });
+      })
+      .finally(() => this.setState({ loader: false }))
   }
 
   buyLicense({ toBuy }) {
@@ -350,7 +357,6 @@ class TabProvider extends React.Component {
           <SoftwarePage
             key={`key${String(refresh)}`}
             softwares={allSW}
-            licenses={liToShow}
             loadSoftwares={this.loadSoftwares}
             getSWinfo={(args) => {
               this.getSWinfo(args)
