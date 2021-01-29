@@ -274,8 +274,10 @@ class TabProvider extends React.Component {
 
   setLiForSale({ license, priceETH }) {
     const { web3, address } = this.props;
+    this.setState({ loader: true })
     func.L_set_for_sale(license.contract_l, web3, address, priceETH)
       .then(res => (res ? alert('License is for sale !', res) : alert('! License set for sale failed...')))
+      .finally(() => this.setState({ loader: false }))
   }
 
   setNewLiOwner({ license, newOwner }) {

@@ -14,7 +14,7 @@ export function typeCheckAddress(address, prefix=true) {
 
 // functions to talk with smart contracts
 
-const gasUseEveryWhere = 6200000;
+const gasUseEveryWhere = 4200000;
 const NULL_ADR = "0x0000000000000000000000000000000000000000"
 const FOR_SALE_NO_FILTER = 2
 
@@ -34,9 +34,15 @@ function _signTransaction(contract, web3, tx_call, acc) {
     return web3.eth.getTransactionCount(account)
       .then(tx_count => {
       console.log("CCCCCCC ine 34 ~ _signTransaction ~ tx_count", tx_count)
-        nonce = '0x' + (tx_count + 1).toString(16);
+        nonce = '0x' + (tx_count).toString(16);
         console.log("GGGGGGG ine 34 ~ _signTransaction ~ nonce", nonce)
-        return tx_call.estimateGas().then(r => (r)).catch(() => null);
+        return tx_call.estimateGas().then(r => {
+            if (r) {
+                return web3.utils.numberToHex(
+                    web3.utils.numberToHex(Math.ceil(web3.utils.hexToNumber(r) * 1.101)));
+            }
+            return r;
+        }).catch(() => null);
       })
       .then(gas => {
       console.log("DDDDD ~ line 38 ~ _signTransaction ~ gas", gas)
@@ -50,6 +56,16 @@ function _signTransaction(contract, web3, tx_call, acc) {
         };
 
         return web3.eth.signTransaction(tx_data)
+            .catch((err) => {
+                if (err && err.code === -32603) {
+                    console.log("🚀 ~ file: utils.js ~ line 61 ~ _signTransaction ~ err", err)
+                    return web3.eth.signTransaction({
+                        ...tx_data,
+                        nonce: web3.utils.numberToHex(web3.utils.hexToNumber(tx_data.nonce) + 1),
+                    });
+                }
+                return err;
+            })
       })
       .then(signedTx => {
       console.log("EEEEE s.js ~ line 52 ~ _signTransaction ~ signedTx", signedTx)
@@ -76,7 +92,7 @@ export function SC_buy_license(new_owner, li_contract, price, web3) {
 export function SH_addSoftware(contract_sh, web3, account, name, version, license_time_default, software_admin) {
   if (!web3 || !account || !name || !version || !software_admin) return Promise.resolve(false);
 
-  const tx_call = contract_sh.methods.addSoftware(name, version, license_time_default, software_admin)
+  const tx_call = contract_sh.methods.addSoftware(name, version, license_time_default, web3.utils.toChecksumAddress(software_admin))
   return _signTransaction(contract_sh, web3, tx_call, account);
 }
 
@@ -644,11 +660,11 @@ export function L_get_selling_price(contract_l) {
   });
 }
 
-export function L_set_for_sale(contract_l, web3, account, price=10) {
+export function L_set_for_sale(contract_l, web3, account, price=0.0001) {
   console.log("🚀 ~ file: utils.js ~ line 652 ~ L_set_for_sale ~ contract_l", contract_l)
   if (!web3 || !account) return false;
 
-  const tx_call = contract_l.methods.set_for_sale(String(price));
+  const tx_call = contract_l.methods.set_for_sale(eth2wei(web3, price));
   return _signTransaction(contract_l, web3, tx_call, account);
 }
 

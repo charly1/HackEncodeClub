@@ -42,8 +42,14 @@ class Licenses extends React.Component {
         modalContent = (
           <LicenseForm
             license={item}
-            sellFunction={setForSale}
-            changeOwner={setNewOwner}
+            sellFunction={(args) => {
+              setForSale(args);
+              this.setState({ modalOpen: false });
+            }}
+            changeOwner={(args) => {
+              setNewOwner(args);
+              this.setState({ modalOpen: false });
+            }}
             changeExpiryDate={setExpiryDate}
             closeFunction={() => this.setState({ modalOpen: false })}
           />
