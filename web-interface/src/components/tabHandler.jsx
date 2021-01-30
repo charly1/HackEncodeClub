@@ -169,7 +169,6 @@ class TabProvider extends React.Component {
   async loadLicenses() {
     const { address, web3 } = this.props;
     const { contract_sh } = this.state;
-    console.log("🚀 ~ file: tabHandler.jsx  contract_sh, addresse", contract_sh, address)
     const liAdr = await func.SH_get_licenses_with_admin(contract_sh, address)
       .then((asAdmin) => func.SH_get_licenses_with_owner(contract_sh, address)
         .then((asOwner) => {
@@ -177,14 +176,11 @@ class TabProvider extends React.Component {
         }))
         .catch(() => ([]));
 
-        console.log("🚀 ~  list of license addresses", liAdr)
-
     const allLiwithSw = await Promise.all(liAdr.map((adr) => {
         const contract_l = new web3.eth.Contract(abi.LICENSE_ABI, adr);
         return func.L_get_informations(contract_l).then((info) => ({ ...info, contract_l }));
       }))
         .then(async (allLi) => {
-          console.log("🚀 allLicenses with infos", allLi)
           if (allLi && allLi.length) {
             return Promise.all(allLi.map((currentLi) => {
               const contract_s = new web3.eth.Contract(abi.SOFTWARE_ABI, currentLi.software_address_linked);
@@ -201,8 +197,6 @@ class TabProvider extends React.Component {
           return false;
         })
         .catch(() => null);
-
-        console.log("🚀 ~ allLiwithSw", allLiwithSw)
 
     if (allLiwithSw && allLiwithSw.length) {
       this.setState(prevState => ({
