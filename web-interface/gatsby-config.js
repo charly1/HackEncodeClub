@@ -4,11 +4,14 @@ require("dotenv").config({
 
 module.exports = {
     plugins: [
-        // {
-        //     resolve: `gatsby-plugin-sharp`,
-        //     options: {
-        //         icon: 'src/images/icon.png',
-        //     },
-        //   },
+        {
+            resolve: 'gatsby-plugin-manifest',
+            options: {
+              name: 'Zucchini DApp',
+              short_name: 'Zucchini',
+              start_url: '/',
+              icon: 'src/images/zucchini.png',
+            },
+        },
     ]
 }
