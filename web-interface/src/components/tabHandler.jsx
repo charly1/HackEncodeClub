@@ -169,7 +169,7 @@ class TabProvider extends React.Component {
   async loadLicenses() {
     const { address, web3 } = this.props;
     const { contract_sh } = this.state;
-    console.log("🚀 ~ file: tabHandler.jsx  contract_sh, addresse", contract_sh, addresse)
+    console.log("🚀 ~ file: tabHandler.jsx  contract_sh, addresse", contract_sh, address)
     const liAdr = await func.SH_get_licenses_with_admin(contract_sh, address)
       .then((asAdmin) => func.SH_get_licenses_with_owner(contract_sh, address)
         .then((asOwner) => {
