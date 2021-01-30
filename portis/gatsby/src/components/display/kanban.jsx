@@ -88,7 +88,7 @@ const Kanban = ({
         ) : null}
         {price ? (
           <Typography className={classes.price}>
-            {`Price: ${xrate ? parseFloat(price) * xrate : price} ${xrate ? '$' : 'ETH'}`}
+            {`Price: ${xrate ? parseFloat(parseFloat(price) * xrate).toFixed(2) : price} ${xrate ? '$' : 'ETH'}`}
           </Typography>
         ) : null}
       </CardContent>

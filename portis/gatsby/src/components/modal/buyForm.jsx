@@ -102,7 +102,7 @@ export function BuyForm({ license, buyFunction, closeFunction, xrate }) {
             <TextField
               id="standard-number"
               label="Price $"
-              defaultValue={parseFloat(selling_price_ETH) * xrate}
+              defaultValue={parseFloat(parseFloat(selling_price_ETH) * xrate).toFixed(2)}
               InputProps={{ readOnly: true }}
               type="number"
               variant="outlined"
