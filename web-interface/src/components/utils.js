@@ -415,10 +415,12 @@ export function S_get_license_with_admin(contract_s, admin) {
     if (!admin) return false;
     return contract_s.methods.get_licenses_with_admin(admin).call()
     .then(res => {
+    console.log("🚀 ~ file: utils.js ~ line 418 ~ S_get_license_with_admin ~ res", res)
         showLogs({ type: '[INFO]:', msg: `Licenses list with admin ${admin}: ${res}` })
         return res;
     })
     .catch(err => {
+    console.log("🚀 ~ file: utils.js ~ line 423 ~ S_get_license_with_admin ~ err", err)
         console.error("An error occured while calling the func:", err);
         return false;
     });

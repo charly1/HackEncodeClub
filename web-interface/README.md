@@ -29,4 +29,5 @@ Publish directory:		`portis/gatsby/public`
 
 ## Learn more
 
-- [Source](https://www.gatsbyjs.com/docs/quick-start)
+- [Gatsby Doc](https://www.gatsbyjs.com/docs/quick-start)
+- [Favicon made by Freepik](www.flaticon.com)

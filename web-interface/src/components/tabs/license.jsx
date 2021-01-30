@@ -93,7 +93,9 @@ class Licenses extends React.Component {
 
   render() {
     const { softwares, address, filters } = this.props;
+    console.log("🚀 ~ file: license.jsx ~ line 96 ~ Licenses ~ render ~ softwares", softwares)
     const { modalOpen, modalContent, liToShow } = this.state;
+    console.log("🚀 ~ file: license.jsx ~ line 98 ~ Licenses ~ render ~ liToShow", liToShow)
 
     return (
       <Paper elevation={0} style={{ backgroundColor: '#bec9e2', width: '100%' }}>

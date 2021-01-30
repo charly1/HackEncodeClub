@@ -166,50 +166,48 @@ class TabProvider extends React.Component {
       });
   }
 
-  loadLicenses() {
+  async loadLicenses() {
     const { address, web3 } = this.props;
-    const { allSW } = this.state;
-    Promise.all(allSW.map((sw) => {
-      const contract_s = new web3.eth.Contract(abi.SOFTWARE_ABI, sw.address);
-      return func.S_get_license_with_admin(contract_s, address)
-        .then((asAdmin) => func.S_get_license_with_owner(contract_s, address)
-          .then((asOwner) => {
-            if ((!asOwner || !asOwner.length) && (!asAdmin || !asAdmin.length)) return {};
-            if (!asOwner || !asOwner.length) return { software: sw, liAddress: asAdmin };
-            if (!asAdmin || !asAdmin.length) return { software: sw, liAddress: asOwner };
-            return { software: sw, liAddress: [...new Set([...asOwner, ...asAdmin])] };
-          }))
+    const { contract_sh } = this.state;
+    const liAdr = await func.SH_get_licenses_with_admin(contract_sh, address)
+      .then((asAdmin) => func.SH_get_licenses_with_owner(contract_sh, address)
+        .then((asOwner) => {
+          return [...new Set([...asOwner, ...asAdmin])];
+        }))
+        .catch(() => ([]));
+
+    const allLiwithSw = await Promise.all(liAdr.map((adr) => {
+        const contract_l = new web3.eth.Contract(abi.LICENSE_ABI, adr);
+        return func.L_get_informations(contract_l).then((info) => ({ ...info, contract_l }));
       }))
-        .then(loaded => {
-          if (loaded && loaded.length) {
-            Promise.all(loaded.map((batch) => {
-              if (!batch.liAddress) return [];
-              const bunch = batch.liAddress.map((addr) => {
-                const contract_l = new web3.eth.Contract(abi.LICENSE_ABI, addr);
-                return func.L_get_informations(contract_l)
-                  .then((liInfo) => (liInfo ? {
-                    ...liInfo,
-                    contract_l,
-                    name: batch.software.name,
-                    version: batch.software.version,
-                    admin_s: batch.software.admin,
-                    contract_s: batch.software.contract,
-                  } : null));
-                });
-              return Promise.all(bunch);
-            }))
-              .then(liWithInfo => {
-                this.setState(prevState => ({
-                  allLicenses: liWithInfo.flat(),
-                  liToShow: liWithInfo.flat(),
-                  filters_li: {
-                    ...prevState.filters_li,
-                    admin: { tag: 'admin', state: false, label: 'Administrated' },
-                  }
-                }))
-              });
+        .then(async (allLi) => {
+          if (allLi && allLi.length) {
+            return Promise.all(allLi.map((currentLi) => {
+              const contract_s = new web3.eth.Contract(abi.SOFTWARE_ABI, currentLi.software_address_linked);
+              return func.S_get_software_info(contract_s)
+                .then((swInfo) => (swInfo ? {
+                  ...swInfo,
+                  ...currentLi,
+                  admin: swInfo.admin,
+                  address: currentLi.license_address,
+                  contract_s,
+                } : null));
+              }));
           }
-        });
+          return false;
+        })
+        .catch(() => null);
+
+    if (allLiwithSw && allLiwithSw.length) {
+      this.setState(prevState => ({
+        allLicenses: allLiwithSw,
+        liToShow: allLiwithSw,
+        filters_li: {
+          ...prevState.filters_li,
+          admin: { tag: 'admin', state: false, label: 'Administrated' },
+        }
+      }))
+    }
   }
 
   loadForSale() {
