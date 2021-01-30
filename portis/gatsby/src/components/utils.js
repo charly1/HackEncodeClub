@@ -1,7 +1,20 @@
 // general functions
 
+const axios = require('axios');
+
+
+export function get_ETH_USD_rate() {
+    return axios.get('https://api.coinbase.com/v2/prices/eth-usd/buy')
+        .then(({ data }) => {
+            showLogs({ msg: data, type: '[INFO]' });
+            if (data && data.data) return parseFloat(data.data.amount);
+            return null;
+        })
+        .catch(() => null);
+}
+
 export function showLogs({ msg = '', type = '[ERROR]' }) {
-  if (process.env.NODE_ENV === "development" && process.env.DEBUG === true) console.log(type + msg);
+  if (process.env.NODE_ENV === "development" && process.env.DEBUG === true) console.info(type + msg);
 }
 
 export function typeCheckAddress(address, prefix=true) {
@@ -14,7 +27,7 @@ export function typeCheckAddress(address, prefix=true) {
 
 // functions to talk with smart contracts
 
-const gasUseEveryWhere = 4200000;
+const gasUseEveryWhere = 2200000;
 const NULL_ADR = "0x0000000000000000000000000000000000000000"
 const FOR_SALE_NO_FILTER = 2
 
@@ -23,19 +36,16 @@ const wei2eth = (amount) => {
 }
 
 const eth2wei = (web3, amount) => {
-    return parseInt(web3.utils.toWei(parseFloat(amount).toFixed(18), 'ether'))
+    const amt = parseInt(web3.utils.toWei(parseFloat(amount).toFixed(18), 'ether'))
+     return "0x" + amt.toString(16);
 }
 
 function _signTransaction(contract, web3, tx_call, acc) {
   const account = web3.utils.toChecksumAddress(acc);
-  console.log("AAAAAA s.js ~ line 30 ~ _signTransaction ~ account", account)
-  console.log("BBBBB ne 30 ~ _signTransaction ~ tx_call", tx_call)
   var nonce = null;  
     return web3.eth.getTransactionCount(account)
       .then(tx_count => {
-      console.log("CCCCCCC ine 34 ~ _signTransaction ~ tx_count", tx_count)
         nonce = '0x' + (tx_count).toString(16);
-        console.log("GGGGGGG ine 34 ~ _signTransaction ~ nonce", nonce)
         return tx_call.estimateGas().then(r => {
             if (r) {
                 return web3.utils.numberToHex(
@@ -45,7 +55,6 @@ function _signTransaction(contract, web3, tx_call, acc) {
         }).catch(() => null);
       })
       .then(gas => {
-      console.log("DDDDD ~ line 38 ~ _signTransaction ~ gas", gas)
         const tx_data = {
             nonce: nonce,
             data: tx_call.encodeABI(),
@@ -54,11 +63,11 @@ function _signTransaction(contract, web3, tx_call, acc) {
             // gasPrice: gasUseEveryWhere,
             to: contract.options.address,
         };
+        showLogs({ type: '[INFO]:', msg: "transaction data" + JSON.stringify(tx_data) });
 
         return web3.eth.signTransaction(tx_data)
             .catch((err) => {
                 if (err && err.code === -32603) {
-                    console.log("🚀 ~ file: utils.js ~ line 61 ~ _signTransaction ~ err", err)
                     return web3.eth.signTransaction({
                         ...tx_data,
                         nonce: web3.utils.numberToHex(web3.utils.hexToNumber(tx_data.nonce) + 1),
@@ -68,12 +77,10 @@ function _signTransaction(contract, web3, tx_call, acc) {
             })
       })
       .then(signedTx => {
-      console.log("EEEEE s.js ~ line 52 ~ _signTransaction ~ signedTx", signedTx)
-          showLogs({ type: '[INFO]:', msg: "signed transaction" + signedTx });
+          showLogs({ type: '[INFO]:', msg: "signed transaction" + JSON.stringify(signedTx) });
           return web3.eth.sendSignedTransaction(signedTx.raw);
       })
       .then(res => {
-      console.log("FFFFFFF ~ line 57 ~ _signTransaction ~ res", res)
           showLogs({ type: '[INFO]:', msg: "successfully sent signed transaction\n" + res });
           return res;
       })
@@ -367,10 +374,8 @@ export function S_add_license_default_expiration(contract_s, web3, account, admi
 // using this function will create a license that has the expiration_timestamp NOT determined by the parameter license_time_default
 // expiration_timestamp means the license has no expiration date
 export function S_add_license(contract_s, web3, account, admin, owner, expiration_timestamp=0) {
-  console.log("1111111 .js ~ line 349 ~ S_add_license ~ web3", web3)
   if (!web3 || !account || !admin || !owner)
     return false;
-    console.log("2222222222 ~ S_add_license ~ admin, owner", account, admin, owner)
   const tx_call = contract_s.methods.add_license(admin, owner, 0);
   return _signTransaction(contract_s, web3, tx_call, account);
 }
@@ -661,7 +666,6 @@ export function L_get_selling_price(contract_l) {
 }
 
 export function L_set_for_sale(contract_l, web3, account, price=0.0001) {
-  console.log("🚀 ~ file: utils.js ~ line 652 ~ L_set_for_sale ~ contract_l", contract_l)
   if (!web3 || !account) return false;
 
   const tx_call = contract_l.methods.set_for_sale(eth2wei(web3, price));

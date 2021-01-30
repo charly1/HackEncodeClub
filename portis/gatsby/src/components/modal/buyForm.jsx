@@ -1,7 +1,7 @@
 import React from "react"
 import { Grid, Button, Typography, TextField } from '@material-ui/core';
 
-export function BuyForm({ license, buyFunction, closeFunction }) {
+export function BuyForm({ license, buyFunction, closeFunction, xrate }) {
   if (!license) return <h>No licence to display</h>;
 
   const {
@@ -97,6 +97,18 @@ export function BuyForm({ license, buyFunction, closeFunction }) {
             />
           )}
         </Grid>
+        {xrate ? (
+          <Grid item>
+            <TextField
+              id="standard-number"
+              label="Price $"
+              defaultValue={parseFloat(selling_price_ETH) * xrate}
+              InputProps={{ readOnly: true }}
+              type="number"
+              variant="outlined"
+            />
+          </Grid>
+        ) : null}
         <Grid item>
           <TextField
             id="standard-number"

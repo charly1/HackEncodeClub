@@ -51,12 +51,13 @@ class Buy extends React.Component {
   }
 
   openModal(item) {
-    const { buyLicense } = this.props;
+    const { buyLicense, xrate } = this.props;
     this.setState({
       modalOpen: true,
       modalContent: (
         <BuyForm
           license={item}
+          xrate={xrate}
           buyFunction={() => {
             if (window.confirm('Do you want to buy this license ?')) {
               this.setState({ modalOpen: false })
@@ -71,7 +72,7 @@ class Buy extends React.Component {
 
   render() {
     const { modalContent, filters, modalOpen, toShow } = this.state;
-    const { licenses, address } = this.props;
+    const { licenses, address, xrate } = this.props;
     return (
       <Paper elevation={0} style={{ backgroundColor: '#bec9e2', width: '100%' }}>
         <Grid>
@@ -91,6 +92,7 @@ class Buy extends React.Component {
               address={el.license_address}
               date={el.expiration_timestamp}
               price={el.selling_price_ETH}
+              xrate={xrate}
               dateLabel="Expiry: "
               version={el.version}
               owner={el.owner}

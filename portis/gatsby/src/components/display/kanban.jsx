@@ -29,6 +29,7 @@ const Kanban = ({
   date,
   dateLabel='',
   price,
+  xrate,
   total,
   totalLabel='',
   version,
@@ -87,7 +88,7 @@ const Kanban = ({
         ) : null}
         {price ? (
           <Typography className={classes.price}>
-            {`Price: ${price} ETH`}
+            {`Price: ${xrate ? parseFloat(price) * xrate : price} ${xrate ? '$' : 'ETH'}`}
           </Typography>
         ) : null}
       </CardContent>

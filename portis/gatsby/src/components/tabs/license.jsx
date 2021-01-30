@@ -15,13 +15,28 @@ class Licenses extends React.Component {
     this.state = {
       modalOpen: false,
       modalContent: null,
+      liToShow: [],
+    }
+  }
+
+  componentDidMount() {
+    this.setState({ liToShow: this.props.licenses });
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.licenses !== this.props.licenses
+      || prevProps.softwares !== this.props.softwares) {
+      this.setState({
+        liToShow: this.props.licenses,
+      })
     }
   }
 
   handleSearch(filtered) {
-    this.setState({
-      toShow: filtered,
-    });
+    const { licenses } = this.props;
+    const sWfiltered = filtered.map((sw) => sw.software_address.toUpperCase());
+    const liToShow = licenses.filter((li) => sWfiltered.includes(li.software_address_linked.toUpperCase()));
+    this.setState({ liToShow });
   }
 
   handleFilter(filter) {
@@ -77,8 +92,8 @@ class Licenses extends React.Component {
   }
 
   render() {
-    const { licenses, softwares, address, filters } = this.props;
-    const { modalOpen, modalContent } = this.state;
+    const { softwares, address, filters } = this.props;
+    const { modalOpen, modalContent, liToShow } = this.state;
 
     return (
       <Paper elevation={0} style={{ backgroundColor: '#bec9e2', width: '100%' }}>
@@ -99,7 +114,7 @@ class Licenses extends React.Component {
           </Button>
         </Grid>
         <Grid>
-          {licenses && licenses.length ? licenses.map(el => (
+          {liToShow && liToShow.length ? liToShow.map(el => (
             <Kanban
               key={el.license_address}
               wallet={address}

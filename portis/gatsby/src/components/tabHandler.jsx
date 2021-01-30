@@ -39,6 +39,7 @@ class TabProvider extends React.Component {
       liForSale: [],
       refresh: true,
       loader: false,
+      xrate: null,
       filters_li: {
         admin: { tag: 'admin', state: true, label: 'Administrated' },
         // owner: { tag: 'owner', state: false, label: 'Owned' },
@@ -52,6 +53,10 @@ class TabProvider extends React.Component {
     let contractAddress = process.env.ROPSTEN_CONTRACT_HANDLER;
     if (this.props.network && this.props.network.includes('binance')) contractAddress = process.env.BINANCE_CONTRACT_HANDLER;
     const contract_sh = new web3.eth.Contract(abi.HANDLER_ABI, contractAddress)
+    func.get_ETH_USD_rate()
+      .then((res) => {
+        if (res) this.setState({ xrate: res });
+      })
     func.subscribe_SH_software_added(contract_sh, this.onEvent)
     this.setState({
       contractAddress,
@@ -143,6 +148,7 @@ class TabProvider extends React.Component {
                 version: software.version,
                 admin_s: software.admin,
                 contract_s: software.contract,
+                contract_l: new web3.eth.Contract(abi.LICENSE_ABI, li.license_address),
                 ...li,
               }));
             return {
@@ -209,10 +215,8 @@ class TabProvider extends React.Component {
   loadForSale() {
     const { contract_sh } = this.state;
     const { web3 } = this.props;
-    console.log("🚀 ~ file: tabHandler.jsx ~ line 212 ~ TabProvider ~ loadForSale ~ web3")
     return func.SH_get_licenses_that_are_for_sale(contract_sh)
       .then(licenses => {
-      console.log("🚀 ~ file: tabHandler.jsx ~ line 214 ~ TabProvider ~ loadForSale ~ licenses", licenses)
         return Promise.all(licenses.map((address) => {
           const contract = new web3.eth.Contract(abi.LICENSE_ABI, address);
           return func.L_get_informations(contract)
@@ -221,7 +225,6 @@ class TabProvider extends React.Component {
         }));
       })
       .then((allForSale) => {
-        console.log("🚀 ~ file: tabHandler.jsx ~ line 224 ~ TabProvider ~ .then ~ allForSale", allForSale)
         return Promise.all(allForSale.map((license) => {
           const contract_s = new web3.eth.Contract(abi.SOFTWARE_ABI, license.software_address_linked);
           return func.S_get_software_info(contract_s)
@@ -253,7 +256,8 @@ class TabProvider extends React.Component {
     func.SH_remove_software(contract_sh, web3, address, software.address)
       .then((res) => {
         if (res) {
-          alert('Software removed !')
+          alert('Software removed !');
+          this.loadSoftwares();
         }
       })
       .finally(() => this.setState({ loader: false }))
@@ -265,18 +269,27 @@ class TabProvider extends React.Component {
       return;
     }
     const { web3, address } = this.props;
+    this.setState({ loader: true })
     func.L_set_owner(license.contract, web3, address, admin)
       .then((res) => {
         if (res) alert('License successfuly changed owner !');
         else alert('! License owner change failed...');
       })
+      .finally(() => this.setState({ loader: false }))
   }
 
   setLiForSale({ license, priceETH }) {
     const { web3, address } = this.props;
     this.setState({ loader: true })
     func.L_set_for_sale(license.contract_l, web3, address, priceETH)
-      .then(res => (res ? alert('License is for sale !', res) : alert('! License set for sale failed...')))
+      .then(res => {
+        if (res) {
+          alert('License is for sale !', res)
+          this.loadLicenses()
+        } else {
+          alert('! License set for sale failed...')
+        }
+      })
       .finally(() => this.setState({ loader: false }))
   }
 
@@ -338,8 +351,9 @@ class TabProvider extends React.Component {
             [filter.tag]: { ...filter, state: !filter.state },
           },
           liToShow: filter.state
-            ? prevState.liToShow.filter(el => el[filter.tag] !== address)
-            : prevState.allLicenses.length ? prevState.allLicenses : prevState.liToShow,
+            ? prevState.allLicenses.length ? prevState.allLicenses : prevState.liToShow
+            : prevState.liToShow.filter(el => (
+              el[filter.tag] && el[filter.tag].toUpperCase() ? el[filter.tag].toUpperCase() === address.toUpperCase() : false)),
         };
       }
     });
@@ -348,7 +362,7 @@ class TabProvider extends React.Component {
   render() {
     const {
       type, allSW, swToShow, liToShow, liForSale, refresh, loader,
-      filters_li,
+      filters_li, xrate,
     } = this.state;
     const { address, logged } = this.props;
 
@@ -391,6 +405,7 @@ class TabProvider extends React.Component {
             key={`key${String(refresh)}`}
             licenses={liForSale}
             buyLicense={this.buyLicense}
+            xrate={xrate}
             {...this.props}
           />
         );
