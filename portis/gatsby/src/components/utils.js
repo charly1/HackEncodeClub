@@ -29,7 +29,8 @@ export function typeCheckAddress(address, prefix=true) {
 
 const gasUseEveryWhere = 2200000;
 const NULL_ADR = "0x0000000000000000000000000000000000000000"
-const FOR_SALE_NO_FILTER = 2
+const FOR_SALE_NO_FILTER = 2;
+const BINANCE_TESTNET_ID = 97;
 
 const wei2eth = (amount) => {
     return parseFloat(amount) / 1000000000000000000;
@@ -40,11 +41,14 @@ const eth2wei = (web3, amount) => {
      return "0x" + amt.toString(16);
 }
 
-function _signTransaction(contract, web3, tx_call, acc) {
+async function _signTransaction(contract, web3, tx_call, acc) {
+  const netId = await web3.eth.net.getId().then(r => r).catch(() => null)
+  const binanceNetwork = netId === BINANCE_TESTNET_ID;
   const account = web3.utils.toChecksumAddress(acc);
   var nonce = null;  
     return web3.eth.getTransactionCount(account)
       .then(tx_count => {
+        if (binanceNetwork) return null;
         nonce = '0x' + (tx_count).toString(16);
         return tx_call.estimateGas().then(r => {
             if (r) {
@@ -60,8 +64,10 @@ function _signTransaction(contract, web3, tx_call, acc) {
             data: tx_call.encodeABI(),
             from: account,
             gas: gas || gasUseEveryWhere,
-            // gasPrice: gasUseEveryWhere,
+            gasPrice: binanceNetwork ? parseInt(gasUseEveryWhere * 10) : undefined,
             to: contract.options.address,
+            // averagePriceWeiHex: '0x1d7cc3dea',
+            // protocolId:"c455f775-7385-4022-8afd-2af9df37d5b4",
         };
         showLogs({ type: '[INFO]:', msg: "transaction data" + JSON.stringify(tx_data) });
 
