@@ -1,5 +1,6 @@
 import React from "react"
 import { Button, Grid, Typography } from '@material-ui/core';
+import MenuIcon from '@material-ui/icons/Menu';
 
 import withPortisProvider from './provider/portis';
 import TabStateProvider from './tabHandler';
@@ -44,6 +45,7 @@ class Layout extends React.Component {
               size="large"
               style={{ width: '350px', margin: '5px', alignSelf: 'center' }}
               onClick={() => this.openDrawer()}
+              startIcon={<MenuIcon/>}
             >
               {email || 'Portis'}
             </Button>
